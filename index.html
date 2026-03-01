@@ -1,397 +1,70 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="hi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GTU Cyber Security Study Guide</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>Tulsi aur Aryan - Ek Prem Kahani</title>
+    <link href="https://cdn.tailwindcss.com" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
-	/* Additional CSS for enhanced features */
+        :root {
+            --bg: #0d0a0b;
+            --fg: #faf8f5;
+            --muted: #a89f9a;
+            --accent: #c9a86c;
+            --accent-deep: #8b4d57;
+            --card: rgba(26, 20, 22, 0.8);
+            --border: rgba(201, 168, 108, 0.2);
+            --rose: #a8576a;
+            --cream: #f5ebe0;
+        }
 
-/* Dark theme toggle */
-.theme-toggle {
-    position: fixed;
-    top: 100px;
-    right: 20px;
-    background: var(--secondary-bg);
-    border: 1px solid var(--border-color);
-    border-radius: 50%;
-    width: 50px;
-    height: 50px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    z-index: 999;
-}
-
-.theme-toggle:hover {
-    background: var(--accent-cyan);
-    color: white;
-    transform: scale(1.1);
-}
-
-/* Search functionality */
-.search-container {
-    position: relative;
-    max-width: 400px;
-    margin: 0 auto 40px;
-}
-
-.search-input {
-    width: 100%;
-    padding: 15px 50px 15px 20px;
-    background: var(--secondary-bg);
-    border: 1px solid var(--border-color);
-    border-radius: 25px;
-    color: var(--text-primary);
-    font-size: 16px;
-    transition: all 0.3s ease;
-}
-
-.search-input:focus {
-    outline: none;
-    border-color: var(--accent-cyan);
-    box-shadow: 0 0 0 3px rgba(6, 182, 212, 0.1);
-}
-
-.search-icon {
-    position: absolute;
-    right: 20px;
-    top: 50%;
-    transform: translateY(-50%);
-    color: var(--text-secondary);
-}
-
-/* Highlight search results */
-.highlight {
-    background: var(--accent-orange);
-    color: black;
-    padding: 2px 4px;
-    border-radius: 3px;
-    font-weight: 600;
-}
-
-/* Interactive quiz styles */
-.quiz-container {
-    background: var(--secondary-bg);
-    border: 1px solid var(--border-color);
-    border-radius: 12px;
-    padding: 30px;
-    margin: 20px 0;
-}
-
-.quiz-question {
-    font-size: 18px;
-    font-weight: 600;
-    margin-bottom: 20px;
-    color: var(--text-primary);
-}
-
-.quiz-options {
-    display: grid;
-    gap: 10px;
-    margin-bottom: 20px;
-}
-
-.quiz-option {
-    padding: 15px;
-    background: var(--accent-bg);
-    border: 2px solid transparent;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-}
-
-.quiz-option:hover {
-    border-color: var(--accent-cyan);
-    background: rgba(6, 182, 212, 0.1);
-}
-
-.quiz-option.selected {
-    border-color: var(--accent-blue);
-    background: rgba(59, 130, 246, 0.1);
-}
-
-.quiz-option.correct {
-    border-color: var(--accent-green);
-    background: rgba(16, 185, 129, 0.1);
-}
-
-.quiz-option.incorrect {
-    border-color: var(--accent-red);
-    background: rgba(239, 68, 68, 0.1);
-}
-
-.quiz-feedback {
-    padding: 15px;
-    border-radius: 8px;
-    margin-top: 15px;
-    display: none;
-}
-
-.quiz-feedback.correct {
-    background: rgba(16, 185, 129, 0.1);
-    border: 1px solid var(--accent-green);
-    color: var(--accent-green);
-}
-
-.quiz-feedback.incorrect {
-    background: rgba(239, 68, 68, 0.1);
-    border: 1px solid var(--accent-red);
-    color: var(--accent-red);
-}
-
-/* Timer styles */
-.timer-container {
-    position: fixed;
-    top: 150px;
-    right: 20px;
-    background: var(--secondary-bg);
-    border: 1px solid var(--border-color);
-    border-radius: 12px;
-    padding: 20px;
-    text-align: center;
-    min-width: 150px;
-}
-
-.timer-display {
-    font-size: 24px;
-    font-weight: 700;
-    color: var(--accent-cyan);
-    font-family: 'JetBrains Mono', monospace;
-}
-
-.timer-label {
-    font-size: 12px;
-    color: var(--text-secondary);
-    margin-top: 5px;
-}
-
-.timer-controls {
-    display: flex;
-    gap: 10px;
-    margin-top: 15px;
-}
-
-.timer-btn {
-    flex: 1;
-    padding: 8px;
-    background: var(--accent-bg);
-    border: 1px solid var(--border-color);
-    border-radius: 6px;
-    color: var(--text-primary);
-    cursor: pointer;
-    font-size: 12px;
-    transition: all 0.3s ease;
-}
-
-.timer-btn:hover {
-    background: var(--accent-cyan);
-    color: white;
-}
-
-/* Notes section */
-.notes-container {
-    background: var(--secondary-bg);
-    border: 1px solid var(--border-color);
-    border-radius: 12px;
-    padding: 30px;
-    margin: 20px 0;
-}
-
-.notes-textarea {
-    width: 100%;
-    min-height: 200px;
-    background: var(--accent-bg);
-    border: 1px solid var(--border-color);
-    border-radius: 8px;
-    padding: 15px;
-    color: var(--text-primary);
-    font-family: 'Inter', sans-serif;
-    font-size: 14px;
-    line-height: 1.6;
-    resize: vertical;
-}
-
-.notes-textarea:focus {
-    outline: none;
-    border-color: var(--accent-cyan);
-}
-
-.notes-actions {
-    display: flex;
-    gap: 10px;
-    margin-top: 15px;
-}
-
-.notes-btn {
-    padding: 10px 20px;
-    background: var(--accent-cyan);
-    border: none;
-    border-radius: 6px;
-    color: white;
-    cursor: pointer;
-    font-weight: 500;
-    transition: all 0.3s ease;
-}
-
-.notes-btn:hover {
-    background: var(--accent-blue);
-    transform: translateY(-1px);
-}
-
-.notes-btn.secondary {
-    background: var(--accent-bg);
-    border: 1px solid var(--border-color);
-    color: var(--text-primary);
-}
-
-.notes-btn.secondary:hover {
-    background: var(--border-color);
-}
-
-/* Responsive adjustments */
-@media (max-width: 768px) {
-    .theme-toggle,
-    .timer-container {
-        position: relative;
-        top: auto;
-        right: auto;
-        margin: 20px auto;
-        width: fit-content;
-    }
-    
-    .search-container {
-        max-width: 100%;
-        margin: 0 20px 40px;
-    }
-    
-    .quiz-container {
-        margin: 20px;
-        padding: 20px;
-    }
-    
-    .notes-container {
-        margin: 20px;
-        padding: 20px;
-    }
-}
-
-/* Print styles */
-@media print {
-    .nav,
-    .theme-toggle,
-    .timer-container,
-    .search-container {
-        display: none;
-    }
-    
-    body {
-        background: white;
-        color: black;
-    }
-    
-    .qa-section {
-        break-inside: avoid;
-        border: 1px solid #ccc;
-        margin-bottom: 20px;
-    }
-    
-    .qa-content {
-        max-height: none !important;
-        display: block !important;
-    }
-}
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
 
-        :root {
-            --primary-bg: #0a0a0a;
-            --secondary-bg: #1a1a1a;
-            --accent-bg: #2a2a2a;
-            --text-primary: #ffffff;
-            --text-secondary: #b0b0b0;
-            --text-muted: #707070;
-            --accent-blue: #3b82f6;
-            --accent-cyan: #06b6d4;
-            --accent-green: #10b981;
-            --accent-orange: #f59e0b;
-            --accent-red: #ef4444;
-            --border-color: #333333;
-            --gradient-1: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            --gradient-2: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-            --gradient-3: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        html {
+            scroll-behavior: smooth;
         }
 
         body {
-            font-family: 'Inter', sans-serif;
-            background: var(--primary-bg);
-            color: var(--text-primary);
-            line-height: 1.6;
+            font-family: 'Poppins', sans-serif;
+            background: var(--bg);
+            color: var(--fg);
             overflow-x: hidden;
+            line-height: 1.8;
         }
 
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
+        h1, h2, h3 {
+            font-family: 'Playfair Display', serif;
         }
 
-        /* Navigation */
-        .nav {
+        /* Particle Canvas */
+        #particles-canvas {
             position: fixed;
             top: 0;
+            left: 0;
             width: 100%;
-            background: rgba(10, 10, 10, 0.95);
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid var(--border-color);
-            z-index: 1000;
-            padding: 15px 0;
-        }
-
-        .nav-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .logo {
-            font-size: 24px;
-            font-weight: 700;
-            color: var(--accent-cyan);
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 30px;
-            list-style: none;
-        }
-
-        .nav-links a {
-            color: var(--text-secondary);
-            text-decoration: none;
-            font-weight: 500;
-            transition: color 0.3s ease;
-        }
-
-        .nav-links a:hover {
-            color: var(--accent-cyan);
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
         }
 
         /* Hero Section */
         .hero {
-            margin-top: 80px;
-            padding: 80px 0;
-            text-align: center;
-            background: var(--gradient-1);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
             position: relative;
-            overflow: hidden;
+            z-index: 2;
+            padding: 2rem;
+            text-align: center;
         }
 
         .hero::before {
@@ -401,1463 +74,1197 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="0.5"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
-            opacity: 0.3;
+            background: 
+                radial-gradient(ellipse at 20% 20%, rgba(168, 87, 106, 0.15) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 80%, rgba(201, 168, 108, 0.1) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 50%, rgba(139, 77, 87, 0.08) 0%, transparent 70%);
+            z-index: -1;
         }
 
-        .hero-content {
-            position: relative;
-            z-index: 1;
-        }
-
-        .hero h1 {
-            font-size: 48px;
+        .hero-title {
+            font-size: clamp(3rem, 10vw, 8rem);
             font-weight: 700;
-            margin-bottom: 20px;
-            background: linear-gradient(45deg, #ffffff, var(--accent-cyan));
+            letter-spacing: 0.05em;
+            background: linear-gradient(135deg, var(--cream) 0%, var(--accent) 50%, var(--rose) 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 1.5s ease forwards;
         }
 
-        .hero p {
-            font-size: 20px;
-            color: rgba(255, 255, 255, 0.9);
-            margin-bottom: 40px;
-            max-width: 600px;
-            margin-left: auto;
-            margin-right: auto;
+        .hero-subtitle {
+            font-size: clamp(1rem, 3vw, 1.5rem);
+            color: var(--muted);
+            font-weight: 300;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            opacity: 0;
+            animation: fadeInUp 1.5s ease 0.3s forwards;
         }
 
-        .cta-button {
-            display: inline-block;
-            padding: 15px 30px;
-            background: var(--accent-cyan);
-            color: white;
-            text-decoration: none;
-            border-radius: 8px;
+        .distance-counter {
+            margin-top: 3rem;
+            padding: 2rem 4rem;
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 1rem;
+            backdrop-filter: blur(20px);
+            opacity: 0;
+            animation: fadeInUp 1.5s ease 0.6s forwards;
+        }
+
+        .distance-number {
+            font-size: clamp(2rem, 6vw, 4rem);
             font-weight: 600;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(6, 182, 212, 0.3);
+            color: var(--accent);
+            font-family: 'Playfair Display', serif;
         }
 
-        .cta-button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(6, 182, 212, 0.4);
+        .distance-label {
+            color: var(--muted);
+            font-size: 0.875rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
         }
 
-        /* Main Content */
-        .main-content {
-            padding: 60px 0;
+        .relationship-date {
+            margin-top: 2rem;
+            padding: 1rem 2rem;
+            border: 1px solid var(--border);
+            border-radius: 0.5rem;
+            opacity: 0;
+            animation: fadeInUp 1.5s ease 0.9s forwards;
         }
 
-        .section {
-            margin-bottom: 60px;
-        }
-
-        .section-header {
-            text-align: center;
-            margin-bottom: 40px;
-        }
-
-        .section-title {
-            font-size: 36px;
-            font-weight: 700;
-            color: var(--accent-cyan);
-            margin-bottom: 10px;
-        }
-
-        .section-subtitle {
-            font-size: 18px;
-            color: var(--text-secondary);
-            max-width: 600px;
-            margin: 0 auto;
-        }
-
-        /* Topic Cards */
-        .topics-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 30px;
-            margin-bottom: 40px;
-        }
-
-        .topic-card {
-            background: var(--secondary-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 30px;
-            transition: all 0.3s ease;
-            cursor: pointer;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .topic-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: var(--gradient-3);
-            transform: scaleX(0);
-            transition: transform 0.3s ease;
-        }
-
-        .topic-card:hover::before {
-            transform: scaleX(1);
-        }
-
-        .topic-card:hover {
-            transform: translateY(-5px);
-            border-color: var(--accent-cyan);
-            box-shadow: 0 10px 30px rgba(6, 182, 212, 0.1);
-        }
-
-        .topic-icon {
-            font-size: 48px;
-            color: var(--accent-cyan);
-            margin-bottom: 20px;
-        }
-
-        .topic-title {
-            font-size: 24px;
-            font-weight: 600;
-            margin-bottom: 15px;
-            color: var(--text-primary);
-        }
-
-        .topic-description {
-            color: var(--text-secondary);
-            margin-bottom: 20px;
-            line-height: 1.6;
-        }
-
-        .topic-questions {
-            color: var(--accent-blue);
-            font-size: 14px;
+        .date-text {
+            font-size: 1.25rem;
+            color: var(--rose);
             font-weight: 500;
         }
 
-        /* Question-Answer Section */
-        .qa-section {
-            background: var(--secondary-bg);
-            border-radius: 12px;
-            padding: 40px;
-            margin-bottom: 30px;
-            border: 1px solid var(--border-color);
+        .scroll-indicator {
+            position: absolute;
+            bottom: 3rem;
+            left: 50%;
+            transform: translateX(-50%);
+            opacity: 0;
+            animation: fadeInUp 1.5s ease 1.2s forwards, bounce 2s ease-in-out infinite 2s;
         }
 
-        .qa-header {
-            display: flex;
-            align-items: center;
-            margin-bottom: 20px;
-            cursor: pointer;
+        .scroll-indicator svg {
+            width: 24px;
+            height: 24px;
+            stroke: var(--accent);
         }
 
-        .qa-number {
-            background: var(--accent-cyan);
-            color: white;
-            width: 40px;
-            height: 40px;
+        /* Story Sections */
+        .story-section {
+            min-height: 100vh;
+            padding: 6rem 2rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .section-container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .section-number {
+            font-size: 0.75rem;
+            letter-spacing: 0.3em;
+            color: var(--accent);
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .section-title {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 600;
+            margin-bottom: 2rem;
+            color: var(--cream);
+            line-height: 1.2;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .story-text {
+            font-size: 1.125rem;
+            color: var(--muted);
+            margin-bottom: 1.5rem;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .story-highlight {
+            color: var(--accent);
+            font-weight: 500;
+        }
+
+        .story-emotion {
+            color: var(--rose);
+            font-style: italic;
+        }
+
+        .quote-box {
+            padding: 2rem;
+            margin: 2rem 0;
+            background: linear-gradient(135deg, rgba(201, 168, 108, 0.1) 0%, rgba(168, 87, 106, 0.1) 100%);
+            border-left: 3px solid var(--accent);
+            border-radius: 0 1rem 1rem 0;
+            font-style: italic;
+            color: var(--cream);
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        /* Memory Cards */
+        .memory-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-top: 3rem;
+        }
+
+        .memory-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 1rem;
+            padding: 2rem;
+            backdrop-filter: blur(10px);
+            transition: all 0.4s ease;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        .memory-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent);
+            box-shadow: 0 20px 40px rgba(201, 168, 108, 0.1);
+        }
+
+        .memory-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, var(--accent) 0%, var(--rose) 100%);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
+            margin-bottom: 1rem;
+        }
+
+        .memory-icon svg {
+            width: 24px;
+            height: 24px;
+            stroke: var(--bg);
+        }
+
+        .memory-title {
+            font-size: 1.25rem;
             font-weight: 600;
-            margin-right: 15px;
-            flex-shrink: 0;
+            color: var(--cream);
+            margin-bottom: 0.5rem;
         }
 
-        .qa-question {
-            font-size: 20px;
-            font-weight: 600;
-            color: var(--text-primary);
-            flex: 1;
+        .memory-text {
+            color: var(--muted);
+            font-size: 0.95rem;
         }
 
-        .qa-toggle {
-            color: var(--accent-cyan);
-            font-size: 20px;
-            transition: transform 0.3s ease;
+        /* Timeline */
+        .timeline {
+            position: relative;
+            padding-left: 3rem;
+            margin-top: 3rem;
         }
 
-        .qa-content {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.3s ease;
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: linear-gradient(to bottom, var(--accent), var(--rose), transparent);
         }
 
-        .qa-content.active {
-            max-height: 2000px;
+        .timeline-item {
+            position: relative;
+            padding-bottom: 3rem;
+            opacity: 0;
+            transform: translateX(-20px);
         }
 
-        .qa-answer {
-            padding: 20px 0 0 55px;
-            color: var(--text-secondary);
-            line-height: 1.7;
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -3rem;
+            top: 0.5rem;
+            width: 12px;
+            height: 12px;
+            background: var(--accent);
+            border-radius: 50%;
+            transform: translateX(-5px);
         }
 
-        .qa-answer p {
-            margin-bottom: 15px;
+        .timeline-date {
+            font-size: 0.875rem;
+            color: var(--accent);
+            margin-bottom: 0.5rem;
         }
 
-        .qa-answer ul {
-            margin: 15px 0;
-            padding-left: 20px;
+        .timeline-content {
+            background: var(--card);
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            border: 1px solid var(--border);
         }
 
-        .qa-answer li {
-            margin-bottom: 8px;
-            color: var(--text-secondary);
-        }
-
-        .qa-answer strong {
-            color: var(--text-primary);
-            font-weight: 600;
-        }
-
-        .qa-answer code {
-            background: var(--accent-bg);
-            padding: 2px 6px;
-            border-radius: 4px;
-            font-family: 'JetBrains Mono', monospace;
-            font-size: 14px;
-            color: var(--accent-cyan);
-        }
-
-        /* Study Tools */
-        .study-tools {
+        /* Stats Counter */
+        .stats-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            margin-top: 40px;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
         }
 
-        .tool-card {
-            background: var(--secondary-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            padding: 25px;
+        .stat-item {
             text-align: center;
-            transition: all 0.3s ease;
+            padding: 2rem;
+            background: var(--card);
+            border-radius: 1rem;
+            border: 1px solid var(--border);
+            opacity: 0;
+            transform: scale(0.9);
         }
 
-        .tool-card:hover {
-            border-color: var(--accent-green);
-            transform: translateY(-3px);
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--accent);
+            font-family: 'Playfair Display', serif;
         }
 
-        .tool-icon {
-            font-size: 36px;
-            color: var(--accent-green);
-            margin-bottom: 15px;
+        .stat-label {
+            color: var(--muted);
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
         }
 
-        .tool-title {
-            font-size: 18px;
-            font-weight: 600;
-            margin-bottom: 10px;
-            color: var(--text-primary);
+        /* Final Letter */
+        .love-letter {
+            background: linear-gradient(135deg, rgba(245, 235, 224, 0.05) 0%, rgba(201, 168, 108, 0.05) 100%);
+            border: 1px solid var(--border);
+            border-radius: 1rem;
+            padding: 3rem;
+            margin-top: 3rem;
+            position: relative;
+            overflow: hidden;
         }
 
-        .tool-description {
-            color: var(--text-secondary);
-            font-size: 14px;
+        .love-letter::before {
+            content: '"';
+            position: absolute;
+            top: 1rem;
+            left: 1.5rem;
+            font-size: 8rem;
+            font-family: 'Playfair Display', serif;
+            color: var(--accent);
+            opacity: 0.2;
+            line-height: 1;
         }
 
-        /* Footer */
-        .footer {
-            background: var(--secondary-bg);
-            border-top: 1px solid var(--border-color);
-            padding: 40px 0;
-            text-align: center;
-            margin-top: 60px;
+        .letter-content {
+            position: relative;
+            z-index: 1;
         }
 
-        .footer-content {
-            color: var(--text-secondary);
+        .letter-text {
+            font-size: 1.25rem;
+            color: var(--cream);
+            line-height: 2;
         }
 
-        /* Responsive Design */
-        @media (max-width: 768px) {
-            .hero h1 {
-                font-size: 36px;
+        .letter-signature {
+            margin-top: 2rem;
+            text-align: right;
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            color: var(--accent);
+        }
+
+        /* Floating Hearts */
+        .floating-heart {
+            position: fixed;
+            pointer-events: none;
+            z-index: 100;
+            opacity: 0.6;
+            animation: floatUp 4s ease-in forwards;
+        }
+
+        @keyframes floatUp {
+            0% {
+                opacity: 0.6;
+                transform: translateY(0) scale(1);
             }
-
-            .hero p {
-                font-size: 18px;
-            }
-
-            .nav-links {
-                display: none;
-            }
-
-            .topics-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .qa-section {
-                padding: 25px;
-            }
-
-            .qa-question {
-                font-size: 18px;
-            }
-
-            .qa-answer {
-                padding-left: 0;
-            }
-        }
-
-        /* Animations */
-        @keyframes fadeInUp {
-            from {
+            100% {
                 opacity: 0;
-                transform: translateY(30px);
+                transform: translateY(-100vh) scale(0.5);
             }
+        }
+
+        @keyframes fadeInUp {
             to {
                 opacity: 1;
-                transform: translateY(0);
+                transform: translateY(0) translateX(0) scale(1);
             }
         }
 
-        .fade-in-up {
-            animation: fadeInUp 0.6s ease-out;
+        @keyframes bounce {
+            0%, 100% {
+                transform: translateX(-50%) translateY(0);
+            }
+            50% {
+                transform: translateX(-50%) translateY(10px);
+            }
         }
 
-        /* Scroll Progress */
+        /* Scroll Reveal Class */
+        .reveal {
+            opacity: 1 !important;
+            transform: translateY(0) translateX(0) scale(1) !important;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .story-section {
+                padding: 4rem 1.5rem;
+            }
+
+            .distance-counter {
+                padding: 1.5rem 2rem;
+            }
+
+            .love-letter {
+                padding: 2rem;
+            }
+
+            .love-letter::before {
+                font-size: 5rem;
+            }
+        }
+
+        /* Reduced Motion */
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+
+        /* Progress Bar */
         .progress-bar {
             position: fixed;
             top: 0;
             left: 0;
-            width: 0%;
             height: 3px;
-            background: var(--gradient-3);
-            z-index: 1001;
+            background: linear-gradient(90deg, var(--accent), var(--rose));
+            z-index: 1000;
             transition: width 0.1s ease;
         }
-    </style>
-	
-	<script>
-	// Enhanced JavaScript functionality for GTU Cyber Security Study Guide
 
-class StudyGuideApp {
-    constructor() {
-        this.quizData = this.initializeQuizData();
-        this.currentQuizIndex = 0;
-        this.score = 0;
-        this.timer = null;
-        this.timeRemaining = 150; // 2.5 hours in minutes
-        this.notes = JSON.parse(localStorage.getItem('studyNotes') || '{}');
-        this.init();
-    }
-
-    init() {
-        this.setupEventListeners();
-        this.loadNotes();
-        this.initializeSearch();
-        this.createInteractiveElements();
-    }
-
-    setupEventListeners() {
-        // Theme toggle
-        const themeToggle = document.querySelector('.theme-toggle');
-        if (themeToggle) {
-            themeToggle.addEventListener('click', () => this.toggleTheme());
-        }
-
-        // Timer controls
-        document.addEventListener('click', (e) => {
-            if (e.target.classList.contains('timer-btn')) {
-                const action = e.target.dataset.action;
-                this.handleTimerAction(action);
-            }
-        });
-
-        // Quiz interactions
-        document.addEventListener('click', (e) => {
-            if (e.target.classList.contains('quiz-option')) {
-                this.handleQuizAnswer(e.target);
-            }
-        });
-
-        // Notes functionality
-        const notesTextarea = document.querySelector('.notes-textarea');
-        if (notesTextarea) {
-            notesTextarea.addEventListener('input', () => this.saveNotes());
-        }
-
-        const notesActions = document.querySelector('.notes-actions');
-        if (notesActions) {
-            notesActions.addEventListener('click', (e) => {
-                if (e.target.classList.contains('notes-btn')) {
-                    const action = e.target.dataset.action;
-                    this.handleNotesAction(action);
-                }
-            });
-        }
-    }
-
-    initializeQuizData() {
-        return [
-            {
-                question: "Which of the following is NOT a type of firewall?",
-                options: [
-                    "Packet Filtering Firewall",
-                    "Stateful Inspection Firewall",
-                    "Application Layer Firewall",
-                    "Database Firewall"
-                ],
-                correct: 3,
-                explanation: "Database Firewall is a specific type of security control for databases, not a general firewall category."
-            },
-            {
-                question: "What is the primary purpose of using Nmap in cybersecurity?",
-                options: [
-                    "To encrypt network traffic",
-                    "To scan networks and discover hosts/services",
-                    "To create firewall rules",
-                    "To generate SSL certificates"
-                ],
-                correct: 1,
-                explanation: "Nmap is primarily used for network discovery and security auditing by scanning networks to discover hosts and services."
-            },
-            {
-                question: "Which section of IT Act, 2000 deals with identity theft?",
-                options: [
-                    "Section 43",
-                    "Section 65",
-                    "Section 66C",
-                    "Section 67"
-                ],
-                correct: 2,
-                explanation: "Section 66C of IT Act, 2000 specifically addresses identity theft and related offenses."
-            },
-            {
-                question: "What is SQL injection primarily used for by attackers?",
-                options: [
-                    "To encrypt database data",
-                    "To execute malicious SQL commands",
-                    "To improve database performance",
-                    "To backup database"
-                ],
-                correct: 1,
-                explanation: "SQL injection allows attackers to execute malicious SQL commands to access, modify, or delete database data."
-            },
-            {
-                question: "Which tool is commonly used for digital forensics analysis?",
-                options: [
-                    "Metasploit",
-                    "Autopsy",
-                    "Nmap",
-                    "Wireshark"
-                ],
-                correct: 1,
-                explanation: "Autopsy is a digital forensics platform specifically designed for analyzing hard drives and mobile devices."
-            }
-        ];
-    }
-
-    toggleTheme() {
-        const body = document.body;
-        const currentTheme = body.getAttribute('data-theme') || 'dark';
-        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-        
-        body.setAttribute('data-theme', newTheme);
-        localStorage.setItem('theme', newTheme);
-        
-        // Update theme toggle icon
-        const icon = document.querySelector('.theme-toggle i');
-        if (icon) {
-            icon.className = newTheme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
-        }
-    }
-
-    initializeSearch() {
-        const searchInput = document.querySelector('.search-input');
-        if (!searchInput) return;
-
-        searchInput.addEventListener('input', (e) => {
-            const query = e.target.value.toLowerCase();
-            this.performSearch(query);
-        });
-    }
-
-    performSearch(query) {
-        const qaSections = document.querySelectorAll('.qa-section');
-        
-        qaSections.forEach(section => {
-            const question = section.querySelector('.qa-question').textContent.toLowerCase();
-            const answer = section.querySelector('.qa-answer').textContent.toLowerCase();
-            
-            if (question.includes(query) || answer.includes(query)) {
-                section.style.display = 'block';
-                if (query) {
-                    this.highlightText(section, query);
-                }
-            } else {
-                section.style.display = query ? 'none' : 'block';
-            }
-        });
-    }
-
-    highlightText(element, query) {
-        const walker = document.createTreeWalker(
-            element,
-            NodeFilter.SHOW_TEXT,
-            null,
-            false
-        );
-
-        const textNodes = [];
-        let node;
-        while (node = walker.nextNode()) {
-            textNodes.push(node);
-        }
-
-        textNodes.forEach(textNode => {
-            const text = textNode.textContent;
-            const regex = new RegExp(`(${query})`, 'gi');
-            if (regex.test(text)) {
-                const highlightedText = text.replace(regex, '<span class="highlight">$1</span>');
-                const wrapper = document.createElement('span');
-                wrapper.innerHTML = highlightedText;
-                textNode.parentNode.replaceChild(wrapper, textNode);
-            }
-        });
-    }
-
-    createInteractiveElements() {
-        // Create quiz container
-        this.createQuizContainer();
-        
-        // Create notes container
-        this.createNotesContainer();
-        
-        // Create timer
-        this.createTimer();
-    }
-
-    createQuizContainer() {
-        const qaSection = document.getElementById('qa');
-        if (!qaSection) return;
-
-        const quizContainer = document.createElement('div');
-        quizContainer.className = 'quiz-container';
-        quizContainer.innerHTML = `
-            <h3 style="color: var(--accent-cyan); margin-bottom: 20px;">
-                <i class="fas fa-question-circle"></i> Quick Quiz
-            </h3>
-            <div class="quiz-question" id="quiz-question"></div>
-            <div class="quiz-options" id="quiz-options"></div>
-            <div class="quiz-feedback" id="quiz-feedback"></div>
-            <div style="margin-top: 20px;">
-                <button class="notes-btn" onclick="studyApp.nextQuiz()">Next Question</button>
-                <span style="margin-left: 15px; color: var(--text-secondary);">
-                    Score: <span id="quiz-score">0</span>/${this.quizData.length}
-                </span>
-            </div>
-        `;
-
-        qaSection.appendChild(quizContainer);
-        this.loadQuizQuestion();
-    }
-
-    createNotesContainer() {
-        const toolsSection = document.getElementById('tools');
-        if (!toolsSection) return;
-
-        const notesContainer = document.createElement('div');
-        notesContainer.className = 'notes-container';
-        notesContainer.innerHTML = `
-            <h3 style="color: var(--accent-cyan); margin-bottom: 20px;">
-                <i class="fas fa-bookmark"></i> Personal Notes
-            </h3>
-            <textarea class="notes-textarea" placeholder="Add your personal notes here... Remember to save frequently!"></textarea>
-            <div class="notes-actions">
-                <button class="notes-btn" data-action="save">Save Notes</button>
-                <button class="notes-btn secondary" data-action="clear">Clear</button>
-                <button class="notes-btn secondary" data-action="export">Export</button>
-            </div>
-        `;
-
-        toolsSection.appendChild(notesContainer);
-    }
-
-    createTimer() {
-        const timerContainer = document.createElement('div');
-        timerContainer.className = 'timer-container';
-        timerContainer.innerHTML = `
-            <div class="timer-display" id="timer-display">02:30:00</div>
-            <div class="timer-label">Exam Time Remaining</div>
-            <div class="timer-controls">
-                <button class="timer-btn" data-action="start">Start</button>
-                <button class="timer-btn" data-action="pause">Pause</button>
-                <button class="timer-btn" data-action="reset">Reset</button>
-            </div>
-        `;
-
-        document.body.appendChild(timerContainer);
-    }
-
-    loadQuizQuestion() {
-        const question = this.quizData[this.currentQuizIndex];
-        const questionEl = document.getElementById('quiz-question');
-        const optionsEl = document.getElementById('quiz-options');
-        const feedbackEl = document.getElementById('quiz-feedback');
-
-        if (!question || !questionEl || !optionsEl || !feedbackEl) return;
-
-        questionEl.textContent = question.question;
-        optionsEl.innerHTML = '';
-        feedbackEl.style.display = 'none';
-
-        question.options.forEach((option, index) => {
-            const optionEl = document.createElement('div');
-            optionEl.className = 'quiz-option';
-            optionEl.textContent = `${String.fromCharCode(65 + index)}. ${option}`;
-            optionEl.dataset.index = index;
-            optionsEl.appendChild(optionEl);
-        });
-    }
-
-    handleQuizAnswer(selectedOption) {
-        const question = this.quizData[this.currentQuizIndex];
-        const selectedIndex = parseInt(selectedOption.dataset.index);
-        const feedbackEl = document.getElementById('quiz-feedback');
-        const options = document.querySelectorAll('.quiz-option');
-
-        // Disable all options
-        options.forEach(option => {
-            option.style.pointerEvents = 'none';
-        });
-
-        // Mark correct/incorrect
-        options.forEach((option, index) => {
-            if (index === question.correct) {
-                option.classList.add('correct');
-            } else if (index === selectedIndex && index !== question.correct) {
-                option.classList.add('incorrect');
-            }
-        });
-
-        // Show feedback
-        feedbackEl.textContent = question.explanation;
-        feedbackEl.className = `quiz-feedback ${selectedIndex === question.correct ? 'correct' : 'incorrect'}`;
-        feedbackEl.style.display = 'block';
-
-        // Update score
-        if (selectedIndex === question.correct) {
-            this.score++;
-            document.getElementById('quiz-score').textContent = this.score;
-        }
-    }
-
-    nextQuiz() {
-        this.currentQuizIndex = (this.currentQuizIndex + 1) % this.quizData.length;
-        
-        // Reset options
-        const options = document.querySelectorAll('.quiz-option');
-        options.forEach(option => {
-            option.style.pointerEvents = 'auto';
-            option.classList.remove('correct', 'incorrect', 'selected');
-        });
-
-        this.loadQuizQuestion();
-    }
-
-    handleTimerAction(action) {
-        switch (action) {
-            case 'start':
-                this.startTimer();
-                break;
-            case 'pause':
-                this.pauseTimer();
-                break;
-            case 'reset':
-                this.resetTimer();
-                break;
-        }
-    }
-
-    startTimer() {
-        if (this.timer) return;
-
-        this.timer = setInterval(() => {
-            this.timeRemaining--;
-            this.updateTimerDisplay();
-
-            if (this.timeRemaining <= 0) {
-                this.pauseTimer();
-                alert('Time\'s up! Exam duration completed.');
-            }
-        }, 1000);
-    }
-
-    pauseTimer() {
-        if (this.timer) {
-            clearInterval(this.timer);
-            this.timer = null;
-        }
-    }
-
-    resetTimer() {
-        this.pauseTimer();
-        this.timeRemaining = 150; // Reset to 2.5 hours
-        this.updateTimerDisplay();
-    }
-
-    updateTimerDisplay() {
-        const hours = Math.floor(this.timeRemaining / 3600);
-        const minutes = Math.floor((this.timeRemaining % 3600) / 60);
-        const seconds = this.timeRemaining % 60;
-
-        const display = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-        
-        const timerDisplay = document.getElementById('timer-display');
-        if (timerDisplay) {
-            timerDisplay.textContent = display;
-        }
-    }
-
-    handleNotesAction(action) {
-        const textarea = document.querySelector('.notes-textarea');
-        if (!textarea) return;
-
-        switch (action) {
-            case 'save':
-                this.saveNotes();
-                break;
-            case 'clear':
-                if (confirm('Are you sure you want to clear all notes?')) {
-                    textarea.value = '';
-                    this.saveNotes();
-                }
-                break;
-            case 'export':
-                this.exportNotes();
-                break;
-        }
-    }
-
-    saveNotes() {
-        const textarea = document.querySelector('.notes-textarea');
-        if (!textarea) return;
-
-        const notes = textarea.value;
-        localStorage.setItem('studyNotes', JSON.stringify({
-            content: notes,
-            timestamp: new Date().toISOString()
-        }));
-
-        // Show save confirmation
-        this.showNotification('Notes saved successfully!', 'success');
-    }
-
-    loadNotes() {
-        const savedNotes = localStorage.getItem('studyNotes');
-        if (savedNotes) {
-            const notesData = JSON.parse(savedNotes);
-            const textarea = document.querySelector('.notes-textarea');
-            if (textarea && notesData.content) {
-                textarea.value = notesData.content;
-            }
-        }
-    }
-
-    exportNotes() {
-        const textarea = document.querySelector('.notes-textarea');
-        if (!textarea || !textarea.value.trim()) {
-            this.showNotification('No notes to export!', 'warning');
-            return;
-        }
-
-        const notesContent = textarea.value;
-        const blob = new Blob([notesContent], { type: 'text/plain' });
-        const url = URL.createObjectURL(blob);
-        
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `GTU-CyberSecurity-Notes-${new Date().toISOString().split('T')[0]}.txt`;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        URL.revokeObjectURL(url);
-
-        this.showNotification('Notes exported successfully!', 'success');
-    }
-
-    showNotification(message, type = 'info') {
-        const notification = document.createElement('div');
-        notification.style.cssText = `
+        /* Navigation */
+        .nav {
             position: fixed;
-            top: 20px;
-            right: 20px;
-            background: ${type === 'success' ? 'var(--accent-green)' : type === 'warning' ? 'var(--accent-orange)' : 'var(--accent-blue)'};
-            color: white;
-            padding: 15px 20px;
-            border-radius: 8px;
-            z-index: 10000;
-            font-weight: 500;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-            transform: translateX(100%);
-            transition: transform 0.3s ease;
-        `;
-        notification.textContent = message;
-
-        document.body.appendChild(notification);
-
-        // Animate in
-        setTimeout(() => {
-            notification.style.transform = 'translateX(0)';
-        }, 100);
-
-        // Remove after 3 seconds
-        setTimeout(() => {
-            notification.style.transform = 'translateX(100%)';
-            setTimeout(() => {
-                document.body.removeChild(notification);
-            }, 300);
-        }, 3000);
-    }
-
-    // Utility functions for subnet calculator
-    calculateSubnet(ip, subnetMask) {
-        const ipParts = ip.split('.').map(Number);
-        const maskParts = subnetMask.split('.').map(Number);
-        
-        const networkAddress = ipParts.map((part, i) => part & maskParts[i]);
-        const broadcastAddress = ipParts.map((part, i) => part | (255 - maskParts[i]));
-        
-        const hostCount = Math.pow(2, 32 - this.getCIDR(subnetMask)) - 2;
-        
-        return {
-            network: networkAddress.join('.'),
-            broadcast: broadcastAddress.join('.'),
-            hosts: hostCount,
-            range: `${networkAddress.join('.')} - ${broadcastAddress.join('.')}`
-        };
-    }
-
-    getCIDR(subnetMask) {
-        const maskParts = subnetMask.split('.').map(Number);
-        let binaryMask = '';
-        
-        maskParts.forEach(part => {
-            binaryMask += part.toString(2).padStart(8, '0');
-        });
-        
-        return binaryMask.split('1').length - 1;
-    }
-}
-
-// Initialize the application
-let studyApp;
-
-document.addEventListener('DOMContentLoaded', () => {
-    studyApp = new StudyGuideApp();
-    
-    // Add keyboard shortcuts
-    document.addEventListener('keydown', (e) => {
-        // Ctrl/Cmd + F to focus search
-        if ((e.ctrlKey || e.metaKey) && e.key === 'f') {
-            e.preventDefault();
-            const searchInput = document.querySelector('.search-input');
-            if (searchInput) searchInput.focus();
+            bottom: 2rem;
+            right: 2rem;
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
         }
-        
-        // Ctrl/Cmd + S to save notes
-        if ((e.ctrlKey || e.metaKey) && e.key === 's') {
-            e.preventDefault();
-            studyApp.saveNotes();
-        }
-        
-        // Escape to clear search
-        if (e.key === 'Escape') {
-            const searchInput = document.querySelector('.search-input');
-            if (searchInput && searchInput.value) {
-                searchInput.value = '';
-                studyApp.performSearch('');
-            }
-        }
-    });
-    
-    // Add smooth scrolling for better UX
-    document.documentElement.style.scrollBehavior = 'smooth';
-    
-    // Initialize search functionality if not already present
-    if (!document.querySelector('.search-container')) {
-        const searchContainer = document.createElement('div');
-        searchContainer.className = 'search-container';
-        searchContainer.innerHTML = `
-            <input type="text" class="search-input" placeholder="Search questions and answers...">
-            <i class="fas fa-search search-icon"></i>
-        `;
-        
-        const qaSection = document.querySelector('#qa .section-header');
-        if (qaSection) {
-            qaSection.parentNode.insertBefore(searchContainer, qaSection.nextSibling);
-            studyApp.initializeSearch();
-        }
-    }
-});
 
-// Export for global access
-window.studyApp = studyApp;
-	</script>
-<base target="_blank">
+        .nav-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--border);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .nav-dot:hover, .nav-dot.active {
+            background: var(--accent);
+            transform: scale(1.3);
+        }
+    </style>
 </head>
 <body>
-    <div class="progress-bar" id="progressBar"></div>
-    
-    <nav class="nav">
-        <div class="container">
-            <div class="nav-content">
-                <div class="logo">
-                    <i class="fas fa-shield-alt"></i> GTU Cyber Security
-                </div>
-                <ul class="nav-links">
-                    <li><a href="#home">Home</a></li>
-                    <li><a href="#topics">Topics</a></li>
-                    <li><a href="#qa">Q&A</a></li>
-                    <li><a href="#tools">Tools</a></li>
-                </ul>
-            </div>
-        </div>
-    </nav>
+    <canvas id="particles-canvas"></canvas>
+    <div class="progress-bar" id="progress-bar"></div>
 
-    <section class="hero" id="home">
-        <div class="container">
-            <div class="hero-content fade-in-up">
-                <h1>GTU Cyber Security Study Guide</h1>
-                <p>Comprehensive preparation material for Gujarat Technological University Cyber Security examinations with detailed explanations and practical examples.</p>
-                <a href="#topics" class="cta-button">Start Learning</a>
+    <!-- Hero Section -->
+    <section class="hero" id="hero">
+        <h1 class="hero-title">Tulsi aur Aryan</h1>
+        <p class="hero-subtitle">Ek Anokhi Prem Kahani</p>
+        
+        <div class="distance-counter">
+            <div class="distance-number" id="distance-counter">6,924.46</div>
+            <div class="distance-label">Kilometre Duri Mein Bhi Paas Hain Hum</div>
+        </div>
+
+        <div class="relationship-date">
+            <div class="date-text">2 June 2025 Se Shuru Hui Mohabbat</div>
+        </div>
+
+        <div class="scroll-indicator">
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="2">
+                <path d="M12 5v14M19 12l-7 7-7-7"/>
+            </svg>
+        </div>
+    </section>
+
+    <!-- Section 1: The Beginning -->
+    <section class="story-section" id="beginning">
+        <div class="section-container">
+            <div class="section-number">Adhyay 01</div>
+            <h2 class="section-title">Jab Dil Mile, Duri Bhi Kam Lagne Lagi</h2>
+            
+            <p class="story-text">
+                Pyaar kabhi dekhta nahi ki duri kitni hai. <span class="story-highlight">6,924.46 kilometre</span> - yeh sirf ek number hai, lekin humari dhadkano ke beech kabhi koi faasla nahi tha. Tulsi aur Aryan ki kahani shuru hui ek aisi dosti se jo phir pyaar mein badal gayi.
+            </p>
+
+            <div class="quote-box">
+                "Pehla call itna lamba tha, itni baatein hui... happiness se bhari hui thi woh ghadiya. Jaise pehli baar milein ho, phir bhi jaante ho ek dusre ko janmo se."
+            </div>
+
+            <p class="story-text">
+                Kabhi ladai hoti thi, toh dono rote the - akele mein. Lekin <span class="story-emotion">ek dusre ka intezaar</span> karte the ki kaun pehle message karega. Yeh thi humari chhoti si siyappa, lekin isme pyaar tha.
+            </p>
+
+            <p class="story-text">
+                Jab main bohot bimaar tha, jab health kharab thi, jab mood off tha - <span class="story-highlight">Tulsi ne mujhe sambhala</span>. Usne kaha tha "Mumma humare saath hai" - woh pal main kabhi nahi bhoolunga. Lag raha tha sab theek ho jayega.
+            </p>
+
+            <div class="memory-grid">
+                <div class="memory-card">
+                    <div class="memory-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke-width="2">
+                            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                        </svg>
+                    </div>
+                    <div class="memory-title">Mera Pyaara Naam</div>
+                    <div class="memory-text">Woh mujhe "AARU" bulati thi, kabhi "post office dabba" - har naam mein pyaar tha.</div>
+                </div>
+
+                <div class="memory-card">
+                    <div class="memory-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke-width="2">
+                            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                        </svg>
+                    </div>
+                    <div class="memory-title">Pehla Call</div>
+                    <div class="memory-text">Lamba, baatein, khushi - sab kuch pehli mulaqaat jaisa feel hua.</div>
+                </div>
+
+                <div class="memory-card">
+                    <div class="memory-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"/>
+                            <path d="M8 14s1.5 2 4 2 4-2 4-2"/>
+                            <line x1="9" y1="9" x2="9.01" y2="9"/>
+                            <line x1="15" y1="9" x2="15.01" y2="9"/>
+                        </svg>
+                    </div>
+                    <div class="memory-title">Uski Hifazat</div>
+                    <div class="memory-text">Bimaar hone par uska khayal rakhna, mood off hone par uska sath.</div>
+                </div>
             </div>
         </div>
     </section>
 
-    <main class="main-content">
-        <div class="container">
-            <section class="section" id="topics">
-                <div class="section-header">
-                    <h2 class="section-title">Core Topics</h2>
-                    <p class="section-subtitle">Essential cyber security concepts covered in GTU syllabus with detailed explanations</p>
-                </div>
+    <!-- Section 2: First I Love You -->
+    <section class="story-section" id="firstlove">
+        <div class="section-container">
+            <div class="section-number">Adhyay 02</div>
+            <h2 class="section-title">Pehla "I Love You" - Dil Ki Sachi Dhadkan</h2>
+            
+            <p class="story-text">
+                Maine pehle kaha. <span class="story-highlight">Kai baar try kiya tha</span>, lekin dar tha - kahin main usey na kho doon. Lekin jab dil bhar gaya, toh keh diya. Usne response nahi diya turant.
+            </p>
 
-                <div class="topics-grid">
-                    <div class="topic-card" onclick="scrollToSection('network-security')">
-                        <div class="topic-icon">
-                            <i class="fas fa-network-wired"></i>
-                        </div>
-                        <h3 class="topic-title">Network Security</h3>
-                        <p class="topic-description">Firewalls, IDS/IPS, NAT, Network sniffers, and wireless security concepts explained with practical examples.</p>
-                        <div class="topic-questions">15+ Questions Covered</div>
-                    </div>
+            <div class="quote-box">
+                "Woh khush thi, muskurai bhi... lekin mujhe wait karwaya jawab ke liye. Bohot lamba wait kiya maine, lekin jab usne bhi 'Love You' kaha - us din laga sab kuch poora ho gaya."
+            </div>
 
-                    <div class="topic-card" onclick="scrollToSection('ethical-hacking')">
-                        <div class="topic-icon">
-                            <i class="fas fa-user-secret"></i>
-                        </div>
-                        <h3 class="topic-title">Ethical Hacking Tools</h3>
-                        <p class="topic-description">Nmap, Metasploit, OpenVAS, Wireshark, and other penetration testing tools with hands-on examples.</p>
-                        <div class="topic-questions">12+ Questions Covered</div>
-                    </div>
+            <p class="story-text">
+                Raat ko aankh nahi lagti thi. Jab woh puuchti thi "Soye?" - main jhooth bolta tha "Haan". Lekin sach yeh tha ki <span class="story-emotion">main uski photos dekhta rehta tha</span>, uske messages, humari baatein, uske smile ke screenshots - subah tak.
+            </p>
 
-                    <div class="topic-card" onclick="scrollToSection('cyber-crimes')">
-                        <div class="topic-icon">
-                            <i class="fas fa-gavel"></i>
-                        </div>
-                        <h3 class="topic-title">Cyber Crimes & Laws</h3>
-                        <p class="topic-description">Types of cyber crimes, IT Act 2000, digital forensics, and incident response procedures.</p>
-                        <div class="topic-questions">10+ Questions Covered</div>
-                    </div>
+            <p class="story-text">
+                Woh roye toh mujse control nahi hota tha. <span class="story-highlight">Andar se rota tha</span>, usey hug karna chahta tha, uski aankhon ke aansu pochna chahta tha. Uske rone par mujhe gussa aata tha - kyunki main usey dukhi nahi dekh sakta.
+            </p>
 
-                    <div class="topic-card" onclick="scrollToSection('web-security')">
-                        <div class="topic-icon">
-                            <i class="fas fa-globe"></i>
-                        </div>
-                        <h3 class="topic-title">Web Security</h3>
-                        <p class="topic-description">SQL injection, XSS, buffer overflow, steganography, and web application vulnerabilities.</p>
-                        <div class="topic-questions">8+ Questions Covered</div>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-date">Pehla Izhaar</div>
+                    <div class="timeline-content">
+                        <p class="memory-text">Darr tha, lekin dil mein pyaar zyada tha. Maine kaha "I Love You" - darr ke maare, khushi ke maare.</p>
                     </div>
                 </div>
-            </section>
-
-            <section class="section" id="qa">
-                <div class="section-header">
-                    <h2 class="section-title">GTU Question Bank</h2>
-                    <p class="section-subtitle">Previous exam questions with detailed answers following GTU pattern</p>
-                </div>
-
-                <!-- Network Security Q&A -->
-                <div id="network-security">
-                    <div class="qa-section">
-                        <div class="qa-header" onclick="toggleQA(this)">
-                            <div class="qa-number">Q1</div>
-                            <div class="qa-question">Define System and Web Vulnerability. Explain different types of vulnerabilities.</div>
-                            <div class="qa-toggle"><i class="fas fa-chevron-down"></i></div>
-                        </div>
-                        <div class="qa-content">
-                            <div class="qa-answer">
-                                <p><strong>System Vulnerability:</strong> A weakness or flaw in a computer system's design, implementation, or operation that could be exploited to violate the system's security policy.</p>
-                                <p><strong>Web Vulnerability:</strong> A security weakness in web applications, web servers, or web browsers that can be exploited by attackers to gain unauthorized access or perform malicious actions.</p>
-                                
-                                <p><strong>Types of Vulnerabilities:</strong></p>
-                                <ul>
-                                    <li><strong>Input Validation Flaws:</strong> SQL injection, XSS, command injection</li>
-                                    <li><strong>Authentication Weaknesses:</strong> Weak passwords, session management issues</li>
-                                    <li><strong>Authorization Failures:</strong> Privilege escalation, access control issues</li>
-                                    <li><strong>Configuration Errors:</strong> Default settings, unnecessary services</li>
-                                    <li><strong>Buffer Overflows:</strong> Memory corruption vulnerabilities</li>
-                                    <li><strong>Information Disclosure:</strong> Exposing sensitive data or system information</li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="qa-section">
-                        <div class="qa-header" onclick="toggleQA(this)">
-                            <div class="qa-number">Q2</div>
-                            <div class="qa-question">Explain Nmap and its different functionalities with commands.</div>
-                            <div class="qa-toggle"><i class="fas fa-chevron-down"></i></div>
-                        </div>
-                        <div class="qa-content">
-                            <div class="qa-answer">
-                                <p><strong>Nmap (Network Mapper)</strong> is a free and open-source network scanning tool used for network discovery, security auditing, and port scanning.</p>
-                                
-                                <p><strong>Key Functionalities:</strong></p>
-                                <ul>
-                                    <li><strong>Host Discovery:</strong> Finding live hosts on a network</li>
-                                    <li><strong>Port Scanning:</strong> Identifying open ports and services</li>
-                                    <li><strong>Service Version Detection:</strong> Determining service versions</li>
-                                    <li><strong>OS Detection:</strong> Identifying operating systems</li>
-                                    <li><strong>Scriptable Interaction:</strong> Using NSE (Nmap Scripting Engine)</li>
-                                </ul>
-
-                                <p><strong>Common Nmap Commands:</strong></p>
-                                <ul>
-                                    <li><code>nmap -sP 192.168.1.0/24</code> - Ping scan to find live hosts</li>
-                                    <li><code>nmap -sS 192.168.1.1</code> - SYN scan (stealth scan)</li>
-                                    <li><code>nmap -sT 192.168.1.1</code> - TCP connect scan</li>
-                                    <li><code>nmap -sU 192.168.1.1</code> - UDP port scan</li>
-                                    <li><code>nmap -sV 192.168.1.1</code> - Service version detection</li>
-                                    <li><code>nmap -O 192.168.1.1</code> - OS detection</li>
-                                    <li><code>nmap -A 192.168.1.1</code> - Aggressive scan (all features)</li>
-                                    <li><code>nmap -p 1-65535 192.168.1.1</code> - Scan all ports</li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="qa-section">
-                        <div class="qa-header" onclick="toggleQA(this)">
-                            <div class="qa-number">Q3</div>
-                            <div class="qa-question">Differentiate between Stateful and Stateless firewalls.</div>
-                            <div class="qa-toggle"><i class="fas fa-chevron-down"></i></div>
-                        </div>
-                        <div class="qa-content">
-                            <div class="qa-answer">
-                                <table style="width: 100%; border-collapse: collapse; margin: 20px 0;">
-                                    <tr style="background: var(--accent-bg);">
-                                        <th style="padding: 15px; border: 1px solid var(--border-color); text-align: left;">Aspect</th>
-                                        <th style="padding: 15px; border: 1px solid var(--border-color); text-align: left;">Stateful Firewall</th>
-                                        <th style="padding: 15px; border: 1px solid var(--border-color); text-align: left;">Stateless Firewall</th>
-                                    </tr>
-                                    <tr>
-                                        <td style="padding: 15px; border: 1px solid var(--border-color);"><strong>Connection Tracking</strong></td>
-                                        <td style="padding: 15px; border: 1px solid var(--border-color);">Tracks connection state and context</td>
-                                        <td style="padding: 15px; border: 1px solid var(--border-color);">No connection tracking</td>
-                                    </tr>
-                                    <tr style="background: var(--accent-bg);">
-                                        <td style="padding: 15px; border: 1px solid var(--border-color);"><strong>Decision Basis</strong></td>
-                                        <td style="padding: 15px; border: 1px solid var(--border-color);">Packet + connection state</td>
-                                        <td style="padding: 15px; border: 1px solid var(--border-color);">Individual packet only</td>
-                                    </tr>
-                                    <tr>
-                                        <td style="padding: 15px; border: 1px solid var(--border-color);"><strong>Performance</strong></td>
-                                        <td style="padding: 15px; border: 1px solid var(--border-color);">Slower due to state tracking</td>
-                                        <td style="padding: 15px; border: 1px solid var(--border-color);">Faster, less resource intensive</td>
-                                    </tr>
-                                    <tr style="background: var(--accent-bg);">
-                                        <td style="padding: 15px; border: 1px solid var(--border-color);"><strong>Security Level</strong></td>
-                                        <td style="padding: 15px; border: 1px solid var(--border-color);">Higher security</td>
-                                        <td style="padding: 15px; border: 1px solid var(--border-color);">Basic security</td>
-                                    </tr>
-                                    <tr>
-                                        <td style="padding: 15px; border: 1px solid var(--border-color);"><strong>Configuration</strong></td>
-                                        <td style="padding: 15px; border: 1px solid var(--border-color);">More complex</td>
-                                        <td style="padding: 15px; border: 1px solid var(--border-color);">Simple rule-based</td>
-                                    </tr>
-                                    <tr style="background: var(--accent-bg);">
-                                        <td style="padding: 15px; border: 1px solid var(--border-color);"><strong>Examples</strong></td>
-                                        <td style="padding: 15px; border: 1px solid var(--border-color);">Cisco ASA, pfSense</td>
-                                        <td style="padding: 15px; border: 1px solid var(--border-color);">Basic ACLs, iptables</td>
-                                    </tr>
-                                </table>
-                            </div>
-                        </div>
+                <div class="timeline-item">
+                    <div class="timeline-date">Uska Jawab</div>
+                    <div class="timeline-content">
+                        <p class="memory-text">Woh khush thi, muskurai. Lekin wait karwaya. Usne socha, shayad. Main bhi wait kiya.</p>
                     </div>
                 </div>
-
-                <!-- Ethical Hacking Tools Q&A -->
-                <div id="ethical-hacking">
-                    <div class="qa-section">
-                        <div class="qa-header" onclick="toggleQA(this)">
-                            <div class="qa-number">Q4</div>
-                            <div class="qa-question">Explain Metasploit Framework and its components.</div>
-                            <div class="qa-toggle"><i class="fas fa-chevron-down"></i></div>
-                        </div>
-                        <div class="qa-content">
-                            <div class="qa-answer">
-                                <p><strong>Metasploit Framework</strong> is an open-source penetration testing framework that provides tools for developing and executing exploit code against remote target machines.</p>
-
-                                <p><strong>Key Components:</strong></p>
-                                <ul>
-                                    <li><strong>msfconsole:</strong> Main command-line interface for Metasploit</li>
-                                    <li><strong>Exploits:</strong> Code that takes advantage of vulnerabilities</li>
-                                    <li><strong>Payloads:</strong> Code that runs on target system after exploitation</li>
-                                    <li><strong>Auxiliary:</strong> Modules for scanning, fuzzing, and other non-exploitation tasks</li>
-                                    <li><strong>Encoders:</strong> Encode payloads to avoid detection</li>
-                                    <li><strong>Nops:</strong> No-operation generators for payload alignment</li>
-                                    <li><strong>Post-exploitation:</strong> Modules for maintaining access and gathering information</li>
-                                </ul>
-
-                                <p><strong>Basic Metasploit Workflow:</strong></p>
-                                <ol>
-                                    <li>Launch Metasploit: <code>msfconsole</code></li>
-                                    <li>Search for exploit: <code>search exploit_name</code></li>
-                                    <li>Use exploit: <code>use exploit/path</code></li>
-                                    <li>Set target options: <code>set RHOST target_ip</code></li>
-                                    <li>Set payload: <code>set PAYLOAD payload_name</code></li>
-                                    <li>Execute: <code>exploit</code> or <code>run</code></li>
-                                </ol>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="qa-section">
-                        <div class="qa-header" onclick="toggleQA(this)">
-                            <div class="qa-number">Q5</div>
-                            <div class="qa-question">What is SQL Injection? Explain with example and prevention methods.</div>
-                            <div class="qa-toggle"><i class="fas fa-chevron-down"></i></div>
-                        </div>
-                        <div class="qa-content">
-                            <div class="qa-answer">
-                                <p><strong>SQL Injection</strong> is a code injection technique that exploits security vulnerabilities in a web application's database layer by manipulating SQL queries.</p>
-
-                                <p><strong>How SQL Injection Works:</strong></p>
-                                <ul>
-                                    <li>Attacker inputs malicious SQL code through user input fields</li>
-                                    <li>The application constructs SQL queries using this input</li>
-                                    <li>Malicious SQL gets executed on the database</li>
-                                    <li>Attacker can read, modify, or delete database data</li>
-                                </ul>
-
-                                <p><strong>Example of SQL Injection:</strong></p>
-                                <p>Vulnerable Code:</p>
-                                <code>SELECT * FROM users WHERE username = '$username' AND password = '$password'</code>
-                                
-                                <p>Malicious Input:</p>
-                                <ul>
-                                    <li>Username: <code>admin'--</code></li>
-                                    <li>Password: <code>anything</code></li>
-                                </ul>
-
-                                <p><strong>Resulting Query:</strong></p>
-                                <code>SELECT * FROM users WHERE username = 'admin'--' AND password = 'anything'</code>
-                                <p>The <code>--</code> comments out the password check, allowing unauthorized access.</p>
-
-                                <p><strong>Prevention Methods:</strong></p>
-                                <ul>
-                                    <li><strong>Parameterized Queries:</strong> Use prepared statements with bound parameters</li>
-                                    <li><strong>Input Validation:</strong> Validate and sanitize all user inputs</li>
-                                    <li><strong>Stored Procedures:</strong> Use database stored procedures</li>
-                                    <li><strong>Least Privilege:</strong> Give database users minimal required permissions</li>
-                                    <li><strong>Web Application Firewall (WAF):</strong> Filter malicious requests</li>
-                                    <li><strong>Regular Security Testing:</strong> Conduct penetration testing and code reviews</li>
-                                </ul>
-                            </div>
-                        </div>
+                <div class="timeline-item">
+                    <div class="timeline-date">Jab Usne Kaha</div>
+                    <div class="timeline-content">
+                        <p class="memory-text">Finally - "Love You". Do shabd, lekin mere liye poori duniya.</p>
                     </div>
                 </div>
-
-                <!-- Cyber Crimes & Laws Q&A -->
-                <div id="cyber-crimes">
-                    <div class="qa-section">
-                        <div class="qa-header" onclick="toggleQA(this)">
-                            <div class="qa-number">Q6</div>
-                            <div class="qa-question">Define Digital Forensics and explain its phases.</div>
-                            <div class="qa-toggle"><i class="fas fa-chevron-down"></i></div>
-                        </div>
-                        <div class="qa-content">
-                            <div class="qa-answer">
-                                <p><strong>Digital Forensics</strong> is the process of identifying, preserving, analyzing, and presenting digital evidence in a legally admissible manner for use in legal proceedings.</p>
-
-                                <p><strong>Key Objectives:</strong></p>
-                                <ul>
-                                    <li>Preserve evidence in its original state</li>
-                                    <li>Reconstruct digital events and timelines</li>
-                                    <li>Identify responsible parties</li>
-                                    <li>Support legal proceedings with technical evidence</li>
-                                </ul>
-
-                                <p><strong>Phases of Digital Forensics:</strong></p>
-                                <ol>
-                                    <li><strong>Identification:</strong> Recognizing potential sources of digital evidence</li>
-                                    <li><strong>Preservation:</strong> Isolating and securing digital evidence to prevent alteration</li>
-                                    <li><strong>Collection:</strong> Acquiring digital evidence using proper forensic procedures</li>
-                                    <li><strong>Examination:</strong> Processing collected data to identify relevant information</li>
-                                    <li><strong>Analysis:</strong> Interpreting examined data to draw conclusions</li>
-                                    <li><strong>Presentation:</strong> Reporting findings in clear, understandable format</li>
-                                    <li><strong>Decision:</strong> Using forensic results for legal or administrative action</li>
-                                </ol>
-
-                                <p><strong>Common Digital Forensics Tools:</strong></p>
-                                <ul>
-                                    <li><strong>Autopsy:</strong> Digital forensics platform for hard drive investigation</li>
-                                    <li><strong>Sleuth Kit:</strong> Collection of command-line forensics tools</li>
-                                    <li><strong>FTK Imager:</strong> Tool for creating forensic images</li>
-                                    <li><strong>Wireshark:</strong> Network protocol analyzer</li>
-                                    <li><strong>Volatility:</strong> Memory forensics framework</li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="qa-section">
-                        <div class="qa-header" onclick="toggleQA(this)">
-                            <div class="qa-number">Q7</div>
-                            <div class="qa-question">Explain IT Act, 2000 and its important sections.</div>
-                            <div class="qa-toggle"><i class="fas fa-chevron-down"></i></div>
-                        </div>
-                        <div class="qa-content">
-                            <div class="qa-answer">
-                                <p><strong>Information Technology Act, 2000 (IT Act, 2000)</strong> is the primary law in India dealing with cybercrime and electronic commerce. It provides legal recognition to electronic transactions and digital signatures.</p>
-
-                                <p><strong>Key Objectives:</strong></p>
-                                <ul>
-                                    <li>Legal recognition of electronic transactions</li>
-                                    <li>Facilitation of electronic filing with government agencies</li>
-                                    <li>Amendment of Indian Penal Code for digital crimes</li>
-                                    <li>Protection of online privacy and data</li>
-                                    <li>Establishment of cyber appellate tribunal</li>
-                                </ul>
-
-                                <p><strong>Important Sections of IT Act, 2000:</strong></p>
-                                
-                                <p><strong>Section 43 - Penalty for Damage to Computer System:</strong></p>
-                                <ul>
-                                    <li>Compensation up to ₹1 crore for unauthorized access</li>
-                                    <li>Covers data theft, introducing viruses, damaging systems</li>
-                                </ul>
-
-                                <p><strong>Section 65 - Tampering with Computer Source Documents:</strong></p>
-                                <ul>
-                                    <li>Punishment: Up to 3 years imprisonment or ₹2 lakh fine</li>
-                                    <li>Concealing, destroying, or altering source code</li>
-                                </ul>
-
-                                <p><strong>Section 66 - Computer Related Offenses:</strong></p>
-                                <ul>
-                                    <li>Punishment: Up to 3 years imprisonment or ₹5 lakh fine</li>
-                                    <li>Dishonestly or fraudulently doing any act referred to in section 43</li>
-                                </ul>
-
-                                <p><strong>Section 66C - Identity Theft:</strong></p>
-                                <ul>
-                                    <li>Punishment: Up to 3 years imprisonment and/or fine up to ₹1 lakh</li>
-                                    <li>Fraudulently using electronic signature, password, or unique identification</li>
-                                </ul>
-
-                                <p><strong>Section 66D - Cheating by Personation:</strong></p>
-                                <ul>
-                                    <li>Punishment: Up to 3 years imprisonment and/or fine up to ₹1 lakh</li>
-                                    <li>Cheating by pretending to be someone else using computer resources</li>
-                                </ul>
-
-                                <p><strong>Section 66E - Privacy Violation:</strong></p>
-                                <ul>
-                                    <li>Punishment: Up to 3 years imprisonment and/or fine up to ₹2 lakh</li>
-                                    <li>Capturing, publishing, or transmitting private images without consent</li>
-                                </ul>
-
-                                <p><strong>Section 67 - Publishing Obscene Information:</strong></p>
-                                <ul>
-                                    <li>Punishment: Up to 3 years imprisonment and/or fine up to ₹5 lakh</li>
-                                    <li>Publishing or transmitting obscene material in electronic form</li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Web Security Q&A -->
-                <div id="web-security">
-                    <div class="qa-section">
-                        <div class="qa-header" onclick="toggleQA(this)">
-                            <div class="qa-number">Q8</div>
-                            <div class="qa-question">Explain Buffer Overflow attack with prevention techniques.</div>
-                            <div class="qa-toggle"><i class="fas fa-chevron-down"></i></div>
-                        </div>
-                        <div class="qa-content">
-                            <div class="qa-answer">
-                                <p><strong>Buffer Overflow</strong> is a software vulnerability that occurs when a program tries to store more data in a buffer than it can hold, causing the excess data to overflow into adjacent memory locations.</p>
-
-                                <p><strong>How Buffer Overflow Works:</strong></p>
-                                <ol>
-                                    <li>Program allocates fixed-size buffer in memory</li>
-                                    <li>Attacker provides input larger than buffer capacity</li>
-                                    <li>Excess data overwrites adjacent memory</li>
-                                    <li>Can overwrite return address, function pointers, or critical data</li>
-                                    <li>Attacker can execute arbitrary code or crash the system</li>
-                                </ol>
-
-                                <p><strong>Types of Buffer Overflow:</strong></p>
-                                <ul>
-                                    <li><strong>Stack Overflow:</strong> Overwriting stack memory</li>
-                                    <li><strong>Heap Overflow:</strong> Overwriting heap memory</li>
-                                    <li><strong>Format String Attack:</strong> Exploiting format string functions</li>
-                                    <li><strong>Integer Overflow:</strong> Arithmetic operations causing overflow</li>
-                                </ul>
-
-                                <p><strong>Prevention Techniques:</strong></p>
-                                <ul>
-                                    <li><strong>Input Validation:</strong> Check input length before copying to buffers</li>
-                                    <li><strong>Safe Functions:</strong> Use <code>strncpy()</code> instead of <code>strcpy()</code></li>
-                                    <li><strong>Stack Canaries:</strong> Place special values between buffer and return address</li>
-                                    <li><strong>ASLR (Address Space Layout Randomization):</strong> Randomize memory layout</li>
-                                    <li><strong>Data Execution Prevention (DEP):</strong> Mark memory regions as non-executable</li>
-                                    <li><strong>Compiler Protections:</strong> Use stack protection mechanisms</li>
-                                    <li><strong>Regular Code Reviews:</strong> Identify and fix vulnerable code</li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <section class="section" id="tools">
-                <div class="section-header">
-                    <h2 class="section-title">Study Tools</h2>
-                    <p class="section-subtitle">Interactive tools to enhance your learning experience</p>
-                </div>
-
-                <div class="study-tools">
-                    <div class="tool-card">
-                        <div class="tool-icon">
-                            <i class="fas fa-calculator"></i>
-                        </div>
-                        <h3 class="tool-title">Subnet Calculator</h3>
-                        <p class="tool-description">Calculate network subnets, IP ranges, and broadcast addresses for network security questions.</p>
-                    </div>
-
-                    <div class="tool-card">
-                        <div class="tool-icon">
-                            <i class="fas fa-clock"></i>
-                        </div>
-                        <h3 class="tool-title">Exam Timer</h3>
-                        <p class="tool-description">Practice time management with GTU exam pattern timing (2.5 hours with proper section allocation).</p>
-                    </div>
-
-                    <div class="tool-card">
-                        <div class="tool-icon">
-                            <i class="fas fa-question-circle"></i>
-                        </div>
-                        <h3 class="tool-title">Quiz Generator</h3>
-                        <p class="tool-description">Generate random questions from different topics to test your knowledge and preparation level.</p>
-                    </div>
-
-                    <div class="tool-card">
-                        <div class="tool-icon">
-                            <i class="fas fa-bookmark"></i>
-                        </div>
-                        <h3 class="tool-title">Quick Notes</h3>
-                        <p class="tool-description">Save important points and create personalized study notes for quick revision before exams.</p>
-                    </div>
-                </div>
-            </section>
-        </div>
-    </main>
-
-    <footer class="footer">
-        <div class="container">
-            <div class="footer-content">
-                <p>&copy; 2024 GTU Cyber Security Study Guide. Designed for educational purposes.</p>
-                <p>Follow GTU examination pattern and guidelines for best results.</p>
             </div>
         </div>
+    </section>
+
+    <!-- Section 3: Jealousy & Trust -->
+    <section class="story-section" id="trust">
+        <div class="section-container">
+            <div class="section-number">Adhyay 03</div>
+            <h2 class="section-title">Jazbaat, Dar Aur Bharosa</h2>
+            
+            <p class="story-text">
+                Kabhi kabhi <span class="story-highlight">jealousy</span> aati thi. Jab doosre bio data aate the shaadi ke liye, jab koi impress karna chahta tha usse. Lekin maine kabhi roka nahi usey. Usko space chahiye, jeena hai usey.
+            </p>
+
+            <div class="quote-box">
+                "Main us par blind trust karta hoon. Uski honesty mujhe pyaari hai. Agar kuch hua toh woh mujhe batati hai. Yehi hai sachcha pyaar - bina shaq ke, bina dar ke."
+            </div>
+
+            <p class="story-text">
+                Uske koi male friend nahi - <span class="story-emotion">zero</span>. Aur main yeh cheez bohot appreciate karta hoon. Isse mera pyaar aur badhta hai uske liye.
+            </p>
+
+            <p class="story-text">
+                Family ka pressure nahi hai mere taraf se. Mere <span class="story-highlight">grandparents bohot chahte hain Tulsi ko</span>. Woh chahte hain hum saath rahen, agli 100 janmo tak. Unhe humare bacche dekhne hain before they leave this world.
+            </p>
+
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="stat-number">100%</div>
+                    <div class="stat-label">Bharosa</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">0</div>
+                    <div class="stat-label">Male Friends</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">100+</div>
+                    <div class="stat-label">Janamon Ki Wishes</div>
+                </div>
+            </div>
+
+            <div class="love-letter">
+                <div class="letter-content">
+                    <p class="letter-text">
+                        Tulsi, main abhi roo raha hoon yeh likhte waqt. 27 February, 11:05 baje - aansu nahi ruk rahe, haath kaamp rahe hain. Mom dad so rahe hain, aur main akela roo raha hoon...
+                    </p>
+                    <p class="letter-text">
+                        <span class="story-highlight">I love you Tulsi</span> - kabhi mat todna humara trust, humara bond, humari relationship diku. Hum tumse bohot pyaar karte hain.
+                    </p>
+                    <div class="letter-signature">- Tumhara Aaru</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 4: Fights & Care -->
+    <section class="story-section" id="fights">
+        <div class="section-container">
+            <div class="section-number">Adhyay 04</div>
+            <h2 class="section-title">Ladai, Maafi Aur Phir Pyaar</h2>
+            
+            <p class="story-text">
+                February mein hui sabse badi ladai. <span class="story-highlight">Video call on nahi kiya</span> usne - chhoti si baat, lekin din bhar no talk. Dono roye. Lekin main block nahi kar sakta, woh bhi nahi kar sakti.
+            </p>
+
+            <div class="quote-box">
+                "Main jaanta hoon hum ek dusre ko kabhi nahi chhodenge. Kabhi nahi. Yeh mera bharosa hai, yeh mera promise hai."
+            </div>
+
+            <p class="story-text">
+                Ladai ke baad main <span class="story-emotion">bohot emotional ho jaata hoon</span>. Khud ko hurt karta hoon, terrace par jaata hoon, rota hoon, khana nahi khata, paani nahi peeta. Uski photos dekhta rehta hoon subah tak. Uska reply, call, message - sab ka intezaar.
+            </p>
+
+            <p class="story-text">
+                Woh mujhe gussa hoti hai jab main properly baat nahi karta, jab apni health ka khayal nahi rakhta. <span class="story-highlight">Woh care karti hai</span>, isliye gussa karti hai.
+            </p>
+
+            <div class="memory-grid">
+                <div class="memory-card">
+                    <div class="memory-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke-width="2">
+                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                        </svg>
+                    </div>
+                    <div class="memory-title">Sabse Badi Ladai</div>
+                    <div class="memory-text">February mein video call wali - dono roye, lekin saath rahe.</div>
+                </div>
+
+                <div class="memory-card">
+                    <div class="memory-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke-width="2">
+                            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                        </svg>
+                    </div>
+                    <div class="memory-title">Maafi</div>
+                    <div class="memory-text">Ek hi din mein theek - hum bina ek dusre ke nahi reh sakte.</div>
+                </div>
+
+                <div class="memory-card">
+                    <div class="memory-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"/>
+                            <path d="M16 16s-1.5-2-4-2-4 2-4 2"/>
+                            <line x1="9" y1="9" x2="9.01" y2="9"/>
+                            <line x1="15" y1="9" x2="15.01" y2="9"/>
+                        </svg>
+                    </div>
+                    <div class="memory-title">Uski Care</div>
+                    <div class="memory-text">Gussa bhi pyaar se, daantna bhi pyaar se - yehi hai Tulsi.</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 5: Fears -->
+    <section class="story-section" id="fears">
+        <div class="section-container">
+            <div class="section-number">Adhyay 05</div>
+            <h2 class="section-title">Darr Hai, Lekin Vishwas Zyada Hai</h2>
+            
+            <p class="story-text">
+                Sach kahun? <span class="story-highlight">Mujhe darr lagta hai</span> woh mujhe chhod de. Yeh soch ke hi main skeleton jaisa feel karta hoon - body bina soul ke, heart bina feelings ke.
+            </p>
+
+            <p class="story-text">
+                Long distance ka darr nahi hai - <span class="story-emotion">main usey trust karta hoon</span>. Lekin mere weight ka darr hai. Main overweight hoon, try kar raha hoon reduce karne ka. Kabhi kabhi rota hoon apni body dekh ke.
+            </p>
+
+            <div class="quote-box">
+                "Mujhe darr hai - kya main fail ho jaunga? Kya main UK mein job nahi paunga? Kya main usse khush nahi rakh paunga? Main family bana chahta hoon, paisa kamaana chahta hoon, usey happy rakhna chahta hoon poori zindagi."
+            </div>
+
+            <p class="story-text">
+                Family approval ka darr bhi hai kabhi kabhi. <span class="story-highlight">Uske dadaji</span> - unse darr lagta hai. Kya woh manenge? Kya woh Tulsi ko emotional blackmail karenge?
+            </p>
+
+            <p class="story-text">
+                Raat ko <span class="story-emotion">overthink</span> karta hoon. Yeh mera sabse bada problem hai. Sochta rehta hoon - par sach yeh hai ki main us par bharosa rakhta hoon, woh mujh par rakhti hai.
+            </p>
+        </div>
+    </section>
+
+    <!-- Section 6: Romantic Memories -->
+    <section class="story-section" id="memories">
+        <div class="section-container">
+            <div class="section-number">Adhyay 06</div>
+            <h2 class="section-title">Woh Yaadein Jo Dil Mein Hamesha Rahengi</h2>
+            
+            <p class="story-text">
+                <span class="story-highlight">Har pal romantic hai</span> humari kahani mein. Jab uski mummy maan gayi mere baare mein, jab maine sapna dekha humari shaadi ka...
+            </p>
+
+            <div class="quote-box">
+                "Usne mujhe video call par ek kiss di thi - sirf ek baar. Main roz wait karta hoon doosri kiss ka. Woh kehti hai 'No' aur phir hasti hai. Yehi hai meri duniya."
+            </div>
+
+            <p class="story-text">
+                Call par soti hai woh kabhi kabhi. Main usey dekhta rehta hoon <span class="story-emotion">soyi hui</span>. Uska chehra kitna innocent lagta hai, kitna pyaara. Tab aur pyaar ho jaata hai.
+            </p>
+
+            <p class="story-text">
+                Usne <span class="story-highlight">surprises bhi bheje hain</span> - mobile phone, Apple earphones, wallet, fruits, trimmer, snacks, books, heart pillow, ice cream, roses, cakes... main count nahi kar sakta.
+            </p>
+
+            <p class="story-text">
+                Normal din hota hai, delivery boy aata hai - main hasti hoon, usey yaad karti hoon. <span class="story-emotion">Thank you Tulsi</span>. Lekin baccha, zyada paisa mat kharch karo - ek baar mahine mein theek hai.
+            </p>
+
+            <div class="memory-grid">
+                <div class="memory-card">
+                    <div class="memory-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke-width="2">
+                            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                        </svg>
+                    </div>
+                    <div class="memory-title">Call Par Kiss</div>
+                    <div class="memory-text">Ek hi baar mili, par yaad hai hamesha ke liye.</div>
+                </div>
+
+                <div class="memory-card">
+                    <div class="memory-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke-width="2">
+                            <path d="M20 12V8H6a2 2 0 0 1-2-2c0-1.1.9-2 2-2h12v4"/>
+                            <path d="M4 6v12c0 1.1.9 2 2 2h14v-4"/>
+                            <path d="M18 12a2 2 0 0 0 0 4h4v-4h-4z"/>
+                        </svg>
+                    </div>
+                    <div class="memory-title">Surprises</div>
+                    <div class="memory-text">Phone, earphones, wallet, books - har cheez mein pyaar.</div>
+                </div>
+
+                <div class="memory-card">
+                    <div class="memory-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke-width="2">
+                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                            <circle cx="9" cy="7" r="4"/>
+                            <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                            <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                        </svg>
+                    </div>
+                    <div class="memory-title">Husband Bulana</div>
+                    <div class="memory-text">Mazaak mein, lekin dil mein sach thi woh baat.</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 7: The Parcel -->
+    <section class="story-section" id="parcel">
+        <div class="section-container">
+            <div class="section-number">Adhyay 07</div>
+            <h2 class="section-title">Ek Parcel, Bohot Saare Emotions</h2>
+            
+            <p class="story-text">
+                <span class="story-highlight">1 February se</span> maine sab paisa ek account mein daal diya - savings, pocket money, earnings, emergency sab. Aur shuru kiya uske liye cheezein kharidna.
+            </p>
+
+            <div class="quote-box">
+                "DMart jaata tha, usse baat karta tha khud se - 'Yeh food pasand aayegi kya?', 'Yeh T-shirt pehnegi kya?', 'Yeh taste pasand aayega kya?' Har cheez mein uska khayal."
+            </div>
+
+            <p class="story-text">
+                <span class="story-emotion">Letters likhta tha</span>, uske liye special items chhupata tha parcel mein. Har din track karta tha - kab pahunchega, kaise kholegi woh, kaisi lagegi usey.
+            </p>
+
+            <p class="story-text">
+                Har item ko pakadta tha, <span class="story-highlight">muskurata tha</span> - sochta tha yeh uske haath lagega. Agar kuch chhoot gaya ho diku, toh maaf karna - maine koshish ki sab yaad rakhne ki.
+            </p>
+
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="stat-number">1st</div>
+                    <div class="stat-label">Feb Se Shuru</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">100%</div>
+                    <div class="stat-label">Pyaar Se Bhara</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">Daily</div>
+                    <div class="stat-label">Tracking</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 8: First Meeting Dream -->
+    <section class="story-section" id="meeting">
+        <div class="section-container">
+            <div class="section-number">Adhyay 08</div>
+            <h2 class="section-title">Pehli Mulaqaat Ka Sapna</h2>
+            
+            <p class="story-text">
+                <span class="story-highlight">Airport</span> pe hoga shayad pehla milan. Main wait kar raha hoon baccha tumhara.
+            </p>
+
+            <div class="quote-box">
+                "Tum mera ghar ho. Humari pehli mulaqaat sabse special hogi. Main tumhe dekhunga, bataunga - 'Hi, meri diku, welcome home diku, bohot miss kiya, love you' - aur phir tight hug."
+            </div>
+
+            <p class="story-text">
+                Jab tum India aogi, jab pehli baar <span class="story-emotion">saamne se dekhunga</span> - aansu aa jayenge mere. Main tumhara chehra chhooonga, tumhe kiss karunga, apni baanho mein bharunga.
+            </p>
+
+            <p class="story-text">
+                Jab tak tum wapas UK nahi jaati, <span class="story-highlight">main tumhe dekhta rehta hoon</span>. Ek pal bhi nahi chhodna hai tumhe ab.
+            </p>
+
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-date">Airport</div>
+                    <div class="timeline-content">
+                        <p class="memory-text">Pehla dekhna, pehla ehsaas - sab yahin hoga.</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-date">Pehla Hug</div>
+                    <div class="timeline-content">
+                        <p class="memory-text">Tight, lamba, emotional - sab kuch us hug mein.</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-date">Pehla Kiss</div>
+                    <div class="timeline-content">
+                        <p class="memory-text">Jo video call par di thi, ab saamne dekhni hai.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 9: Marriage Dream -->
+    <section class="story-section" id="marriage">
+        <div class="section-container">
+            <div class="section-number">Adhyay 09</div>
+            <h2 class="section-title">Shaadi Ka Sapna - Ek Nayi Shuruwat</h2>
+            
+            <p class="story-text">
+                <span class="story-highlight">Court marriage</span> - haan, hum paisa bachana chahte hain. Travel ke liye, honeymoon ke liye, ghar gaadi ke liye, future ke liye.
+            </p>
+
+            <p class="story-text">
+                <span class="story-emotion">Traditional bhi</span> - time ke hisaab se. Main jo sherwani pehnunga woh tumhari choice hogi. Tum jo pehnogi woh meri choice hogi.
+            </p>
+
+            <div class="quote-box">
+                "Dono roenge - hum, humare parents. Shayad main zyada rounga. Yeh khushi ke aansu honge, ki finally, finally hum saath hain."
+            </div>
+
+            <p class="story-text">
+                Mere grandparents bohot chahte hain yeh shaadi <span class="story-highlight">jitni jaldi ho sake</span>. Unhe humari shaadi dekhni hai, humare bacche dekhne hain. Unka ashirwad humare saath hai.
+            </p>
+
+            <div class="memory-grid">
+                <div class="memory-card">
+                    <div class="memory-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke-width="2">
+                            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                        </svg>
+                    </div>
+                    <div class="memory-title">Court Marriage</div>
+                    <div class="memory-text">Simple, practical, future ke liye sahi.</div>
+                </div>
+
+                <div class="memory-card">
+                    <div class="memory-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke-width="2">
+                            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                        </svg>
+                    </div>
+                    <div class="memory-title">Traditional</div>
+                    <div class="memory-text">Rasmein, riwaaz, parivar sabke saath.</div>
+                </div>
+
+                <div class="memory-card">
+                    <div class="memory-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke-width="2">
+                            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                        </svg>
+                    </div>
+                    <div class="memory-title">Dono Rorenge</div>
+                    <div class="memory-text">Khushi ke aansu, finally saath hain hum.</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 10: Final Letter -->
+    <section class="story-section" id="final">
+        <div class="section-container">
+            <div class="section-number">Antim Adhyay</div>
+            <h2 class="section-title">Ek Chhithi Tumhare Naam</h2>
+            
+            <div class="love-letter">
+                <div class="letter-content">
+                    <p class="letter-text">
+                        Tulsi meri pyaari,
+                    </p>
+                    <p class="letter-text">
+                        Main kuch nahi chhupaata tumse. Tum meri duniya ho, mera sab kuch ho. <span class="story-highlight">6,924.46 kilometre</span> ki duri humare dil ka faasla nahi badal sakti.
+                    </p>
+                    <p class="letter-text">
+                        Tumne mujhe bohot khush kiya hai - har surprise se, har call se, har message se. Main tumse vada karta hoon ki main kabhi nahi chhodunga tumhe. <span class="story-emotion">Agli 100 janmo tak</span> bhi tumhare saath rahunga.
+                    </p>
+                    <p class="letter-text">
+                        Jab bhi tum royi, main andar se roya. Jab bhi tum khush hui, main bohot khush hua. Tumhari har emotion meri dhadkan ban gayi hai ab.
+                    </p>
+                    <p class="letter-text">
+                        <span class="story-highlight">Mujhe tumse pyaar hai diku</span> - itna pyaar ki main shabdo mein bayaan nahi kar sakta. Bas ek cheez ke liye kehta hoon - kabhi mat chhodna mujhe. Kabhi mat todna humara bond.
+                    </p>
+                    <p class="letter-text">
+                        Tumhara intezaar karta rahega,
+                    </p>
+                    <div class="letter-signature">Tumhara Aaru, hamesha ke liye</div>
+                </div>
+            </div>
+
+            <div class="quote-box" style="margin-top: 3rem; text-align: center;">
+                <p style="font-size: 1.5rem; color: var(--accent);">
+                    "Duri mein bhi paas hain hum, kyunki dil ka koi distance nahi hota."
+                </p>
+            </div>
+
+            <div class="stats-grid" style="margin-top: 4rem;">
+                <div class="stat-item">
+                    <div class="stat-number">6924</div>
+                    <div class="stat-label">Kilometres Duri</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">0</div>
+                    <div class="stat-label">Faasla Dil Ka</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">Forever</div>
+                    <div class="stat-label">Pyaar Hamesha</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer style="text-align: center; padding: 4rem 2rem; background: linear-gradient(to top, rgba(168, 87, 106, 0.1), transparent); position: relative; z-index: 2;">
+        <p style="color: var(--muted); font-size: 0.875rem; letter-spacing: 0.2em; text-transform: uppercase;">Tulsi aur Aryan</p>
+        <p style="color: var(--accent); font-size: 1.25rem; margin-top: 0.5rem; font-family: 'Playfair Display', serif;">Ek Anokhi Prem Kahani</p>
+        <p style="color: var(--muted); font-size: 0.75rem; margin-top: 2rem;">2 June 2025 Se Shuru, Hamesha Tak</p>
     </footer>
 
+    <!-- Navigation Dots -->
+    <nav class="nav" id="nav">
+        <div class="nav-dot active" data-section="hero"></div>
+        <div class="nav-dot" data-section="beginning"></div>
+        <div class="nav-dot" data-section="firstlove"></div>
+        <div class="nav-dot" data-section="trust"></div>
+        <div class="nav-dot" data-section="fights"></div>
+        <div class="nav-dot" data-section="fears"></div>
+        <div class="nav-dot" data-section="memories"></div>
+        <div class="nav-dot" data-section="parcel"></div>
+        <div class="nav-dot" data-section="meeting"></div>
+        <div class="nav-dot" data-section="marriage"></div>
+        <div class="nav-dot" data-section="final"></div>
+    </nav>
+
     <script>
-        // Toggle Q&A sections
-        function toggleQA(header) {
-            const content = header.nextElementSibling;
-            const toggle = header.querySelector('.qa-toggle i');
-            
-            content.classList.toggle('active');
-            
-            if (content.classList.contains('active')) {
-                toggle.classList.remove('fa-chevron-down');
-                toggle.classList.add('fa-chevron-up');
-            } else {
-                toggle.classList.remove('fa-chevron-up');
-                toggle.classList.add('fa-chevron-down');
+        // Initialize variables first
+        const sections = document.querySelectorAll('.story-section, .hero');
+        const navDots = document.querySelectorAll('.nav-dot');
+        const progressBar = document.getElementById('progress-bar');
+        const distanceCounter = document.getElementById('distance-counter');
+        
+        let targetDistance = 6924.46;
+        let currentDistance = 0;
+        let distanceAnimated = false;
+
+        // Particle System
+        const canvas = document.getElementById('particles-canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        let animationFrameId = null;
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+
+        function createParticle() {
+            return {
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                size: Math.max(0.5, Math.random() * 2),
+                speedX: (Math.random() - 0.5) * 0.3,
+                speedY: (Math.random() - 0.5) * 0.3,
+                opacity: Math.random() * 0.5 + 0.2,
+                hue: Math.random() > 0.5 ? 35 : 350
+            };
+        }
+
+        function initParticles() {
+            particles = [];
+            const particleCount = Math.min(80, Math.floor(window.innerWidth / 20));
+            for (let i = 0; i < particleCount; i++) {
+                particles.push(createParticle());
             }
         }
 
-        // Scroll to section
-        function scrollToSection(sectionId) {
-            const section = document.getElementById(sectionId);
-            if (section) {
-                section.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            }
+        function animateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            particles.forEach((p, index) => {
+                p.x += p.speedX;
+                p.y += p.speedY;
+
+                if (p.x < 0 || p.x > canvas.width) p.speedX *= -1;
+                if (p.y < 0 || p.y > canvas.height) p.speedY *= -1;
+
+                const gradient = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, Math.max(0.1, p.size * 3));
+                if (p.hue === 35) {
+                    gradient.addColorStop(0, 'rgba(201, 168, 108, ' + p.opacity + ')');
+                    gradient.addColorStop(1, 'rgba(201, 168, 108, 0)');
+                } else {
+                    gradient.addColorStop(0, 'rgba(168, 87, 106, ' + p.opacity + ')');
+                    gradient.addColorStop(1, 'rgba(168, 87, 106, 0)');
+                }
+
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, Math.max(0.1, p.size * 3), 0, Math.PI * 2);
+                ctx.fillStyle = gradient;
+                ctx.fill();
+            });
+
+            animationFrameId = requestAnimationFrame(animateParticles);
         }
 
-        // Progress bar
-        window.addEventListener('scroll', () => {
-            const scrollTop = window.pageYOffset;
-            const docHeight = document.body.scrollHeight - window.innerHeight;
-            const scrollPercent = (scrollTop / docHeight) * 100;
-            document.getElementById('progressBar').style.width = scrollPercent + '%';
-        });
+        // Distance Counter Animation
+        function animateDistance() {
+            if (!distanceCounter) return;
+            
+            const duration = 2000;
+            const startTime = performance.now();
 
-        // Smooth scroll for navigation links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            function updateDistance(currentTime) {
+                const elapsed = currentTime - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                
+                const easeOut = 1 - Math.pow(1 - progress, 3);
+                currentDistance = progress * targetDistance;
+                
+                distanceCounter.textContent = currentDistance.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+
+                if (progress < 1) {
+                    requestAnimationFrame(updateDistance);
                 }
+            }
+
+            requestAnimationFrame(updateDistance);
+        }
+
+        // Scroll Reveal
+        function setupScrollReveal() {
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const elements = entry.target.querySelectorAll('.section-number, .section-title, .story-text, .quote-box, .memory-card, .timeline-item, .stat-item, .love-letter');
+                        
+                        elements.forEach((el, index) => {
+                            setTimeout(() => {
+                                el.classList.add('reveal');
+                            }, index * 100);
+                        });
+
+                        // Trigger distance animation when hero is visible
+                        if (entry.target.id === 'hero' && !distanceAnimated) {
+                            distanceAnimated = true;
+                            setTimeout(animateDistance, 500);
+                        }
+                    }
+                });
+            }, observerOptions);
+
+            sections.forEach(section => observer.observe(section));
+        }
+
+        // Navigation
+        function setupNavigation() {
+            navDots.forEach(dot => {
+                dot.addEventListener('click', () => {
+                    const sectionId = dot.getAttribute('data-section');
+                    const section = document.getElementById(sectionId);
+                    if (section) {
+                        section.scrollIntoView({ behavior: 'smooth' });
+                    }
+                });
             });
-        });
 
-        // Add fade-in animation on scroll
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: '0px 0px -50px 0px'
-        };
+            // Update active dot on scroll
+            window.addEventListener('scroll', () => {
+                const scrollPos = window.scrollY + window.innerHeight / 2;
 
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('fade-in-up');
-                }
+                sections.forEach((section, index) => {
+                    const sectionTop = section.offsetTop;
+                    const sectionBottom = sectionTop + section.offsetHeight;
+
+                    if (scrollPos >= sectionTop && scrollPos < sectionBottom) {
+                        navDots.forEach(d => d.classList.remove('active'));
+                        if (navDots[index]) {
+                            navDots[index].classList.add('active');
+                        }
+                    }
+                });
+
+                // Progress bar
+                const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+                const progress = Math.min((window.scrollY / docHeight) * 100, 100);
+                progressBar.style.width = progress + '%';
             });
-        }, observerOptions);
+        }
 
-        document.querySelectorAll('.topic-card, .qa-section').forEach(el => {
-            observer.observe(el);
-        });
+        // Floating Hearts
+        function createFloatingHeart(x, y) {
+            const heart = document.createElement('div');
+            heart.className = 'floating-heart';
+            heart.innerHTML = `
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                </svg>
+            `;
+            heart.style.left = x + 'px';
+            heart.style.top = y + 'px';
+            heart.style.color = Math.random() > 0.5 ? '#c9a86c' : '#a8576a';
+            document.body.appendChild(heart);
 
-        // Auto-expand first Q&A on page load
-        window.addEventListener('load', () => {
-            const firstQA = document.querySelector('.qa-header');
-            if (firstQA) {
-                toggleQA(firstQA);
+            setTimeout(() => heart.remove(), 4000);
+        }
+
+        // Click to create hearts
+        document.addEventListener('click', (e) => {
+            for (let i = 0; i < 3; i++) {
+                setTimeout(() => {
+                    createFloatingHeart(e.clientX + (Math.random() - 0.5) * 30, e.clientY + (Math.random() - 0.5) * 30);
+                }, i * 100);
             }
         });
+
+        // Reduced motion check
+        const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+        // Initialize everything
+        function init() {
+            resizeCanvas();
+            
+            if (!prefersReducedMotion) {
+                initParticles();
+                animateParticles();
+            }
+            
+            setupScrollReveal();
+            setupNavigation();
+        }
+
+        // Event listeners
+        window.addEventListener('resize', () => {
+            resizeCanvas();
+            if (!prefersReducedMotion) {
+                initParticles();
+            }
+        });
+
+        // Start
+        init();
     </script>
 </body>
 </html>
