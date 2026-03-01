@@ -3,23 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tulsi & Aryan - The Story of Us</title>
+    <title>Tulsi & Aryan - A Song of Love and Distance</title>
     <link href="https://cdn.tailwindcss.com" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Cinzel:wght@400;500;600;700&family=Merriweather:ital,wght@0,300;0,400;0,700;1,300;1,400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Cinzel:wght@400;500;600;700&family=Fauna+One:wght@300;400;500;700&display=swap" rel="stylesheet">
+    
     <style>
         :root {
-            --bg-dark: #0a0a0a;
-            --bg-leather: #141414;
-            --gold: #c9a227;
-            --gold-light: #e6c866;
-            --gold-dark: #8a6e1a;
-            --parchment: #f0e6d2;
-            --parchment-dark: #d4c4a8;
-            --blood-red: #8b0000;
-            --text-main: #1a1a1a;
-            --text-light: #e0e0e0;
+            --bg-dark: #050505;
+            --gold-primary: #c9a227;
+            --gold-glow: #ffdf6d;
+            --blood-red: #8a0303;
+            --parchment: #e8dcc4;
+            --text-dark: #111;
+            --text-light: #d4c4a8;
         }
 
         * {
@@ -28,35 +26,201 @@
             box-sizing: border-box;
         }
 
+        html {
+            scroll-behavior: smooth;
+        }
+
         body {
-            font-family: 'Merriweather', serif;
+            font-family: 'Fauna One', serif;
             background-color: var(--bg-dark);
-            background-image: 
-                radial-gradient(circle at 50% 0%, rgba(201, 162, 39, 0.1) 0%, transparent 60%),
-                url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.02'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
-            color: var(--text-main);
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            padding: 2rem 1rem;
+            color: var(--text-light);
+            overflow-x: hidden;
+            cursor: none; /* Hide default cursor */
+        }
+
+        /* Custom Cursor */
+        .cursor {
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--gold-primary);
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            transition: transform 0.15s ease, background 0.15s ease;
+            transform: translate(-50%, -50%);
+            mix-blend-mode: difference;
+        }
+
+        .cursor.hover {
+            transform: translate(-50%, -50%) scale(1.5);
+            background: rgba(201, 162, 39, 0.3);
+            border-color: var(--gold-glow);
+        }
+
+        /* Particle Canvas */
+        #ember-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
         }
 
         /* Main Container */
-        .book-container {
-            width: 100%;
-            max-width: 850px;
+        .main-wrapper {
             position: relative;
-            background: linear-gradient(to right, #e8dcc8, #f4ead8, #e8dcc8);
-            box-shadow: 
-                0 0 50px rgba(0,0,0,0.8),
-                inset 0 0 80px rgba(139, 69, 19, 0.1);
-            border-radius: 5px;
-            padding: 3rem 2rem;
-            border: 1px solid #777;
+            z-index: 2;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
-        /* Texture Overlay */
-        .book-container::before {
+        /* Hero Section */
+        .hero-section {
+            min-height: 100vh;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            text-align: center;
+            perspective: 1000px;
+        }
+
+        .hero-bg-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at center, transparent 0%, #000 90%);
+            z-index: 1;
+        }
+
+        .hero-content {
+            z-index: 2;
+            max-width: 900px;
+            padding: 2rem;
+        }
+
+        .main-title {
+            font-family: 'Cinzel Decorative', cursive;
+            font-size: clamp(3rem, 10vw, 7rem);
+            color: transparent;
+            background: linear-gradient(to bottom, var(--gold-glow), var(--gold-primary), #8a6e1a);
+            -webkit-background-clip: text;
+            background-clip: text;
+            text-shadow: 0 0 20px rgba(201, 162, 39, 0.5);
+            margin-bottom: 1rem;
+            letter-spacing: 0.1em;
+            animation: titleGlow 3s infinite alternate;
+        }
+
+        .subtitle {
+            font-family: 'Cinzel', serif;
+            color: var(--text-light);
+            letter-spacing: 0.5em;
+            text-transform: uppercase;
+            font-size: 1rem;
+            margin-bottom: 3rem;
+            opacity: 0.8;
+        }
+
+        .sigil-container {
+            position: relative;
+            width: 150px;
+            height: 150px;
+            margin: 0 auto 3rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .sigil-ring {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border: 2px solid var(--gold-primary);
+            border-radius: 50%;
+            animation: spin 20s linear infinite;
+        }
+
+        .sigil-ring::before, .sigil-ring::after {
+            content: "";
+            position: absolute;
+            top: -10px;
+            left: 50%;
+            width: 20px;
+            height: 20px;
+            background: var(--blood-red);
+            border-radius: 50%;
+            transform: translateX(-50%);
+            box-shadow: 0 0 10px var(--blood-red);
+        }
+
+        .sigil-ring::after {
+            top: auto;
+            bottom: -10px;
+        }
+
+        .sigil-text {
+            font-family: 'Cinzel Decorative', cursive;
+            font-size: 1.5rem;
+            color: var(--gold-primary);
+            z-index: 2;
+        }
+
+        .distance-badge {
+            display: inline-block;
+            padding: 1rem 2rem;
+            border: 1px solid var(--gold-primary);
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(5px);
+            font-family: 'Cinzel', serif;
+            color: var(--gold-primary);
+            letter-spacing: 0.2em;
+            position: relative;
+        }
+
+        .distance-badge::before, .distance-badge::after {
+            content: "";
+            position: absolute;
+            top: 5px;
+            left: 5px;
+            right: 5px;
+            bottom: 5px;
+            border: 1px solid rgba(201, 162, 39, 0.3);
+            pointer-events: none;
+        }
+
+        /* Book Container */
+        .book-section {
+            width: 100%;
+            max-width: 900px;
+            padding: 4rem 1rem;
+            position: relative;
+        }
+
+        .book-paper {
+            background: linear-gradient(to right, #dcd0b8, #e8dcc4, #dcd0b8);
+            box-shadow: 
+                0 0 50px rgba(0,0,0,0.8),
+                inset 0 0 80px rgba(139, 69, 19, 0.2);
+            padding: 4rem 2rem;
+            position: relative;
+            border-radius: 2px;
+            border: 1px solid #777;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
+        }
+
+        /* Paper Texture Overlay */
+        .book-paper::before {
             content: "";
             position: absolute;
             top: 0;
@@ -66,153 +230,139 @@
             background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.08'/%3E%3C/svg%3E");
             pointer-events: none;
             z-index: 1;
-            border-radius: 5px;
+            border-radius: 2px;
+        }
+
+        /* Fold Line Effect */
+        .book-paper::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 50%;
+            width: 2px;
+            height: 100%;
+            background: linear-gradient(to bottom, transparent, rgba(0,0,0,0.1), transparent);
+            pointer-events: none;
+            z-index: 1;
         }
 
         .content-wrapper {
             position: relative;
             z-index: 2;
+            color: var(--text-dark);
         }
 
-        /* Header */
-        .header-section {
+        /* Section Title */
+        .category-header {
+            font-family: 'Cinzel Decorative', cursive;
+            font-size: 2rem;
+            color: var(--text-dark);
             text-align: center;
             margin-bottom: 3rem;
-            border-bottom: 2px solid var(--gold-dark);
-            padding-bottom: 2rem;
+            position: relative;
+            padding-bottom: 1rem;
         }
 
-        .main-title {
-            font-family: 'Cinzel Decorative', cursive;
-            font-size: clamp(2rem, 7vw, 3.5rem);
-            color: var(--bg-dark);
-            margin-bottom: 0.5rem;
-            text-shadow: 2px 2px 0px rgba(201, 162, 39, 0.3);
-        }
-
-        .subtitle {
-            font-family: 'Cinzel', serif;
-            color: var(--gold-dark);
-            letter-spacing: 0.2em;
-            text-transform: uppercase;
-            font-size: 0.9rem;
-            margin-top: 1rem;
-        }
-
-        .long-detail {
-            color: #555;
-            font-style: italic;
-            font-size: 0.9rem;
-            margin-top: 0.5rem;
-        }
-
-        /* Sigil / Divider */
-        .sigil-divider {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 2rem 0;
-            color: var(--gold-dark);
-            font-size: 1.5rem;
-        }
-
-        .sigil-divider::before, .sigil-divider::after {
+        .category-header::after {
             content: "";
-            flex: 1;
-            height: 1px;
-            background: linear-gradient(to right, transparent, var(--gold-dark), transparent);
-            margin: 0 1rem;
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 3px;
+            background: var(--blood-red);
+            box-shadow: 0 0 10px var(--blood-red);
         }
 
         /* Accordion Styles */
         .chapter-item {
             margin-bottom: 1.5rem;
-            border: 1px solid var(--parchment-dark);
-            background: rgba(255, 255, 255, 0.3);
+            position: relative;
+            border-left: 3px solid transparent;
             transition: all 0.3s ease;
         }
 
         .chapter-item:hover {
-            border-color: var(--gold);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            border-left-color: var(--blood-red);
         }
 
         .chapter-header {
+            background: rgba(255, 255, 255, 0.4);
+            padding: 1.5rem;
+            cursor: pointer;
+            font-family: 'Cinzel', serif;
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: var(--text-dark);
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 1.2rem 1.5rem;
-            cursor: pointer;
-            font-family: 'Cinzel', serif;
-            color: var(--bg-dark);
-            font-weight: 600;
-            font-size: 1.1rem;
-            background: linear-gradient(to right, rgba(201, 162, 39, 0.05), transparent);
+            transition: background 0.3s ease;
+            position: relative;
+            overflow: hidden;
         }
 
-        .chapter-header::after {
-            content: "\2766"; /* Fleur-de-lis like symbol */
-            color: var(--gold-dark);
-            transition: transform 0.3s ease;
-            font-size: 1rem;
+        .chapter-header::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.5), transparent);
+            transform: translateX(-100%);
+            transition: transform 0.5s ease;
         }
 
-        .chapter-item.active .chapter-header::after {
-            transform: rotate(90deg);
+        .chapter-item:hover .chapter-header::before {
+            transform: translateX(100%);
+        }
+
+        .chapter-icon {
+            font-size: 1.5rem;
             color: var(--blood-red);
+            transition: transform 0.3s ease;
+        }
+
+        .chapter-item.active .chapter-icon {
+            transform: rotate(45deg);
         }
 
         .chapter-content {
             max-height: 0;
             overflow: hidden;
-            transition: max-height 0.5s ease-out;
+            background: rgba(255, 255, 255, 0.6);
+            transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1), padding 0.3s ease;
         }
 
         .chapter-text {
             padding: 1.5rem;
-            background: rgba(255, 255, 255, 0.5);
-            border-top: 1px solid var(--parchment-dark);
+            border-top: 1px solid rgba(0,0,0,0.1);
             font-size: 1rem;
             line-height: 1.8;
-            color: #2c2c2c;
+            color: #333;
         }
 
-        .chapter-text p {
-            margin-bottom: 1rem;
-        }
-
-        .chapter-text strong {
-            color: var(--blood-red);
-            font-weight: 700;
-        }
-
+        .chapter-text p { margin-bottom: 1rem; }
+        
         .emotional-note {
             font-style: italic;
-            color: #555;
+            color: var(--blood-red);
             margin-top: 1rem;
             padding-top: 1rem;
-            border-top: 1px dashed var(--gold);
-        }
-
-        /* Category Titles */
-        .category-title {
-            font-family: 'Cinzel Decorative', cursive;
-            color: var(--blood-red);
-            font-size: 1.5rem;
-            margin-top: 3rem;
-            margin-bottom: 1.5rem;
-            text-align: center;
-            text-shadow: 1px 1px 0 rgba(0,0,0,0.1);
+            border-top: 1px dashed #999;
+            font-weight: bold;
         }
 
         /* Buttons */
         .btn-container {
             display: flex;
             flex-direction: column;
-            gap: 1rem;
+            gap: 1.5rem;
             margin-top: 4rem;
             padding-top: 2rem;
-            border-top: 2px solid var(--gold-dark);
+            border-top: 2px solid rgba(0,0,0,0.1);
             align-items: center;
         }
 
@@ -220,63 +370,74 @@
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            gap: 0.5rem;
-            padding: 1rem 2rem;
+            gap: 0.75rem;
+            padding: 1.2rem 2.5rem;
             font-family: 'Cinzel', serif;
             font-weight: 700;
             text-decoration: none;
             border-radius: 2px;
             transition: all 0.3s ease;
             text-transform: uppercase;
-            letter-spacing: 0.1em;
+            letter-spacing: 0.15em;
             cursor: pointer;
+            position: relative;
             width: 100%;
             max-width: 350px;
+            overflow: hidden;
         }
 
-        .download-btn {
-            background: var(--gold);
-            color: #111;
-            border: 1px solid var(--gold-dark);
-            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
-        }
-
-        .download-btn:hover {
-            background: var(--gold-light);
-            transform: translateY(-2px);
-            box-shadow: 0 6px 10px rgba(0,0,0,0.3);
-        }
-
+        /* Iron Button Style */
         .back-btn {
-            background: transparent;
-            color: var(--bg-dark);
-            border: 1px solid var(--bg-dark);
+            background: #1a1a1a;
+            color: #ccc;
+            border: 1px solid #444;
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.5);
         }
 
         .back-btn:hover {
-            background: var(--bg-dark);
-            color: var(--gold);
+            color: var(--gold-primary);
+            border-color: var(--gold-primary);
+            box-shadow: 0 0 15px rgba(201, 162, 39, 0.3), inset 0 0 20px rgba(0,0,0,0.5);
         }
 
-        /* Responsive */
-        @media (max-width: 640px) {
-            .book-container {
-                padding: 2rem 1rem;
-            }
-            .chapter-header {
-                font-size: 0.95rem;
-                padding: 1rem;
-            }
-            .chapter-text {
-                padding: 1rem;
-            }
+        /* Gold Seal Button Style */
+        .download-btn {
+            background: linear-gradient(to right, #8a6e1a, var(--gold-primary), #8a6e1a);
+            color: #000;
+            border: 1px solid var(--gold-glow);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
         }
 
-        /* Scroll reveal animation */
+        .download-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(201, 162, 39, 0.4);
+        }
+
+        .action-btn span {
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Animations */
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes titleGlow {
+            0% { text-shadow: 0 0 20px rgba(201, 162, 39, 0.3); }
+            100% { text-shadow: 0 0 40px rgba(201, 162, 39, 0.8); }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
         .reveal-item {
             opacity: 0;
-            transform: translateY(20px);
-            transition: opacity 0.6s ease, transform 0.6s ease;
+            transform: translateY(30px);
+            transition: opacity 1s ease, transform 1s ease;
         }
 
         .reveal-item.visible {
@@ -284,663 +445,678 @@
             transform: translateY(0);
         }
 
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #f1f1f1;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: var(--gold-dark);
-            border-radius: 4px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #555;
+        /* Responsive */
+        @media (max-width: 768px) {
+            .book-paper {
+                padding: 2rem 1rem;
+            }
+            .main-title {
+                font-size: 2.5rem;
+            }
+            body {
+                cursor: auto; /* Default cursor on mobile */
+            }
+            .cursor {
+                display: none;
+            }
         }
     </style>
 </head>
 <body>
 
-    <div class="book-container">
-        <div class="content-wrapper">
+    <!-- Custom Cursor -->
+    <div class="cursor" id="cursor"></div>
+
+    <!-- Ember Particles Canvas -->
+    <canvas id="ember-canvas"></canvas>
+
+    <div class="main-wrapper">
+        
+        <!-- Hero Section -->
+        <header class="hero-section">
+            <div class="hero-bg-overlay"></div>
             
-            <!-- Header -->
-            <header class="header-section reveal-item">
-                <h1 class="main-title">Tulsi & Aryan</h1>
-                <p class="subtitle">A Saga of Love & Distance</p>
-                <div class="sigil-divider">&#9830;</div>
-                <p class="long-detail">Distance: 6,924.46 km | Since 2nd June 2025</p>
-            </header>
-
-            <!-- Section 1: Moments -->
-            <h2 class="category-title reveal-item">Memories & Emotions</h2>
-
-            <div class="chapter-item reveal-item">
-                <div class="chapter-header">Was it during a call?</div>
-                <div class="chapter-content">
-                    <div class="chapter-text">
-                        <p>The first call was so long and we were so talkative. We talked a lot with full of happiness. It felt like souls meeting for the first time.</p>
-                    </div>
+            <div class="hero-content">
+                <div class="sigil-container reveal-item visible" style="transition-delay: 0s;">
+                    <div class="sigil-ring"></div>
+                    <div class="sigil-text">T & A</div>
+                </div>
+                
+                <h1 class="main-title reveal-item visible" style="transition-delay: 0.2s;">TULSI & ARYAN</h1>
+                <p class="subtitle reveal-item visible" style="transition-delay: 0.4s;">A Song of Love & Distance</p>
+                
+                <div class="distance-badge reveal-item visible" style="transition-delay: 0.6s;">
+                    <div style="font-size: 1.2rem; margin-bottom: 0.5rem;">6,924.46 KM Apart</div>
+                    <div style="font-size: 0.8rem; opacity: 0.7;">Since 2nd June 2025</div>
                 </div>
             </div>
-
-            <div class="chapter-item reveal-item">
-                <div class="chapter-header">During a fight?</div>
-                <div class="chapter-content">
-                    <div class="chapter-text">
-                        <p>We cry alone, we remember each other, and we wait to see who texts first after the fight. The silence is heavy, but the love remains.</p>
-                    </div>
-                </div>
+            
+            <!-- Scroll Down Indicator -->
+            <div style="position: absolute; bottom: 2rem; animation: bounce 2s infinite;">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#c9a227" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 5v14M19 12l-7 7-7-7"/>
+                </svg>
             </div>
+        </header>
 
-            <div class="chapter-item reveal-item">
-                <div class="chapter-header">When she cared for you?</div>
-                <div class="chapter-content">
-                    <div class="chapter-text">
-                        <p>When I was very ill, when my health was bad, and when my mood was off. She always stands by me, no matter the distance.</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="chapter-item reveal-item">
-                <div class="chapter-header">When she said something special?</div>
-                <div class="chapter-content">
-                    <div class="chapter-text">
-                        <p>There was a time when she said <strong>"Mumma is with us."</strong> That moment gave me so much peace.</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="chapter-item reveal-item">
-                <div class="chapter-header">When she called you by a nickname?</div>
-                <div class="chapter-content">
-                    <div class="chapter-text">
-                        <p>She calls me <strong>"AARU"</strong> and sometimes <strong>"Post Office Dabba"</strong>. Every name hides her love for me.</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="chapter-item reveal-item">
-                <div class="chapter-header">When she cried?</div>
-                <div class="chapter-content">
-                    <div class="chapter-text">
-                        <p>I feel so bad, I cry from the inside. At that moment, I just want to hug her. I never want her to cry. Her tears are unbearable for me.</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="chapter-item reveal-item">
-                <div class="chapter-header">When she got angry?</div>
-                <div class="chapter-content">
-                    <div class="chapter-text">
-                        <p>When I don't talk to her properly, or when I don't care about my health. Her anger is also a part of her love.</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="chapter-item reveal-item">
-                <div class="chapter-header">When she ignored you?</div>
-                <div class="chapter-content">
-                    <div class="chapter-text">
-                        <p>I don't eat, I cry a lot. I check every notification. My health deteriorates and I miss her a lot. Her silence breaks me.</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Section 2: First I Love You -->
-            <h2 class="category-title reveal-item">The First "I Love You"</h2>
-
-            <div class="chapter-item reveal-item">
-                <div class="chapter-header">Who said it first?</div>
-                <div class="chapter-content">
-                    <div class="chapter-text">
-                        <p>I said it first.</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="chapter-item reveal-item">
-                <div class="chapter-header">How did it happen?</div>
-                <div class="chapter-content">
-                    <div class="chapter-text">
-                        <p>When I was sure, I shared my feelings, but she didn't respond immediately.</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="chapter-item reveal-item">
-                <div class="chapter-header">Was it planned or sudden?</div>
-                <div class="chapter-content">
-                    <div class="chapter-text">
-                        <p>I had tried to share it many times, but I had a fear of losing her. Finally, the heart spoke.</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="chapter-item reveal-item">
-                <div class="chapter-header">What was her reaction?</div>
-                <div class="chapter-content">
-                    <div class="chapter-text">
-                        <p>She was happy and smiled, but she made me wait for the answer. She was perhaps thinking, and I was waiting eagerly.</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="chapter-item reveal-item">
-                <div class="chapter-header">Did she take time?</div>
-                <div class="chapter-content">
-                    <div class="chapter-text">
-                        <p>Yes, she said "Love you" after a long time. But when she said it, the wait felt justified.</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="chapter-item reveal-item">
-                <div class="chapter-header">Did she tease you?</div>
-                <div class="chapter-content">
-                    <div class="chapter-text">
-                        <p>When she is full of mood, she teases me a lot, and when she teases me, I fear losing her.</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="chapter-item reveal-item">
-                <div class="chapter-header">Did she say it softly?</div>
-                <div class="chapter-content">
-                    <div class="chapter-text">
-                        <p>She cries a lot and I hate that. When she cries a lot, it makes me so angry. It hurts to see her in pain.</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="chapter-item reveal-item">
-                <div class="chapter-header">Did you sleep that night or not?</div>
-                <div class="chapter-content">
-                    <div class="chapter-text">
-                        <p>I could not even close my eyes. When she asked "Did you sleep?", I lied and said yes, but in reality, I was watching her pics, her messages, her smiles. I waited until morning.</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Section 3: Jealousy -->
-            <h2 class="category-title reveal-item">Jealousy & Trust</h2>
-
-            <div class="chapter-item reveal-item">
-                <div class="chapter-header">Did you ever feel jealous?</div>
-                <div class="chapter-content">
-                    <div class="chapter-text">
-                        <p>So and so much.</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="chapter-item reveal-item">
-                <div class="chapter-header">Because of?</div>
-                <div class="chapter-content">
-                    <div class="chapter-text">
-                        <p>Some other biodata comes for marriage, or when someone tries to impress and get close to her.</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="chapter-item reveal-item">
-                <div class="chapter-header">Someone liking her photo?</div>
-                <div class="chapter-content">
-                    <div class="chapter-text">
-                        <p>That is okay to me because she also needs space to live life. I never say do this or do that, but I just take care of her from toxic people.</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="chapter-item reveal-item">
-                <div class="chapter-header">Someone messaging her?</div>
-                <div class="chapter-content">
-                    <div class="chapter-text">
-                        <p>I trust her blindly and I respect her. I never ask about messages, calls, or video calls from anyone, but yes, I love her honesty. She tells me everything if something happens.</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="chapter-item reveal-item">
-                <div class="chapter-header">Her male friend?</div>
-                <div class="chapter-content">
-                    <div class="chapter-text">
-                        <p>Zero. And I love that. Her having zero male friends makes me love her even more.</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="chapter-item reveal-item">
-                <div class="chapter-header">Family pressure?</div>
-                <div class="chapter-content">
-                    <div class="chapter-text">
-                        <p>I do not have any pressure but I love my grandparents and they love Tulsi. They want us together for a lifetime, even for the next 100 births. They want to see us and our children before they die. My family loves her a lot and waits every second for Tulsi to come to India, to marry me.</p>
-                        <div class="emotional-note">
-                            <strong>Tulsi, I am literally crying over this part. This is 27th Feb, 11:05 and tears are not stopping, hands are vibrating, mom and dad are sleeping, and I am crying... I love you Tulsi - never break our trust, our bond, and relationship diku. We love you.</strong>
+        <!-- Book Content Section -->
+        <section class="book-section">
+            <div class="book-paper">
+                <div class="content-wrapper">
+                    
+                    <!-- Section 1 -->
+                    <h2 class="category-header reveal-item">Memories & Emotions</h2>
+                    
+                    <div class="chapter-item reveal-item">
+                        <div class="chapter-header">
+                            <span>Was it during a call?</span>
+                            <span class="chapter-icon">&#10022;</span>
+                        </div>
+                        <div class="chapter-content">
+                            <div class="chapter-text">
+                                <p>The first call was so long and we were so talkative. We talked a lot with full of happiness. It felt like souls meeting for the first time.</p>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </div>
 
-            <div class="chapter-item reveal-item">
-                <div class="chapter-header">She didn't reply fast?</div>
-                <div class="chapter-content">
-                    <div class="chapter-text">
-                        <p>I wait, I don't get angry but I am proud of her because she works in a medicine shop. She is doing so many efforts for me, for our bright future, for our family. I am proud of you Tuli.</p>
+                    <div class="chapter-item reveal-item">
+                        <div class="chapter-header">
+                            <span>During a fight?</span>
+                            <span class="chapter-icon">&#10022;</span>
+                        </div>
+                        <div class="chapter-content">
+                            <div class="chapter-text">
+                                <p>We cry alone, we remember each other, and we wait to see who texts first after the fight. The silence is heavy, but the love remains.</p>
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </div>
 
-            <div class="chapter-item reveal-item">
-                <div class="chapter-header">What did you do?</div>
-                <div class="chapter-content">
-                    <div class="chapter-text">
-                        <p>I wait and I wait for my favorite notification from her.</p>
+                    <div class="chapter-item reveal-item">
+                        <div class="chapter-header">
+                            <span>When she cared for you?</span>
+                            <span class="chapter-icon">&#10022;</span>
+                        </div>
+                        <div class="chapter-content">
+                            <div class="chapter-text">
+                                <p>When I was very ill, when my health was bad, and when my mood was off. She always stands by me, no matter the distance.</p>
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </div>
 
-            <div class="chapter-item reveal-item">
-                <div class="chapter-header">Did you fight?</div>
-                <div class="chapter-content">
-                    <div class="chapter-text">
-                        <p>Sometimes because of ego, attitude, or maybe misunderstanding.</p>
+                    <div class="chapter-item reveal-item">
+                        <div class="chapter-header">
+                            <span>When she said something special?</span>
+                            <span class="chapter-icon">&#10022;</span>
+                        </div>
+                        <div class="chapter-content">
+                            <div class="chapter-text">
+                                <p>There was a time when she said <strong>"Mumma is with us."</strong> That moment gave me so much peace.</p>
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </div>
 
-            <div class="chapter-item reveal-item">
-                <div class="chapter-header">Did she calm you?</div>
-                <div class="chapter-content">
-                    <div class="chapter-text">
-                        <p>She is the only one who can calm me, otherwise, I can be the one who fights against the world. She is my peace.</p>
+                    <div class="chapter-item reveal-item">
+                        <div class="chapter-header">
+                            <span>When she called you by a nickname?</span>
+                            <span class="chapter-icon">&#10022;</span>
+                        </div>
+                        <div class="chapter-content">
+                            <div class="chapter-text">
+                                <p>She calls me <strong>"AARU"</strong> and sometimes <strong>"Post Office Dabba"</strong>. Every name hides her love for me.</p>
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </div>
 
-            <div class="chapter-item reveal-item">
-                <div class="chapter-header">Did you act mature or emotional?</div>
-                <div class="chapter-content">
-                    <div class="chapter-text">
-                        <p>So much emotional, every time emotional.</p>
+                    <div class="chapter-item reveal-item">
+                        <div class="chapter-header">
+                            <span>When she cried?</span>
+                            <span class="chapter-icon">&#10022;</span>
+                        </div>
+                        <div class="chapter-content">
+                            <div class="chapter-text">
+                                <p>I feel so bad, I cry from the inside. At that moment, I just want to hug her. I never want her to cry. Her tears are unbearable for me.</p>
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </div>
 
-            <!-- Section 4: Biggest Fight -->
-            <h2 class="category-title reveal-item">The Biggest Fight</h2>
-
-            <div class="chapter-item reveal-item">
-                <div class="chapter-header">Describe the worst fight.</div>
-                <div class="chapter-content">
-                    <div class="chapter-text">
-                        <p>Just recently in February.</p>
+                    <div class="chapter-item reveal-item">
+                        <div class="chapter-header">
+                            <span>When she got angry?</span>
+                            <span class="chapter-icon">&#10022;</span>
+                        </div>
+                        <div class="chapter-content">
+                            <div class="chapter-text">
+                                <p>When I don't talk to her properly, or when I don't care about my health. Her anger is also a part of her love.</p>
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </div>
 
-            <div class="chapter-item reveal-item">
-                <div class="chapter-header">What was the reason?</div>
-                <div class="chapter-content">
-                    <div class="chapter-text">
-                        <p>Because she did not turn the video call on.</p>
+                    <div class="chapter-item reveal-item">
+                        <div class="chapter-header">
+                            <span>When she ignored you?</span>
+                            <span class="chapter-icon">&#10022;</span>
+                        </div>
+                        <div class="chapter-content">
+                            <div class="chapter-text">
+                                <p>I don't eat, I cry a lot. I check every notification. My health deteriorates and I miss her a lot. Her silence breaks me.</p>
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </div>
 
-            <div class="chapter-item reveal-item">
-                <div class="chapter-header">Did someone cry?</div>
-                <div class="chapter-content">
-                    <div class="chapter-text">
-                        <p>We both cried.</p>
+                    <!-- Section 2 -->
+                    <h2 class="category-header reveal-item">The First "I Love You"</h2>
+
+                    <div class="chapter-item reveal-item">
+                        <div class="chapter-header">
+                            <span>Who said it first?</span>
+                            <span class="chapter-icon">&#10022;</span>
+                        </div>
+                        <div class="chapter-content">
+                            <div class="chapter-text"><p>I said it first.</p></div>
+                        </div>
                     </div>
-                </div>
-            </div>
 
-            <div class="chapter-item reveal-item">
-                <div class="chapter-header">Did someone block?</div>
-                <div class="chapter-content">
-                    <div class="chapter-text">
-                        <p>Not yet, I can't. She says she can't either. I can't block her even if she makes me feel the worst.</p>
+                    <div class="chapter-item reveal-item">
+                        <div class="chapter-header">
+                            <span>How did it happen?</span>
+                            <span class="chapter-icon">&#10022;</span>
+                        </div>
+                        <div class="chapter-content">
+                            <div class="chapter-text">
+                                <p>When I was sure, I shared my feelings, but she didn't respond immediately.</p>
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </div>
 
-            <div class="chapter-item reveal-item">
-                <div class="chapter-header">Did someone say "leave me"?</div>
-                <div class="chapter-content">
-                    <div class="chapter-text">
-                        <p>I know her, we are not going to leave each other. Never, never, and never.</p>
+                    <div class="chapter-item reveal-item">
+                        <div class="chapter-header">
+                            <span>Was it planned or sudden?</span>
+                            <span class="chapter-icon">&#10022;</span>
+                        </div>
+                        <div class="chapter-content">
+                            <div class="chapter-text">
+                                <p>I had tried to share it many times, but I had a fear of losing her. Finally, the heart spoke.</p>
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </div>
 
-            <div class="chapter-item reveal-item">
-                <div class="chapter-header">How many hours/days no talk?</div>
-                <div class="chapter-content">
-                    <div class="chapter-text">
-                        <p>Only one day when we did not make a video call, but we did have small talk.</p>
+                    <div class="chapter-item reveal-item">
+                        <div class="chapter-header">
+                            <span>What was her reaction?</span>
+                            <span class="chapter-icon">&#10022;</span>
+                        </div>
+                        <div class="chapter-content">
+                            <div class="chapter-text">
+                                <p>She was happy and smiled, but she made me wait for the answer. She was perhaps thinking, and I was waiting eagerly.</p>
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </div>
 
-            <div class="chapter-item reveal-item">
-                <div class="chapter-header">What were you feeling during silence?</div>
-                <div class="chapter-content">
-                    <div class="chapter-text">
-                        <p>I am more silent than her. I hurt myself, I go to the terrace, I cry a lot. I do not eat, do not drink water, and sometimes I just watch her pics till morning. I wait for her reply, text, call, or video call, holding my phone in my hands overnight.</p>
+                    <div class="chapter-item reveal-item">
+                        <div class="chapter-header">
+                            <span>Did she take time?</span>
+                            <span class="chapter-icon">&#10022;</span>
+                        </div>
+                        <div class="chapter-content">
+                            <div class="chapter-text">
+                                <p>Yes, she said "Love you" after a long time. But when she said it, the wait felt justified.</p>
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </div>
 
-            <!-- Section 5: Biggest Fear -->
-            <h2 class="category-title reveal-item">Your Biggest Fear</h2>
-
-            <div class="chapter-item reveal-item">
-                <div class="chapter-header">Are you scared she may leave?</div>
-                <div class="chapter-content">
-                    <div class="chapter-text">
-                        <p>Yes, even the thought makes me feel like a skeleton without a body, a heart without feeling. I cry so much.</p>
+                    <div class="chapter-item reveal-item">
+                        <div class="chapter-header">
+                            <span>Did she tease you?</span>
+                            <span class="chapter-icon">&#10022;</span>
+                        </div>
+                        <div class="chapter-content">
+                            <div class="chapter-text">
+                                <p>When she is full of mood, she teases me a lot, and when she teases me, I fear losing her.</p>
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </div>
 
-            <div class="chapter-item reveal-item">
-                <div class="chapter-header">Are you scared long distance may fail?</div>
-                <div class="chapter-content">
-                    <div class="chapter-text">
-                        <p>Nope, I trust her.</p>
+                    <div class="chapter-item reveal-item">
+                        <div class="chapter-header">
+                            <span>Did she say it softly?</span>
+                            <span class="chapter-icon">&#10022;</span>
+                        </div>
+                        <div class="chapter-content">
+                            <div class="chapter-text">
+                                <p>She cries a lot and I hate that. When she cries a lot, it makes me so angry. It hurts to see her in pain.</p>
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </div>
 
-            <div class="chapter-item reveal-item">
-                <div class="chapter-header">Are you insecure about weight?</div>
-                <div class="chapter-content">
-                    <div class="chapter-text">
-                        <p>Yes, I am overweight and I am trying to lose it. Sometimes I cry because of my body and belly.</p>
+                    <div class="chapter-item reveal-item">
+                        <div class="chapter-header">
+                            <span>Did you sleep that night or not?</span>
+                            <span class="chapter-icon">&#10022;</span>
+                        </div>
+                        <div class="chapter-content">
+                            <div class="chapter-text">
+                                <p>I could not even close my eyes. When she asked "Did you sleep?", I lied and said yes, but in reality, I was watching her pics, her messages, her smiles. I waited until morning.</p>
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </div>
 
-            <div class="chapter-item reveal-item">
-                <div class="chapter-header">Are you scared about money/career?</div>
-                <div class="chapter-content">
-                    <div class="chapter-text">
-                        <p>I want to build a family, money, and career. I want her happy for a lifetime, hence I think a lot—what if I failed? What if I do not earn? What if I can't find a job in the UK?</p>
+                    <!-- Section 3 -->
+                    <h2 class="category-header reveal-item">Jealousy & Trust</h2>
+
+                    <div class="chapter-item reveal-item">
+                        <div class="chapter-header">
+                            <span>Did you ever feel jealous?</span>
+                            <span class="chapter-icon">&#10022;</span>
+                        </div>
+                        <div class="chapter-content">
+                            <div class="chapter-text"><p>So and so much.</p></div>
+                        </div>
                     </div>
-                </div>
-            </div>
 
-            <div class="chapter-item reveal-item">
-                <div class="chapter-header">Are you scared about family approval?</div>
-                <div class="chapter-content">
-                    <div class="chapter-text">
-                        <p>I believe in Tulsi, but sometimes I get scared of her big father, her family. What if they decline? Or make Tulsi emotionally blackmail?</p>
+                    <div class="chapter-item reveal-item">
+                        <div class="chapter-header">
+                            <span>Because of?</span>
+                            <span class="chapter-icon">&#10022;</span>
+                        </div>
+                        <div class="chapter-content">
+                            <div class="chapter-text">
+                                <p>Some other biodata comes for marriage, or when someone tries to impress and get close to her.</p>
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </div>
 
-            <div class="chapter-item reveal-item">
-                <div class="chapter-header">Do you overthink at night?</div>
-                <div class="chapter-content">
-                    <div class="chapter-text">
-                        <p>Yes, this is my biggest problem. I overthink so much.</p>
+                    <div class="chapter-item reveal-item">
+                        <div class="chapter-header">
+                            <span>Someone liking her photo?</span>
+                            <span class="chapter-icon">&#10022;</span>
+                        </div>
+                        <div class="chapter-content">
+                            <div class="chapter-text">
+                                <p>That is okay to me because she also needs space to live life. I never say do this or do that, but I just take care of her from toxic people.</p>
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </div>
 
-            <!-- Section 6: Romantic Memory -->
-            <h2 class="category-title reveal-item">Most Romantic Memory</h2>
-
-            <div class="chapter-item reveal-item">
-                <div class="chapter-header">Most romantic memory?</div>
-                <div class="chapter-content">
-                    <div class="chapter-text">
-                        <p>Each and every moment. When her mother agreed about me, when I dreamed about our romance.</p>
+                    <div class="chapter-item reveal-item">
+                        <div class="chapter-header">
+                            <span>Someone messaging her?</span>
+                            <span class="chapter-icon">&#10022;</span>
+                        </div>
+                        <div class="chapter-content">
+                            <div class="chapter-text">
+                                <p>I trust her blindly and I respect her. I never ask about messages, calls, or video calls from anyone, but yes, I love her honesty. She tells me everything if something happens.</p>
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </div>
 
-            <div class="chapter-item reveal-item">
-                <div class="chapter-header">Most romantic thing she ever did?</div>
-                <div class="chapter-content">
-                    <div class="chapter-text">
-                        <p>Gave me a kiss over a video call—I miss it every day. She gave me one only once when I asked, otherwise, she says no (laughing hahaha).</p>
+                    <div class="chapter-item reveal-item">
+                        <div class="chapter-header">
+                            <span>Her male friend?</span>
+                            <span class="chapter-icon">&#10022;</span>
+                        </div>
+                        <div class="chapter-content">
+                            <div class="chapter-text">
+                                <p>Zero. And I love that. Her having zero male friends makes me love her even more.</p>
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </div>
 
-            <div class="chapter-item reveal-item">
-                <div class="chapter-header">Did she ever sleep on call?</div>
-                <div class="chapter-content">
-                    <div class="chapter-text">
-                        <p>Many times, and I love watching her sleepy. When she sleeps, I love her more by watching her face.</p>
+                    <div class="chapter-item reveal-item">
+                        <div class="chapter-header">
+                            <span>Family pressure?</span>
+                            <span class="chapter-icon">&#10022;</span>
+                        </div>
+                        <div class="chapter-content">
+                            <div class="chapter-text">
+                                <p>I do not have any pressure but I love my grandparents and they love Tulsi. They want us together for a lifetime, even for the next 100 births. They want to see us and our children before they die. My family loves her a lot and waits every second for Tulsi to come to India, to marry me.</p>
+                                <div class="emotional-note">
+                                    "Tulsi, I am literally crying over this part. This is 27th Feb, 11:05 and tears are not stopping, hands are vibrating, mom and dad are sleeping, and I am crying... I love you Tulsi - never break our trust, our bond, and relationship diku. We love you."
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </div>
 
-            <div class="chapter-item reveal-item">
-                <div class="chapter-header">Did she send surprise?</div>
-                <div class="chapter-content">
-                    <div class="chapter-text">
-                        <p>Yes, this is one of my favorite things. She bought me a mobile phone, wired Apple earphones, wallet, so many fruits, trimmer, snacks, books, a heart pillow, ice creams, roses, cakes, and so many things I can't even count. She is just amazing.</p>
-                        <p>I love when she orders suddenly and surprisingly. Thank you, Tulsi. But Tulsi, this is not a good thing to use so much money. Once a month is fine, my baccha.</p>
+                    <div class="chapter-item reveal-item">
+                        <div class="chapter-header">
+                            <span>She didn't reply fast?</span>
+                            <span class="chapter-icon">&#10022;</span>
+                        </div>
+                        <div class="chapter-content">
+                            <div class="chapter-text">
+                                <p>I wait, I don't get angry but I am proud of her because she works in a medicine shop. She is doing so many efforts for me, for our bright future, for our family. I am proud of you Tuli.</p>
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </div>
 
-            <div class="chapter-item reveal-item">
-                <div class="chapter-header">Did she call you husband jokingly?</div>
-                <div class="chapter-content">
-                    <div class="chapter-text">
-                        <p>Yes, I do funny things over a call. I just want to make her smile, make her laugh so I can see her smiling face.</p>
+                    <div class="chapter-item reveal-item">
+                        <div class="chapter-header">
+                            <span>What did you do?</span>
+                            <span class="chapter-icon">&#10022;</span>
+                        </div>
+                        <div class="chapter-content">
+                            <div class="chapter-text"><p>I wait and I wait for my favorite notification from her.</p></div>
+                        </div>
                     </div>
-                </div>
-            </div>
 
-            <!-- Section 7: Parcel Scene -->
-            <h2 class="category-title reveal-item">The Parcel Scene</h2>
-
-            <div class="chapter-item reveal-item">
-                <div class="chapter-header">When you packed the parcel?</div>
-                <div class="chapter-content">
-                    <div class="chapter-text">
-                        <p>From February 1st, I took all my money in one bank account—my savings, pocket money, earnings, hidden money (emergency money). And I started buying things for her. I chose the best things, like the best company toy, best food, etc.</p>
+                    <div class="chapter-item reveal-item">
+                        <div class="chapter-header">
+                            <span>Did you fight?</span>
+                            <span class="chapter-icon">&#10022;</span>
+                        </div>
+                        <div class="chapter-content">
+                            <div class="chapter-text"><p>Sometimes because of ego, attitude, or maybe misunderstanding.</p></div>
+                        </div>
                     </div>
-                </div>
-            </div>
 
-            <div class="chapter-item reveal-item">
-                <div class="chapter-header">Were you emotional?</div>
-                <div class="chapter-content">
-                    <div class="chapter-text">
-                        <p>When the parcel left and when I was writing letters, hiding my emotions at those times... yes, very emotional.</p>
+                    <div class="chapter-item reveal-item">
+                        <div class="chapter-header">
+                            <span>Did she calm you?</span>
+                            <span class="chapter-icon">&#10022;</span>
+                        </div>
+                        <div class="chapter-content">
+                            <div class="chapter-text"><p>She is the only one who can calm me, otherwise, I can be the one who fights against the world. She is my peace.</p></div>
+                        </div>
                     </div>
-                </div>
-            </div>
 
-            <div class="chapter-item reveal-item">
-                <div class="chapter-header">Did you imagine her opening it?</div>
-                <div class="chapter-content">
-                    <div class="chapter-text">
-                        <p>Each and every day. I check the parcel details, I track the parcel.</p>
+                    <div class="chapter-item reveal-item">
+                        <div class="chapter-header">
+                            <span>Did you act mature or emotional?</span>
+                            <span class="chapter-icon">&#10022;</span>
+                        </div>
+                        <div class="chapter-content">
+                            <div class="chapter-text"><p>So much emotional, every time emotional.</p></div>
+                        </div>
                     </div>
-                </div>
-            </div>
 
-            <div class="chapter-item reveal-item">
-                <div class="chapter-header">Did you hold items and smile?</div>
-                <div class="chapter-content">
-                    <div class="chapter-text">
-                        <p>Yes, I sent each and every item I remembered. I am sorry diku if I missed any item.</p>
+                    <!-- Section 4 -->
+                    <h2 class="category-header reveal-item">The Biggest Fight</h2>
+
+                    <div class="chapter-item reveal-item">
+                        <div class="chapter-header"><span>Describe the worst fight.</span><span class="chapter-icon">&#10022;</span></div>
+                        <div class="chapter-content"><div class="chapter-text"><p>Just recently in February.</p></div></div>
                     </div>
-                </div>
-            </div>
-
-            <div class="chapter-item reveal-item">
-                <div class="chapter-header">Did you talk to yourself?</div>
-                <div class="chapter-content">
-                    <div class="chapter-text">
-                        <p>Yes, I go to the DMart and talk about her—does she like this food? Will she wear this T-shirt? Does she love this taste?</p>
+                    <div class="chapter-item reveal-item">
+                        <div class="chapter-header"><span>What was the reason?</span><span class="chapter-icon">&#10022;</span></div>
+                        <div class="chapter-content"><div class="chapter-text"><p>Because she did not turn the video call on.</p></div></div>
                     </div>
-                </div>
-            </div>
-
-            <!-- Section 8: First Meeting -->
-            <h2 class="category-title reveal-item">First Meeting Imagination</h2>
-
-            <div class="chapter-item reveal-item">
-                <div class="chapter-header">When you meet her for the first time?</div>
-                <div class="chapter-content">
-                    <div class="chapter-text">
-                        <p>Maybe at the airport. I am waiting for you, baccha.</p>
+                    <div class="chapter-item reveal-item">
+                        <div class="chapter-header"><span>Did someone cry?</span><span class="chapter-icon">&#10022;</span></div>
+                        <div class="chapter-content"><div class="chapter-text"><p>We both cried.</p></div></div>
                     </div>
-                </div>
-            </div>
-
-            <div class="chapter-item reveal-item">
-                <div class="chapter-header">Airport or home?</div>
-                <div class="chapter-content">
-                    <div class="chapter-text">
-                        <p>She is my home, and our first meet will be the most grateful moment of all time.</p>
+                    <div class="chapter-item reveal-item">
+                        <div class="chapter-header"><span>Did someone block?</span><span class="chapter-icon">&#10022;</span></div>
+                        <div class="chapter-content"><div class="chapter-text"><p>Not yet, I can't. She says she can't either. I can't block her even if she makes me feel the worst.</p></div></div>
                     </div>
-                </div>
-            </div>
-
-            <div class="chapter-item reveal-item">
-                <div class="chapter-header">Will you hug first?</div>
-                <div class="chapter-content">
-                    <div class="chapter-text">
-                        <p>As soon as I see her at the airport.</p>
+                    <div class="chapter-item reveal-item">
+                        <div class="chapter-header"><span>Did someone say "leave me"?</span><span class="chapter-icon">&#10022;</span></div>
+                        <div class="chapter-content"><div class="chapter-text"><p>I know her, we are not going to leave each other. Never, never, and never.</p></div></div>
                     </div>
-                </div>
-            </div>
-
-            <div class="chapter-item reveal-item">
-                <div class="chapter-header">Will you cry?</div>
-                <div class="chapter-content">
-                    <div class="chapter-text">
-                        <p>When she comes to India, when I see her for the first time... I will definitely cry.</p>
+                    <div class="chapter-item reveal-item">
+                        <div class="chapter-header"><span>How many hours/days no talk?</span><span class="chapter-icon">&#10022;</span></div>
+                        <div class="chapter-content"><div class="chapter-text"><p>Only one day when we did not make a video call, but we did have small talk.</p></div></div>
                     </div>
-                </div>
-            </div>
-
-            <div class="chapter-item reveal-item">
-                <div class="chapter-header">Will you touch her face?</div>
-                <div class="chapter-content">
-                    <div class="chapter-text">
-                        <p>Of course, I will kiss her. I will touch her with my arms, fingers, hands.</p>
+                    <div class="chapter-item reveal-item">
+                        <div class="chapter-header"><span>What were you feeling during silence?</span><span class="chapter-icon">&#10022;</span></div>
+                        <div class="chapter-content"><div class="chapter-text"><p>I am more silent than her. I hurt myself, I go to the terrace, I cry a lot. I do not eat, do not drink water, and sometimes I just watch her pics till morning. I wait for her reply, text, call, or video call, holding my phone in my hands overnight.</p></div></div>
                     </div>
-                </div>
-            </div>
 
-            <div class="chapter-item reveal-item">
-                <div class="chapter-header">Will you stay silent?</div>
-                <div class="chapter-content">
-                    <div class="chapter-text">
-                        <p>I will look at her until she flies back to the UK (or stays forever).</p>
+                    <!-- Section 5 -->
+                    <h2 class="category-header reveal-item">Your Biggest Fear</h2>
+
+                    <div class="chapter-item reveal-item">
+                        <div class="chapter-header"><span>Are you scared she may leave?</span><span class="chapter-icon">&#10022;</span></div>
+                        <div class="chapter-content"><div class="chapter-text"><p>Yes, even the thought makes me feel like a skeleton without a body, a heart without feeling. I cry so much.</p></div></div>
                     </div>
-                </div>
-            </div>
-
-            <div class="chapter-item reveal-item">
-                <div class="chapter-header">What will you say first?</div>
-                <div class="chapter-content">
-                    <div class="chapter-text">
-                        <p>"Hi, my diku, welcome home diku, missed you so much, love you." And then hug her tightly. Even now, I am imagining and crying alone...</p>
+                    <div class="chapter-item reveal-item">
+                        <div class="chapter-header"><span>Are you scared long distance may fail?</span><span class="chapter-icon">&#10022;</span></div>
+                        <div class="chapter-content"><div class="chapter-text"><p>Nope, I trust her.</p></div></div>
                     </div>
-                </div>
-            </div>
-
-            <!-- Section 9: Marriage Dream -->
-            <h2 class="category-title reveal-item">Marriage Dream</h2>
-
-            <div class="chapter-item reveal-item">
-                <div class="chapter-header">Court marriage?</div>
-                <div class="chapter-content">
-                    <div class="chapter-text">
-                        <p>Yes, we want to save money to travel, for a honeymoon, for our future, for a house, car, etc.</p>
+                    <div class="chapter-item reveal-item">
+                        <div class="chapter-header"><span>Are you insecure about weight?</span><span class="chapter-icon">&#10022;</span></div>
+                        <div class="chapter-content"><div class="chapter-text"><p>Yes, I am overweight and I am trying to lose it. Sometimes I cry because of my body and belly.</p></div></div>
                     </div>
-                </div>
-            </div>
-
-            <div class="chapter-item reveal-item">
-                <div class="chapter-header">Traditional?</div>
-                <div class="chapter-content">
-                    <div class="chapter-text">
-                        <p>Yes, but depends on the time.</p>
+                    <div class="chapter-item reveal-item">
+                        <div class="chapter-header"><span>Are you scared about money/career?</span><span class="chapter-icon">&#10022;</span></div>
+                        <div class="chapter-content"><div class="chapter-text"><p>I want to build a family, money, and career. I want her happy for a lifetime, hence I think a lot—what if I failed? What if I do not earn? What if I can't find a job in the UK?</p></div></div>
                     </div>
-                </div>
-            </div>
-
-            <div class="chapter-item reveal-item">
-                <div class="chapter-header">Both?</div>
-                <div class="chapter-content">
-                    <div class="chapter-text">
-                        <p>Yes, she will be ready by a makeup artist.</p>
+                    <div class="chapter-item reveal-item">
+                        <div class="chapter-header"><span>Are you scared about family approval?</span><span class="chapter-icon">&#10022;</span></div>
+                        <div class="chapter-content"><div class="chapter-text"><p>I believe in Tulsi, but sometimes I get scared of her big father, her family. What if they decline? Or make Tulsi emotionally blackmail?</p></div></div>
                     </div>
-                </div>
-            </div>
-
-            <div class="chapter-item reveal-item">
-                <div class="chapter-header">What color sherwani?</div>
-                <div class="chapter-content">
-                    <div class="chapter-text">
-                        <p>Whatever she likes.</p>
+                    <div class="chapter-item reveal-item">
+                        <div class="chapter-header"><span>Do you overthink at night?</span><span class="chapter-icon">&#10022;</span></div>
+                        <div class="chapter-content"><div class="chapter-text"><p>Yes, this is my biggest problem. I overthink so much.</p></div></div>
                     </div>
-                </div>
-            </div>
 
-            <div class="chapter-item reveal-item">
-                <div class="chapter-header">What will she wear?</div>
-                <div class="chapter-content">
-                    <div class="chapter-text">
-                        <p>Whatever I like.</p>
+                    <!-- Section 6 -->
+                    <h2 class="category-header reveal-item">Most Romantic Memory</h2>
+
+                    <div class="chapter-item reveal-item">
+                        <div class="chapter-header"><span>Most romantic memory?</span><span class="chapter-icon">&#10022;</span></div>
+                        <div class="chapter-content"><div class="chapter-text"><p>Each and every moment. When her mother agreed about me, when I dreamed about our romance.</p></div></div>
                     </div>
-                </div>
-            </div>
-
-            <div class="chapter-item reveal-item">
-                <div class="chapter-header">Who will cry more?</div>
-                <div class="chapter-content">
-                    <div class="chapter-text">
-                        <p>Both, or our parents more... and definitely myself.</p>
+                    <div class="chapter-item reveal-item">
+                        <div class="chapter-header"><span>Most romantic thing she ever did?</span><span class="chapter-icon">&#10022;</span></div>
+                        <div class="chapter-content"><div class="chapter-text"><p>Gave me a kiss over a video call—I miss it every day. She gave me one only once when I asked, otherwise, she says no (laughing hahaha).</p></div></div>
                     </div>
-                </div>
-            </div>
-
-            <!-- Section 10: Secret -->
-            <h2 class="category-title reveal-item">One Secret</h2>
-
-            <div class="chapter-item reveal-item">
-                <div class="chapter-header">One secret you never told her?</div>
-                <div class="chapter-content">
-                    <div class="chapter-text">
-                        <p>I have nothing to hide from her. She is my everything.</p>
+                    <div class="chapter-item reveal-item">
+                        <div class="chapter-header"><span>Did she ever sleep on call?</span><span class="chapter-icon">&#10022;</span></div>
+                        <div class="chapter-content"><div class="chapter-text"><p>Many times, and I love watching her sleepy. When she sleeps, I love her more by watching her face.</p></div></div>
                     </div>
+                    <div class="chapter-item reveal-item">
+                        <div class="chapter-header"><span>Did she send surprise?</span><span class="chapter-icon">&#10022;</span></div>
+                        <div class="chapter-content">
+                            <div class="chapter-text">
+                                <p>Yes, this is one of my favorite things. She bought me a mobile phone, wired Apple earphones, wallet, so many fruits, trimmer, snacks, books, a heart pillow, ice creams, roses, cakes, and so many things I can't even count. She is just amazing.</p>
+                                <p>I love when she orders suddenly and surprisingly. Thank you, Tulsi. But Tulsi, this is not a good thing to use so much money. Once a month is fine, my baccha.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="chapter-item reveal-item">
+                        <div class="chapter-header"><span>Did she call you husband jokingly?</span><span class="chapter-icon">&#10022;</span></div>
+                        <div class="chapter-content"><div class="chapter-text"><p>Yes, I do funny things over a call. I just want to make her smile, make her laugh so I can see her smiling face.</p></div></div>
+                    </div>
+
+                    <!-- Section 7 -->
+                    <h2 class="category-header reveal-item">The Parcel Scene</h2>
+
+                    <div class="chapter-item reveal-item">
+                        <div class="chapter-header"><span>When you packed the parcel?</span><span class="chapter-icon">&#10022;</span></div>
+                        <div class="chapter-content"><div class="chapter-text"><p>From February 1st, I took all my money in one bank account—my savings, pocket money, earnings, hidden money (emergency money). And I started buying things for her. I chose the best things, like the best company toy, best food, etc.</p></div></div>
+                    </div>
+                    <div class="chapter-item reveal-item">
+                        <div class="chapter-header"><span>Were you emotional?</span><span class="chapter-icon">&#10022;</span></div>
+                        <div class="chapter-content"><div class="chapter-text"><p>When the parcel left and when I was writing letters, hiding my emotions at those times... yes, very emotional.</p></div></div>
+                    </div>
+                    <div class="chapter-item reveal-item">
+                        <div class="chapter-header"><span>Did you imagine her opening it?</span><span class="chapter-icon">&#10022;</span></div>
+                        <div class="chapter-content"><div class="chapter-text"><p>Each and every day. I check the parcel details, I track the parcel.</p></div></div>
+                    </div>
+                    <div class="chapter-item reveal-item">
+                        <div class="chapter-header"><span>Did you hold items and smile?</span><span class="chapter-icon">&#10022;</span></div>
+                        <div class="chapter-content"><div class="chapter-text"><p>Yes, I sent each and every item I remembered. I am sorry diku if I missed any item.</p></div></div>
+                    </div>
+                    <div class="chapter-item reveal-item">
+                        <div class="chapter-header"><span>Did you talk to yourself?</span><span class="chapter-icon">&#10022;</span></div>
+                        <div class="chapter-content"><div class="chapter-text"><p>Yes, I go to the DMart and talk about her—does she like this food? Will she wear this T-shirt? Does she love this taste?</p></div></div>
+                    </div>
+
+                    <!-- Section 8 -->
+                    <h2 class="category-header reveal-item">First Meeting Imagination</h2>
+
+                    <div class="chapter-item reveal-item">
+                        <div class="chapter-header"><span>When you meet her for the first time?</span><span class="chapter-icon">&#10022;</span></div>
+                        <div class="chapter-content"><div class="chapter-text"><p>Maybe at the airport. I am waiting for you, baccha.</p></div></div>
+                    </div>
+                    <div class="chapter-item reveal-item">
+                        <div class="chapter-header"><span>Airport or home?</span><span class="chapter-icon">&#10022;</span></div>
+                        <div class="chapter-content"><div class="chapter-text"><p>She is my home, and our first meet will be the most grateful moment of all time.</p></div></div>
+                    </div>
+                    <div class="chapter-item reveal-item">
+                        <div class="chapter-header"><span>Will you hug first?</span><span class="chapter-icon">&#10022;</span></div>
+                        <div class="chapter-content"><div class="chapter-text"><p>As soon as I see her at the airport.</p></div></div>
+                    </div>
+                    <div class="chapter-item reveal-item">
+                        <div class="chapter-header"><span>Will you cry?</span><span class="chapter-icon">&#10022;</span></div>
+                        <div class="chapter-content"><div class="chapter-text"><p>When she comes to India, when I see her for the first time... I will definitely cry.</p></div></div>
+                    </div>
+                    <div class="chapter-item reveal-item">
+                        <div class="chapter-header"><span>Will you touch her face?</span><span class="chapter-icon">&#10022;</span></div>
+                        <div class="chapter-content"><div class="chapter-text"><p>Of course, I will kiss her. I will touch her with my arms, fingers, hands.</p></div></div>
+                    </div>
+                    <div class="chapter-item reveal-item">
+                        <div class="chapter-header"><span>Will you stay silent?</span><span class="chapter-icon">&#10022;</span></div>
+                        <div class="chapter-content"><div class="chapter-text"><p>I will look at her until she flies back to the UK (or stays forever).</p></div></div>
+                    </div>
+                    <div class="chapter-item reveal-item">
+                        <div class="chapter-header"><span>What will you say first?</span><span class="chapter-icon">&#10022;</span></div>
+                        <div class="chapter-content"><div class="chapter-text"><p>"Hi, my diku, welcome home diku, missed you so much, love you." And then hug her tightly. Even now, I am imagining and crying alone...</p></div></div>
+                    </div>
+
+                    <!-- Section 9 -->
+                    <h2 class="category-header reveal-item">Marriage Dream</h2>
+
+                    <div class="chapter-item reveal-item">
+                        <div class="chapter-header"><span>Court marriage?</span><span class="chapter-icon">&#10022;</span></div>
+                        <div class="chapter-content"><div class="chapter-text"><p>Yes, we want to save money to travel, for a honeymoon, for our future, for a house, car, etc.</p></div></div>
+                    </div>
+                    <div class="chapter-item reveal-item">
+                        <div class="chapter-header"><span>Traditional?</span><span class="chapter-icon">&#10022;</span></div>
+                        <div class="chapter-content"><div class="chapter-text"><p>Yes, but depends on the time.</p></div></div>
+                    </div>
+                    <div class="chapter-item reveal-item">
+                        <div class="chapter-header"><span>Both?</span><span class="chapter-icon">&#10022;</span></div>
+                        <div class="chapter-content"><div class="chapter-text"><p>Yes, she will be ready by a makeup artist.</p></div></div>
+                    </div>
+                    <div class="chapter-item reveal-item">
+                        <div class="chapter-header"><span>What color sherwani?</span><span class="chapter-icon">&#10022;</span></div>
+                        <div class="chapter-content"><div class="chapter-text"><p>Whatever she likes.</p></div></div>
+                    </div>
+                    <div class="chapter-item reveal-item">
+                        <div class="chapter-header"><span>What will she wear?</span><span class="chapter-icon">&#10022;</span></div>
+                        <div class="chapter-content"><div class="chapter-text"><p>Whatever I like.</p></div></div>
+                    </div>
+                    <div class="chapter-item reveal-item">
+                        <div class="chapter-header"><span>Who will cry more?</span><span class="chapter-icon">&#10022;</span></div>
+                        <div class="chapter-content"><div class="chapter-text"><p>Both, or our parents more... and definitely myself.</p></div></div>
+                    </div>
+
+                    <!-- Section 10 -->
+                    <h2 class="category-header reveal-item">One Secret</h2>
+
+                    <div class="chapter-item reveal-item">
+                        <div class="chapter-header"><span>One secret you never told her?</span><span class="chapter-icon">&#10022;</span></div>
+                        <div class="chapter-content"><div class="chapter-text"><p>I have nothing to hide from her. She is my everything.</p></div></div>
+                    </div>
+
+                    <!-- Buttons -->
+                    <div class="btn-container reveal-item">
+                        <a href="story.pdf" download class="action-btn download-btn">
+                            <span>Download Story Book</span>
+                        </a>
+                        
+                        <a href="https://codewitharyan-01.github.io/Love/" target="_blank" class="action-btn back-btn">
+                            <span>Back To Our Story</span>
+                        </a>
+                    </div>
+
                 </div>
             </div>
+        </section>
 
-            <!-- Buttons Section -->
-            <div class="btn-container reveal-item">
-                <a href="story.pdf" download class="action-btn download-btn">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-                    Download Story Book
-                </a>
-                
-                <a href="https://codewitharyan-01.github.io/Love/" target="_blank" class="action-btn back-btn">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
-                    Back To Our Story
-                </a>
-            </div>
-
-        </div>
+        <footer style="text-align: center; padding: 4rem 0; color: #555; font-family: 'Cinzel', serif;">
+            <p>Fire & Blood | Love & Distance</p>
+        </footer>
     </div>
 
     <script>
-        // Accordion Logic
+        // --- 1. Ember Particle System ---
+        const canvas = document.getElementById('ember-canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+
+        class Particle {
+            constructor() {
+                this.reset();
+            }
+
+            reset() {
+                this.x = Math.random() * canvas.width;
+                this.y = canvas.height + 10;
+                this.size = Math.random() * 3 + 1;
+                this.speedY = Math.random() * 2 + 0.5;
+                this.speedX = (Math.random() - 0.5) * 1;
+                this.opacity = Math.random() * 0.5 + 0.3;
+                this.color = Math.random() > 0.5 ? '#c9a227' : '#ff4500'; // Gold or Red-Orange
+            }
+
+            update() {
+                this.y -= this.speedY;
+                this.x += this.speedX;
+                this.opacity -= 0.003;
+
+                if (this.opacity <= 0 || this.y < -10) {
+                    this.reset();
+                }
+            }
+
+            draw() {
+                ctx.fillStyle = this.color;
+                ctx.globalAlpha = this.opacity;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.globalAlpha = 1;
+                
+                // Glow effect
+                ctx.shadowBlur = 10;
+                ctx.shadowColor = this.color;
+            }
+        }
+
+        function initParticles() {
+            particles = [];
+            for (let i = 0; i < 50; i++) {
+                particles.push(new Particle());
+            }
+        }
+
+        function animateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(p => {
+                p.update();
+                p.draw();
+            });
+            requestAnimationFrame(animateParticles);
+        }
+
+        initParticles();
+        animateParticles();
+
+
+        // --- 2. Custom Cursor ---
+        const cursor = document.getElementById('cursor');
+        const hoverElements = document.querySelectorAll('a, button, .chapter-header');
+
+        window.addEventListener('mousemove', (e) => {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+        });
+
+        hoverElements.forEach(el => {
+            el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
+            el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
+        });
+
+
+        // --- 3. Accordion Logic ---
         const chapters = document.querySelectorAll('.chapter-item');
 
         chapters.forEach(chapter => {
@@ -948,9 +1124,16 @@
             const content = chapter.querySelector('.chapter-content');
             
             header.addEventListener('click', () => {
-                // Toggle current chapter
+                // Close others (optional, remove if you want multiple open)
+                chapters.forEach(other => {
+                    if (other !== chapter) {
+                        other.classList.remove('active');
+                        other.querySelector('.chapter-content').style.maxHeight = null;
+                    }
+                });
+
+                // Toggle current
                 chapter.classList.toggle('active');
-                
                 if (chapter.classList.contains('active')) {
                     content.style.maxHeight = content.scrollHeight + "px";
                 } else {
@@ -959,16 +1142,16 @@
             });
         });
 
-        // Scroll Reveal Animation
+
+        // --- 4. Scroll Reveal Animation ---
         const revealElements = document.querySelectorAll('.reveal-item');
 
         const revealOnScroll = () => {
             const windowHeight = window.innerHeight;
-            const revealPoint = 100;
+            const revealPoint = 150;
 
             revealElements.forEach(element => {
                 const elementTop = element.getBoundingClientRect().top;
-
                 if (elementTop < windowHeight - revealPoint) {
                     element.classList.add('visible');
                 }
@@ -976,7 +1159,8 @@
         };
 
         window.addEventListener('scroll', revealOnScroll);
-        window.addEventListener('load', revealOnScroll); // Trigger on load
+        window.addEventListener('load', revealOnScroll);
+
     </script>
 </body>
 </html>
