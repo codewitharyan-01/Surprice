@@ -3,22 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tulsi aur Aryan - Ek Prem Kahani</title>
+    <title>Tulsi & Aryan - The Story of Us</title>
     <link href="https://cdn.tailwindcss.com" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Cinzel:wght@400;500;600;700&family=Merriweather:ital,wght@0,300;0,400;0,700;1,300;1,400&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg: #0d0a0b;
-            --fg: #faf8f5;
-            --muted: #a89f9a;
-            --accent: #c9a86c;
-            --accent-deep: #8b4d57;
-            --card: rgba(26, 20, 22, 0.8);
-            --border: rgba(201, 168, 108, 0.2);
-            --rose: #a8576a;
-            --cream: #f5ebe0;
+            --bg-dark: #0a0a0a;
+            --bg-leather: #141414;
+            --gold: #c9a227;
+            --gold-light: #e6c866;
+            --gold-dark: #8a6e1a;
+            --parchment: #f0e6d2;
+            --parchment-dark: #d4c4a8;
+            --blood-red: #8b0000;
+            --text-main: #1a1a1a;
+            --text-light: #e0e0e0;
         }
 
         * {
@@ -27,1244 +28,965 @@
             box-sizing: border-box;
         }
 
-        html {
-            scroll-behavior: smooth;
-        }
-
         body {
-            font-family: 'Poppins', sans-serif;
-            background: var(--bg);
-            color: var(--fg);
-            overflow-x: hidden;
-            line-height: 1.8;
+            font-family: 'Merriweather', serif;
+            background-color: var(--bg-dark);
+            background-image: 
+                radial-gradient(circle at 50% 0%, rgba(201, 162, 39, 0.1) 0%, transparent 60%),
+                url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.02'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            padding: 2rem 1rem;
         }
 
-        h1, h2, h3 {
-            font-family: 'Playfair Display', serif;
+        /* Main Container */
+        .book-container {
+            width: 100%;
+            max-width: 850px;
+            position: relative;
+            background: linear-gradient(to right, #e8dcc8, #f4ead8, #e8dcc8);
+            box-shadow: 
+                0 0 50px rgba(0,0,0,0.8),
+                inset 0 0 80px rgba(139, 69, 19, 0.1);
+            border-radius: 5px;
+            padding: 3rem 2rem;
+            border: 1px solid #777;
         }
 
-        /* Particle Canvas */
-        #particles-canvas {
-            position: fixed;
+        /* Texture Overlay */
+        .book-container::before {
+            content: "";
+            position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
+            background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.08'/%3E%3C/svg%3E");
             pointer-events: none;
             z-index: 1;
+            border-radius: 5px;
         }
 
-        /* Hero Section */
-        .hero {
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
+        .content-wrapper {
             position: relative;
             z-index: 2;
-            padding: 2rem;
+        }
+
+        /* Header */
+        .header-section {
             text-align: center;
+            margin-bottom: 3rem;
+            border-bottom: 2px solid var(--gold-dark);
+            padding-bottom: 2rem;
         }
 
-        .hero::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: 
-                radial-gradient(ellipse at 20% 20%, rgba(168, 87, 106, 0.15) 0%, transparent 50%),
-                radial-gradient(ellipse at 80% 80%, rgba(201, 168, 108, 0.1) 0%, transparent 50%),
-                radial-gradient(ellipse at 50% 50%, rgba(139, 77, 87, 0.08) 0%, transparent 70%);
-            z-index: -1;
+        .main-title {
+            font-family: 'Cinzel Decorative', cursive;
+            font-size: clamp(2rem, 7vw, 3.5rem);
+            color: var(--bg-dark);
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 0px rgba(201, 162, 39, 0.3);
         }
 
-        .hero-title {
-            font-size: clamp(3rem, 10vw, 8rem);
-            font-weight: 700;
-            letter-spacing: 0.05em;
-            background: linear-gradient(135deg, var(--cream) 0%, var(--accent) 50%, var(--rose) 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin-bottom: 1rem;
-            opacity: 0;
-            transform: translateY(30px);
-            animation: fadeInUp 1.5s ease forwards;
-        }
-
-        .hero-subtitle {
-            font-size: clamp(1rem, 3vw, 1.5rem);
-            color: var(--muted);
-            font-weight: 300;
-            letter-spacing: 0.3em;
-            text-transform: uppercase;
-            opacity: 0;
-            animation: fadeInUp 1.5s ease 0.3s forwards;
-        }
-
-        .distance-counter {
-            margin-top: 3rem;
-            padding: 2rem 4rem;
-            background: var(--card);
-            border: 1px solid var(--border);
-            border-radius: 1rem;
-            backdrop-filter: blur(20px);
-            opacity: 0;
-            animation: fadeInUp 1.5s ease 0.6s forwards;
-        }
-
-        .distance-number {
-            font-size: clamp(2rem, 6vw, 4rem);
-            font-weight: 600;
-            color: var(--accent);
-            font-family: 'Playfair Display', serif;
-        }
-
-        .distance-label {
-            color: var(--muted);
-            font-size: 0.875rem;
+        .subtitle {
+            font-family: 'Cinzel', serif;
+            color: var(--gold-dark);
             letter-spacing: 0.2em;
             text-transform: uppercase;
+            font-size: 0.9rem;
+            margin-top: 1rem;
         }
 
-        .relationship-date {
-            margin-top: 2rem;
-            padding: 1rem 2rem;
-            border: 1px solid var(--border);
-            border-radius: 0.5rem;
-            opacity: 0;
-            animation: fadeInUp 1.5s ease 0.9s forwards;
-        }
-
-        .date-text {
-            font-size: 1.25rem;
-            color: var(--rose);
-            font-weight: 500;
-        }
-
-        .scroll-indicator {
-            position: absolute;
-            bottom: 3rem;
-            left: 50%;
-            transform: translateX(-50%);
-            opacity: 0;
-            animation: fadeInUp 1.5s ease 1.2s forwards, bounce 2s ease-in-out infinite 2s;
-        }
-
-        .scroll-indicator svg {
-            width: 24px;
-            height: 24px;
-            stroke: var(--accent);
-        }
-
-        /* Story Sections */
-        .story-section {
-            min-height: 100vh;
-            padding: 6rem 2rem;
-            position: relative;
-            z-index: 2;
-        }
-
-        .section-container {
-            max-width: 900px;
-            margin: 0 auto;
-        }
-
-        .section-number {
-            font-size: 0.75rem;
-            letter-spacing: 0.3em;
-            color: var(--accent);
-            text-transform: uppercase;
-            margin-bottom: 1rem;
-            opacity: 0;
-            transform: translateY(20px);
-        }
-
-        .section-title {
-            font-size: clamp(2rem, 5vw, 3.5rem);
-            font-weight: 600;
-            margin-bottom: 2rem;
-            color: var(--cream);
-            line-height: 1.2;
-            opacity: 0;
-            transform: translateY(20px);
-        }
-
-        .story-text {
-            font-size: 1.125rem;
-            color: var(--muted);
-            margin-bottom: 1.5rem;
-            opacity: 0;
-            transform: translateY(20px);
-        }
-
-        .story-highlight {
-            color: var(--accent);
-            font-weight: 500;
-        }
-
-        .story-emotion {
-            color: var(--rose);
+        .long-detail {
+            color: #555;
             font-style: italic;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
         }
 
-        .quote-box {
-            padding: 2rem;
-            margin: 2rem 0;
-            background: linear-gradient(135deg, rgba(201, 168, 108, 0.1) 0%, rgba(168, 87, 106, 0.1) 100%);
-            border-left: 3px solid var(--accent);
-            border-radius: 0 1rem 1rem 0;
-            font-style: italic;
-            color: var(--cream);
-            opacity: 0;
-            transform: translateY(20px);
-        }
-
-        /* Memory Cards */
-        .memory-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 1.5rem;
-            margin-top: 3rem;
-        }
-
-        .memory-card {
-            background: var(--card);
-            border: 1px solid var(--border);
-            border-radius: 1rem;
-            padding: 2rem;
-            backdrop-filter: blur(10px);
-            transition: all 0.4s ease;
-            opacity: 0;
-            transform: translateY(30px);
-        }
-
-        .memory-card:hover {
-            transform: translateY(-5px);
-            border-color: var(--accent);
-            box-shadow: 0 20px 40px rgba(201, 168, 108, 0.1);
-        }
-
-        .memory-icon {
-            width: 48px;
-            height: 48px;
-            background: linear-gradient(135deg, var(--accent) 0%, var(--rose) 100%);
-            border-radius: 50%;
+        /* Sigil / Divider */
+        .sigil-divider {
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-bottom: 1rem;
-        }
-
-        .memory-icon svg {
-            width: 24px;
-            height: 24px;
-            stroke: var(--bg);
-        }
-
-        .memory-title {
-            font-size: 1.25rem;
-            font-weight: 600;
-            color: var(--cream);
-            margin-bottom: 0.5rem;
-        }
-
-        .memory-text {
-            color: var(--muted);
-            font-size: 0.95rem;
-        }
-
-        /* Timeline */
-        .timeline {
-            position: relative;
-            padding-left: 3rem;
-            margin-top: 3rem;
-        }
-
-        .timeline::before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 0;
-            bottom: 0;
-            width: 2px;
-            background: linear-gradient(to bottom, var(--accent), var(--rose), transparent);
-        }
-
-        .timeline-item {
-            position: relative;
-            padding-bottom: 3rem;
-            opacity: 0;
-            transform: translateX(-20px);
-        }
-
-        .timeline-item::before {
-            content: '';
-            position: absolute;
-            left: -3rem;
-            top: 0.5rem;
-            width: 12px;
-            height: 12px;
-            background: var(--accent);
-            border-radius: 50%;
-            transform: translateX(-5px);
-        }
-
-        .timeline-date {
-            font-size: 0.875rem;
-            color: var(--accent);
-            margin-bottom: 0.5rem;
-        }
-
-        .timeline-content {
-            background: var(--card);
-            padding: 1.5rem;
-            border-radius: 0.5rem;
-            border: 1px solid var(--border);
-        }
-
-        /* Stats Counter */
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 2rem;
-            margin-top: 3rem;
-        }
-
-        .stat-item {
-            text-align: center;
-            padding: 2rem;
-            background: var(--card);
-            border-radius: 1rem;
-            border: 1px solid var(--border);
-            opacity: 0;
-            transform: scale(0.9);
-        }
-
-        .stat-number {
-            font-size: 3rem;
-            font-weight: 700;
-            color: var(--accent);
-            font-family: 'Playfair Display', serif;
-        }
-
-        .stat-label {
-            color: var(--muted);
-            font-size: 0.875rem;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-        }
-
-        /* Final Letter */
-        .love-letter {
-            background: linear-gradient(135deg, rgba(245, 235, 224, 0.05) 0%, rgba(201, 168, 108, 0.05) 100%);
-            border: 1px solid var(--border);
-            border-radius: 1rem;
-            padding: 3rem;
-            margin-top: 3rem;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .love-letter::before {
-            content: '"';
-            position: absolute;
-            top: 1rem;
-            left: 1.5rem;
-            font-size: 8rem;
-            font-family: 'Playfair Display', serif;
-            color: var(--accent);
-            opacity: 0.2;
-            line-height: 1;
-        }
-
-        .letter-content {
-            position: relative;
-            z-index: 1;
-        }
-
-        .letter-text {
-            font-size: 1.25rem;
-            color: var(--cream);
-            line-height: 2;
-        }
-
-        .letter-signature {
-            margin-top: 2rem;
-            text-align: right;
-            font-family: 'Playfair Display', serif;
+            margin: 2rem 0;
+            color: var(--gold-dark);
             font-size: 1.5rem;
-            color: var(--accent);
         }
 
-        /* Floating Hearts */
-        .floating-heart {
-            position: fixed;
-            pointer-events: none;
-            z-index: 100;
-            opacity: 0.6;
-            animation: floatUp 4s ease-in forwards;
+        .sigil-divider::before, .sigil-divider::after {
+            content: "";
+            flex: 1;
+            height: 1px;
+            background: linear-gradient(to right, transparent, var(--gold-dark), transparent);
+            margin: 0 1rem;
         }
 
-        @keyframes floatUp {
-            0% {
-                opacity: 0.6;
-                transform: translateY(0) scale(1);
-            }
-            100% {
-                opacity: 0;
-                transform: translateY(-100vh) scale(0.5);
-            }
-        }
-
-        @keyframes fadeInUp {
-            to {
-                opacity: 1;
-                transform: translateY(0) translateX(0) scale(1);
-            }
-        }
-
-        @keyframes bounce {
-            0%, 100% {
-                transform: translateX(-50%) translateY(0);
-            }
-            50% {
-                transform: translateX(-50%) translateY(10px);
-            }
-        }
-
-        /* Scroll Reveal Class */
-        .reveal {
-            opacity: 1 !important;
-            transform: translateY(0) translateX(0) scale(1) !important;
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            .story-section {
-                padding: 4rem 1.5rem;
-            }
-
-            .distance-counter {
-                padding: 1.5rem 2rem;
-            }
-
-            .love-letter {
-                padding: 2rem;
-            }
-
-            .love-letter::before {
-                font-size: 5rem;
-            }
-        }
-
-        /* Reduced Motion */
-        @media (prefers-reduced-motion: reduce) {
-            * {
-                animation-duration: 0.01ms !important;
-                animation-iteration-count: 1 !important;
-                transition-duration: 0.01ms !important;
-            }
-        }
-
-        /* Progress Bar */
-        .progress-bar {
-            position: fixed;
-            top: 0;
-            left: 0;
-            height: 3px;
-            background: linear-gradient(90deg, var(--accent), var(--rose));
-            z-index: 1000;
-            transition: width 0.1s ease;
-        }
-
-        /* Navigation */
-        .nav {
-            position: fixed;
-            bottom: 2rem;
-            right: 2rem;
-            z-index: 100;
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
-        }
-
-        .nav-dot {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            background: var(--border);
-            cursor: pointer;
+        /* Accordion Styles */
+        .chapter-item {
+            margin-bottom: 1.5rem;
+            border: 1px solid var(--parchment-dark);
+            background: rgba(255, 255, 255, 0.3);
             transition: all 0.3s ease;
         }
 
-        .nav-dot:hover, .nav-dot.active {
-            background: var(--accent);
-            transform: scale(1.3);
+        .chapter-item:hover {
+            border-color: var(--gold);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .chapter-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.2rem 1.5rem;
+            cursor: pointer;
+            font-family: 'Cinzel', serif;
+            color: var(--bg-dark);
+            font-weight: 600;
+            font-size: 1.1rem;
+            background: linear-gradient(to right, rgba(201, 162, 39, 0.05), transparent);
+        }
+
+        .chapter-header::after {
+            content: "\2766"; /* Fleur-de-lis like symbol */
+            color: var(--gold-dark);
+            transition: transform 0.3s ease;
+            font-size: 1rem;
+        }
+
+        .chapter-item.active .chapter-header::after {
+            transform: rotate(90deg);
+            color: var(--blood-red);
+        }
+
+        .chapter-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-out;
+        }
+
+        .chapter-text {
+            padding: 1.5rem;
+            background: rgba(255, 255, 255, 0.5);
+            border-top: 1px solid var(--parchment-dark);
+            font-size: 1rem;
+            line-height: 1.8;
+            color: #2c2c2c;
+        }
+
+        .chapter-text p {
+            margin-bottom: 1rem;
+        }
+
+        .chapter-text strong {
+            color: var(--blood-red);
+            font-weight: 700;
+        }
+
+        .emotional-note {
+            font-style: italic;
+            color: #555;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px dashed var(--gold);
+        }
+
+        /* Category Titles */
+        .category-title {
+            font-family: 'Cinzel Decorative', cursive;
+            color: var(--blood-red);
+            font-size: 1.5rem;
+            margin-top: 3rem;
+            margin-bottom: 1.5rem;
+            text-align: center;
+            text-shadow: 1px 1px 0 rgba(0,0,0,0.1);
+        }
+
+        /* Buttons */
+        .btn-container {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-top: 4rem;
+            padding-top: 2rem;
+            border-top: 2px solid var(--gold-dark);
+            align-items: center;
+        }
+
+        .action-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 1rem 2rem;
+            font-family: 'Cinzel', serif;
+            font-weight: 700;
+            text-decoration: none;
+            border-radius: 2px;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            cursor: pointer;
+            width: 100%;
+            max-width: 350px;
+        }
+
+        .download-btn {
+            background: var(--gold);
+            color: #111;
+            border: 1px solid var(--gold-dark);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+        }
+
+        .download-btn:hover {
+            background: var(--gold-light);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 10px rgba(0,0,0,0.3);
+        }
+
+        .back-btn {
+            background: transparent;
+            color: var(--bg-dark);
+            border: 1px solid var(--bg-dark);
+        }
+
+        .back-btn:hover {
+            background: var(--bg-dark);
+            color: var(--gold);
+        }
+
+        /* Responsive */
+        @media (max-width: 640px) {
+            .book-container {
+                padding: 2rem 1rem;
+            }
+            .chapter-header {
+                font-size: 0.95rem;
+                padding: 1rem;
+            }
+            .chapter-text {
+                padding: 1rem;
+            }
+        }
+
+        /* Scroll reveal animation */
+        .reveal-item {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+
+        .reveal-item.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--gold-dark);
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #555;
         }
     </style>
 </head>
 <body>
-    <canvas id="particles-canvas"></canvas>
-    <div class="progress-bar" id="progress-bar"></div>
 
-    <!-- Hero Section -->
-    <section class="hero" id="hero">
-        <h1 class="hero-title">Tulsi aur Aryan</h1>
-        <p class="hero-subtitle">Ek Anokhi Prem Kahani</p>
-        
-        <div class="distance-counter">
-            <div class="distance-number" id="distance-counter">6,924.46</div>
-            <div class="distance-label">Kilometre Duri Mein Bhi Paas Hain Hum</div>
-        </div>
-
-        <div class="relationship-date">
-            <div class="date-text">2 June 2025 Se Shuru Hui Mohabbat</div>
-        </div>
-
-        <div class="scroll-indicator">
-            <svg viewBox="0 0 24 24" fill="none" stroke-width="2">
-                <path d="M12 5v14M19 12l-7 7-7-7"/>
-            </svg>
-        </div>
-    </section>
-
-    <!-- Section 1: The Beginning -->
-    <section class="story-section" id="beginning">
-        <div class="section-container">
-            <div class="section-number">Adhyay 01</div>
-            <h2 class="section-title">Jab Dil Mile, Duri Bhi Kam Lagne Lagi</h2>
+    <div class="book-container">
+        <div class="content-wrapper">
             
-            <p class="story-text">
-                Pyaar kabhi dekhta nahi ki duri kitni hai. <span class="story-highlight">6,924.46 kilometre</span> - yeh sirf ek number hai, lekin humari dhadkano ke beech kabhi koi faasla nahi tha. Tulsi aur Aryan ki kahani shuru hui ek aisi dosti se jo phir pyaar mein badal gayi.
-            </p>
+            <!-- Header -->
+            <header class="header-section reveal-item">
+                <h1 class="main-title">Tulsi & Aryan</h1>
+                <p class="subtitle">A Saga of Love & Distance</p>
+                <div class="sigil-divider">&#9830;</div>
+                <p class="long-detail">Distance: 6,924.46 km | Since 2nd June 2025</p>
+            </header>
 
-            <div class="quote-box">
-                "Pehla call itna lamba tha, itni baatein hui... happiness se bhari hui thi woh ghadiya. Jaise pehli baar milein ho, phir bhi jaante ho ek dusre ko janmo se."
-            </div>
+            <!-- Section 1: Moments -->
+            <h2 class="category-title reveal-item">Yaadein aur Ehsaas</h2>
 
-            <p class="story-text">
-                Kabhi ladai hoti thi, toh dono rote the - akele mein. Lekin <span class="story-emotion">ek dusre ka intezaar</span> karte the ki kaun pehle message karega. Yeh thi humari chhoti si siyappa, lekin isme pyaar tha.
-            </p>
-
-            <p class="story-text">
-                Jab main bohot bimaar tha, jab health kharab thi, jab mood off tha - <span class="story-highlight">Tulsi ne mujhe sambhala</span>. Usne kaha tha "Mumma humare saath hai" - woh pal main kabhi nahi bhoolunga. Lag raha tha sab theek ho jayega.
-            </p>
-
-            <div class="memory-grid">
-                <div class="memory-card">
-                    <div class="memory-icon">
-                        <svg viewBox="0 0 24 24" fill="none" stroke-width="2">
-                            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
-                        </svg>
+            <div class="chapter-item reveal-item">
+                <div class="chapter-header">क्या यह कॉल के दौरान था?</div>
+                <div class="chapter-content">
+                    <div class="chapter-text">
+                        <p>हाँ, पहली कॉल इतनी लंबी और बातूनी थी। हमने खुशी से भरकर बहुत बात की। उस दिन लगा जैले जाने ही आत्माएं मिली हों।</p>
                     </div>
-                    <div class="memory-title">Mera Pyaara Naam</div>
-                    <div class="memory-text">Woh mujhe "AARU" bulati thi, kabhi "post office dabba" - har naam mein pyaar tha.</div>
-                </div>
-
-                <div class="memory-card">
-                    <div class="memory-icon">
-                        <svg viewBox="0 0 24 24" fill="none" stroke-width="2">
-                            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
-                        </svg>
-                    </div>
-                    <div class="memory-title">Pehla Call</div>
-                    <div class="memory-text">Lamba, baatein, khushi - sab kuch pehli mulaqaat jaisa feel hua.</div>
-                </div>
-
-                <div class="memory-card">
-                    <div class="memory-icon">
-                        <svg viewBox="0 0 24 24" fill="none" stroke-width="2">
-                            <circle cx="12" cy="12" r="10"/>
-                            <path d="M8 14s1.5 2 4 2 4-2 4-2"/>
-                            <line x1="9" y1="9" x2="9.01" y2="9"/>
-                            <line x1="15" y1="9" x2="15.01" y2="9"/>
-                        </svg>
-                    </div>
-                    <div class="memory-title">Uski Hifazat</div>
-                    <div class="memory-text">Bimaar hone par uska khayal rakhna, mood off hone par uska sath.</div>
                 </div>
             </div>
+
+            <div class="chapter-item reveal-item">
+                <div class="chapter-header">लड़ाई के दौरान क्या होता है?</div>
+                <div class="chapter-content">
+                    <div class="chapter-text">
+                        <p>हम अकेले-अकेले रोते हैं, एक-दूसरे को याद करते हैं। बस इंतज़ार करते हैं कि लड़ाई के बाद पहला मैसेज कौन भेजे। चुप्पी भारी होती है, पर प्यार कम नहीं होता।</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="chapter-item reveal-item">
+                <div class="chapter-header">जब उसने तुम्हारा ख्याल रखा?</div>
+                <div class="chapter-content">
+                    <div class="chapter-text">
+                        <p>जब मैं बहुत बीमार था, जब मेरी सेहत खराब थी और जब मेरा मूड ऑफ होता है। वो हमेशा मेरे साथ खड़ी रहती है, चाहे दूरी कितनी भी हो।</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="chapter-item reveal-item">
+                <div class="chapter-header">उसने कुछ खास कब कहा?</div>
+                <div class="chapter-content">
+                    <div class="chapter-text">
+                        <p>एक समय था जब उसने कहा था कि <strong>"मम्मा हमारे साथ हैं।</strong> उस पल मुझे बहुत शांति मिली थी।</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="chapter-item reveal-item">
+                <div class="chapter-header">जब उसने तुम्हें निकनेम से बुलाया?</div>
+                <div class="chapter-content">
+                    <div class="chapter-text">
+                        <p>वो मुझे <strong>"AARU"</strong> बुलाती है और कभी-कभी <strong>"Post Office Dabba"</strong> भी। हर नाम में उसका प्यार छिपा है।</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="chapter-item reveal-item">
+                <div class="chapter-header">जब वो रोई?</div>
+                <div class="chapter-content">
+                    <div class="chapter-text">
+                        <p>मुझे बहुत बुरा लगता है, मैं अंदर से रोता हूँ। उस वक्त मैं बस उसे hug करना चाहता हूँ। मैं नहीं चाहता कि वो रोए। उसके आंसू मुझे बर्दाश्त नहीं होते।</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="chapter-item reveal-item">
+                <div class="chapter-header">जब वो नाराज़ हुई?</div>
+                <div class="chapter-content">
+                    <div class="chapter-text">
+                        <p>जब मैं उससे सही से बात नहीं करता, या जब मैं अपनी सेहत का ख्याल नहीं रखता। उसका गुस्सा भी उसके प्यार का हिस्सा है।</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="chapter-item reveal-item">
+                <div class="chapter-header">जब उसने इग्नोर किया?</div>
+                <div class="chapter-content">
+                    <div class="chapter-text">
+                        <p>मैं खाना नहीं खाता, बहुत रोता हूँ। हर notification check करता हूँ। मेरी सेहत गिर जाती है और मैं उसे बहुत miss करता हूँ। उसकी चुप्पी मुझे तोड़ देती है।</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section 2: First I Love You -->
+            <h2 class="category-title reveal-item">पहला "I Love You"</h2>
+
+            <div class="chapter-item reveal-item">
+                <div class="chapter-header">किसने पहले कहा?</div>
+                <div class="chapter-content">
+                    <div class="chapter-text">
+                        <p>मैंने पहले कहा था।</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="chapter-item reveal-item">
+                <div class="chapter-header">यह कैसे हुआ?</div>
+                <div class="chapter-content">
+                    <div class="chapter-text">
+                        <p>जब मैं सुनिश्चित था कि मैंने अपनी भावनाओं को साझा कर दिया है, लेकिन उसने तुरंत जवाब नहीं दिया था।</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="chapter-item reveal-item">
+                <div class="chapter-header">क्या यह प्लान किया हुआ था या अचानक?</div>
+                <div class="chapter-content">
+                    <div class="chapter-text">
+                        <p>मैंने कई बार साझा करने की कोशिश की थी, लेकिन मुझे उसे खोने का डर था। आखिरकार दिल की बात निकल ही पड़ी।</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="chapter-item reveal-item">
+                <div class="chapter-header">उसकी प्रतिक्रिया क्या थी?</div>
+                <div class="chapter-content">
+                    <div class="chapter-text">
+                        <p>वह खुश थी और मुस्कुराई, लेकिन उसने मुझे जवाब के लिए इंतज़ार कराया। वो शायद सोच रही थी, और मैं बेसब्री से इंतज़ार कर रहा था।</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="chapter-item reveal-item">
+                <div class="chapter-header">क्या उसने समय लिया?</div>
+                <div class="chapter-content">
+                    <div class="chapter-text">
+                        <p>हाँ, उसने काफी लंबे समय बाद "लव यू" कहा। लेकिन जब उसने कहा, तो सब इंतज़ार जायज़ लगा।</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="chapter-item reveal-item">
+                <div class="chapter-header">क्या वह तुम्हें छेड़ती (tease) है?</div>
+                <div class="chapter-content">
+                    <div class="chapter-text">
+                        <p>जब वह खुश होती है तो मुझे बहुत छेड़ती है, और जब वह मुझे छेड़ती है तो मुझे डर लगता है कि कहीं मैं उसे खो न जाऊँ।</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="chapter-item reveal-item">
+                <div class="chapter-header">क्या उसने इसे धीरे से कहा?</div>
+                <div class="chapter-content">
+                    <div class="chapter-text">
+                        <p>वह बहुत रोती है और मुझे यह बिल्कुल पसंद नहीं है। जब वह बहुत रोती है तो मुझे बहुत गुस्सा आता है। दर्द होता है उसे ऐसे देखकर।</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="chapter-item reveal-item">
+                <div class="chapter-header">क्या आप उस रात सोए या नहीं?</div>
+                <div class="chapter-content">
+                    <div class="chapter-text">
+                        <p>मैं आंखें भी नहीं बंद कर सका। जब उसने पूछा कि क्या तुम सोए? तो मैंने झूठ बोला कि हाँ, लेकिन असल में मैं उसकी तस्वीरें, उसके मैसेज, उसकी मुस्कान के स्क्रीनशॉट देख रहा था। मैं सुबह तक इंतज़ार करता रहा।</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section 3: Jealousy -->
+            <h2 class="category-title reveal-item">जलन और भरोसा</h2>
+
+            <div class="chapter-item reveal-item">
+                <div class="chapter-header">क्या आपको कभी जलन (jealousy) हुई?</div>
+                <div class="chapter-content">
+                    <div class="chapter-text">
+                        <p>बहुत बहुत ज्यादा।</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="chapter-item reveal-item">
+                <div class="chapter-header">किसके कारण?</div>
+                <div class="chapter-content">
+                    <div class="chapter-text">
+                        <p>कुछ अन्य बायोडाटा शादी के लिए आते हैं, या जब कोई उसे प्रभावित करने और उसके करीब आने की कोशिश करता है।</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="chapter-item reveal-item">
+                <div class="chapter-header">कोई उसकी फोटो को लाइक कर रहा है?</div>
+                <div class="chapter-content">
+                    <div class="chapter-text">
+                        <p>यह मुझे ठीक लगता है क्योंकि उसे जीने के लिए जगह चाहिए। मैं कभी नहीं कहता कि यह करो या वह करो, लेकिन मैं बस toxic लोगों से उसका ख्याल रखता हूँ।</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="chapter-item reveal-item">
+                <div class="chapter-header">कोई उसे मैसेज कर रहा है?</div>
+                <div class="chapter-content">
+                    <div class="chapter-text">
+                        <p>मैं उस पर अंधा भरोसा करता हूँ और उसका सम्मान करता हूँ। मैं किसी से मैसेज, कॉल या वीडियो कॉल के बारे में कभी नहीं पूछता, लेकिन हाँ, मुझे उसकी ईमानदारी प्यारी है। अगर कुछ होता है तो वो मुझे बताती है।</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="chapter-item reveal-item">
+                <div class="chapter-header">उसका पुरुष मित्र?</div>
+                <div class="chapter-content">
+                    <div class="chapter-text">
+                        <p>जीरो। और मुझे यह बहुत पसंद है। उसका कोई पुरुष मित्र न होना मुझे उससे और ज्यादा प्यार करता है।</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="chapter-item reveal-item">
+                <div class="chapter-header">परिवार का दबाव?</div>
+                <div class="chapter-content">
+                    <div class="chapter-text">
+                        <p>मुझे कोई दबाव नहीं है लेकिन मैं अपने दादा-दादी से प्यार करता हूँ और वे तुलसी को प्यार करते हैं। वे चाहते हैं कि हम जीवन भर, अगले 100 जन्मों तक साथ रहें। वे अपनी मृत्यु से पहले हमें और हमारे बच्चों को देखना चाहते हैं।</p>
+                        <div class="emotional-note">
+                            <strong>तुलसी, मैं इस हिस्से को लिखते समय बहुत रो रहा हूँ। 27 फरवरी, 11:05 बजे हैं, आंसू नहीं रुक रहे, हाथ कांप रहे हैं। मम्मी पापा सो रहे हैं और मैं रो रहा हूँ... मैं तुमसे प्यार करता हूँ तुलसी - कभी हमारा भरोसा, हमारा रिश्ता मत तोड़ना दीकू। हम तुमसे प्यार करते हैं।</strong>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="chapter-item reveal-item">
+                <div class="chapter-header">जब उसने जल्दी जवाब नहीं दिया?</div>
+                <div class="chapter-content">
+                    <div class="chapter-text">
+                        <p>मैं इंतज़ार करता हूँ, मैं गुस्सा नहीं होता बल्कि मुझे उस पर गर्व होता है क्योंकि वह एक मेडिसिन शॉप में काम करती है। वह मेरे लिए, हमारे उज्ज्वल भविष्य के लिए, हमारे परिवार के लिए बहुत प्रयास कर रही है। मैं तुम पर गर्व करता हूँ तुली।</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="chapter-item reveal-item">
+                <div class="chapter-header">आपने क्या किया?</div>
+                <div class="chapter-content">
+                    <div class="chapter-text">
+                        <p>मैं इंतज़ार करता हूँ और उसके मेरे पसंदीदा notification का इंतज़ार करता हूँ।</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="chapter-item reveal-item">
+                <div class="chapter-header">क्या आप लड़े?</div>
+                <div class="chapter-content">
+                    <div class="chapter-text">
+                        <p>कभी-कभी अहंकार, रवैये या शायद गलतफहमी की वजह से।</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="chapter-item reveal-item">
+                <div class="chapter-header">क्या उसने तुम्हें शांत किया?</div>
+                <div class="chapter-content">
+                    <div class="chapter-text">
+                        <p>वह एकमात्र है जो मुझे शांत कर सकती है, अन्यथा मैं दुनिया से लड़ने वाला हो सकता हूँ। वह मेरी शांति है।</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="chapter-item reveal-item">
+                <div class="chapter-header">आपने परिपक्व (mature) या भावुक (emotional) अभिनय किया?</div>
+                <div class="chapter-content">
+                    <div class="chapter-text">
+                        <p>बहुत ज्यादा भावुक, हर बार भावुक।</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section 4: Biggest Fight -->
+            <h2 class="category-title reveal-item">सबसे बड़ी लड़ाई</h2>
+
+            <div class="chapter-item reveal-item">
+                <div class="chapter-header">सबसे बुरी लड़ाई का वर्णन करें।</div>
+                <div class="chapter-content">
+                    <div class="chapter-text">
+                        <p>अभी हाल ही में फरवरी में।</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="chapter-item reveal-item">
+                <div class="chapter-header">क्या कारण था?</div>
+                <div class="chapter-content">
+                    <div class="chapter-text">
+                        <p>क्योंकि उसने वीडियो कॉल ऑन नहीं किया था।</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="chapter-item reveal-item">
+                <div class="chapter-header">क्या कोई रोया?</div>
+                <div class="chapter-content">
+                    <div class="chapter-text">
+                        <p>हम दोनों रोए।</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="chapter-item reveal-item">
+                <div class="chapter-header">क्या किसी ने ब्लॉक किया?</div>
+                <div class="chapter-content">
+                    <div class="chapter-text">
+                        <p>अभी तक नहीं, मैं नहीं कर सकता। वो भी नहीं कर सकती। मैं उसे ब्लॉक नहीं कर सकता, भले ही वह मुझे बुरा महसूस कराए।</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="chapter-item reveal-item">
+                <div class="chapter-header">क्या किसी ने कहा "मुझे छोड़ दो"?</div>
+                <div class="chapter-content">
+                    <div class="chapter-text">
+                        <p>मैं उसे जानता हूँ, हम कभी एक-दूसरे को नहीं छोड़ेंगे। कभी नहीं, कभी नहीं और कभी नहीं।</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="chapter-item reveal-item">
+                <div class="chapter-header">कितने घंटे/दिन तक कोई बात नहीं हुई?</div>
+                <div class="chapter-content">
+                    <div class="chapter-text">
+                        <p>केवल एक दिन जब हमने वीडियो कॉल नहीं की, लेकिन हमने छोटी-मोटी बातचीत की थी।</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="chapter-item reveal-item">
+                <div class="chapter-header">चुप्पी के दौरान आप क्या महसूस कर रहे थे?</div>
+                <div class="chapter-content">
+                    <div class="chapter-text">
+                        <p>मैं उससे ज्यादा चुप था। मैंने खुद को चोट पहुंचाई, मैं terrace गया, बहुत रोया। मैंने खाना नहीं खाया, पानी नहीं पिया और कभी-कभी तो सुबह तक उसकी तस्वीरें देखता रहा। मैं उसके जवाब, टेक्स्ट, कॉल या वीडियो कॉल का इंतज़ार करता रहा, रात भर फोन हाथ में पकड़े।</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section 5: Biggest Fear -->
+            <h2 class="category-title reveal-item">आपका सबसे बड़ा डर</h2>
+
+            <div class="chapter-item reveal-item">
+                <div class="chapter-header">क्या आपको डर है कि वह छोड़ सकती है?</div>
+                <div class="chapter-content">
+                    <div class="chapter-text">
+                        <p>हाँ, यह सोचना भी मुझे शरीर रहित कंकाल जैसा महसूस कराता है, एक ऐसा दिल जिसमें कोई एहसास न हो। मैं बहुत रोता हूँ।</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="chapter-item reveal-item">
+                <div class="chapter-header">क्या आपको डर है कि लंबी दूरी का रिश्ता फेल हो सकता है?</div>
+                <div class="chapter-content">
+                    <div class="chapter-text">
+                        <p>नहीं, मैं उस पर भरोसा करता हूँ।</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="chapter-item reveal-item">
+                <div class="chapter-header">क्या आप वजन को लेकर असुरक्षित हैं?</div>
+                <div class="chapter-content">
+                    <div class="chapter-text">
+                        <p>हाँ, मैं ओवरवेट हूँ और कम करने की कोशिश कर रहा हूँ। कभी-कभी मैं अपने शरीर और पेट की वजह से रोता हूँ।</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="chapter-item reveal-item">
+                <div class="chapter-header">क्या आप पैसे/करियर को लेकर डरते हैं?</div>
+                <div class="chapter-content">
+                    <div class="chapter-text">
+                        <p>मैं परिवार, पैसा और करियर बनाना चाहता हूँ। मैं चाहता हूँ कि वह जीवन भर खुश रहे, इसलिए मैं ज्यादा सोचता हूँ—क्या होगा अगर मैं फेल हो गया? अगर मैं कमा नहीं पाया? अगर मुझे UK में नौकरी नहीं मिली?</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="chapter-item reveal-item">
+                <div class="chapter-header">क्या आप पारिवारिक मंजूरी (approval) से डरते हैं?</div>
+                <div class="chapter-content">
+                    <div class="chapter-text">
+                        <p>मुझे तुलसी पर भरोसा है लेकिन कभी-कभी मुझे उसके बड़े पिताजी, उसके परिवार से डर लगता है। क्या होगा अगर उन्होंने मना कर दिया? या तुलसी को ब्लैकमेल किया?</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="chapter-item reveal-item">
+                <div class="chapter-header">क्या आप रात को ज्यादा सोचते (overthink) हैं?</div>
+                <div class="chapter-content">
+                    <div class="chapter-text">
+                        <p>हाँ, यह मेरी सबसे बड़ी समस्या है। मैं बहुत ज्यादा सोचता हूँ।</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section 6: Romantic Memory -->
+            <h2 class="category-title reveal-item">सबसे रोमांटिक याद</h2>
+
+            <div class="chapter-item reveal-item">
+                <div class="chapter-header">सबसे रोमांटिक याद क्या है?</div>
+                <div class="chapter-content">
+                    <div class="chapter-text">
+                        <p>हर एक पल। जब उसकी मां मेरे बारे में सहमत हो गई थीं, जब मैंने हमारे रोमांस का सपना देखा।</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="chapter-item reveal-item">
+                <div class="chapter-header">उसने कभी किया सबसे रोमांटिक काम?</div>
+                <div class="chapter-content">
+                    <div class="chapter-text">
+                        <p>वीडियो कॉल पर मुझे एक किस दी थी — मैं हर दिन उसका इंतज़ार करता हूँ। उसने मुझे सिर्फ एक बार दी जब मैंने मांगी, वो कहती है "नहीं" (हंसते हुए हाहाहा)।</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="chapter-item reveal-item">
+                <div class="chapter-header">क्या उसने कभी सोते हुए कॉल किया?</div>
+                <div class="chapter-content">
+                    <div class="chapter-text">
+                        <p>कई बार, और मुझे उसे सोते हुए देखना बहुत पसंद है। जब वह सोती है तो मैं उसका चेहरा देखकर उससे और ज्यादा प्यार करता हूँ।</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="chapter-item reveal-item">
+                <div class="chapter-header">क्या उसने कभी सरप्राइज भेजा?</div>
+                <div class="chapter-content">
+                    <div class="chapter-text">
+                        <p>हाँ, यह मेरी पसंदीदा चीजों में से एक है। उसने मुझे मोबाइल फोन, वायर्ड एप्पल इयरफोन, वॉलेट, बहुत सारे फल, ट्रिमर, स्नैक्स, किताबें, एक दिल का तकिया, आइसक्रीम, गुलाब, केक और बहुत कुछ भेजा। मैं गिन भी नहीं सकता, वह बहुत अद्भुत है।</p>
+                        <p>मुझे प्यार है जब वह अचानक ऑर्डर करती है... लेकिन तुलसी, ज्यादा पैसा खर्च करना अच्छी बात नहीं है, महीने में एक बार ठीक है मेरी बच्चा।</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="chapter-item reveal-item">
+                <div class="chapter-header">क्या उसने मजाक में 'पति' बुलाया?</div>
+                <div class="chapter-content">
+                    <div class="chapter-text">
+                        <p>हाँ, मैं कॉल पर मजाकिया हरकतें करता हूँ। मैं बस चाहता हूँ कि वह मुस्कुराए, हंसे ताकि मैं उसके चेहरे को मुस्कुराते हुए देख सकूँ।</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section 7: Parcel Scene -->
+            <h2 class="category-title reveal-item">पार्सल का मंजर</h2>
+
+            <div class="chapter-item reveal-item">
+                <div class="chapter-header">जब आपने पार्सल पैक किया?</div>
+                <div class="chapter-content">
+                    <div class="chapter-text">
+                        <p>1 फरवरी से, मैंने अपना सारा पैसा एक बैंक खाते में डाल दिया—जैसे मेरी बचत, पॉकेट मनी, कमाई, छुपा हुआ पैसा (आपातकालीन पैसा)। और मैंने उसके लिए चीजें खरीदना शुरू कर दिया। मैंने उसके लिए सबसे अच्छी चीजें चुनीं, जैसे सबसे अच्छी कंपनी का खिलौना, सबसे अच्छा खाना।</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="chapter-item reveal-item">
+                <div class="chapter-header">क्या आप भावुक थे?</div>
+                <div class="chapter-content">
+                    <div class="chapter-text">
+                        <p>जब पार्सल रवाना हुआ, जब मैं चिट्ठियाँ लिख रहा था, और जब मैं उन पलों को याद कर रहा था, तो बहुत भावुक हो गया था।</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="chapter-item reveal-item">
+                <div class="chapter-header">क्या आपने कल्पना की उसे खोलते हुए?</div>
+                <div class="chapter-content">
+                    <div class="chapter-text">
+                        <p>हर एक दिन। मैं पार्सल का विवरण check करता, ट्रैक करता था।</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="chapter-item reveal-item">
+                <div class="chapter-header">क्या आपने सामान पकड़ा और मुस्कुराए?</div>
+                <div class="chapter-content">
+                    <div class="chapter-text">
+                        <p>हाँ, मैंने हर वह चीज भेजी जो मुझे याद थी। दीकू, अगर कोई चीज भेजने से रह गई हो तो माफ करना।</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="chapter-item reveal-item">
+                <div class="chapter-header">क्या आप खुद से बात करते थे?</div>
+                <div class="chapter-content">
+                    <div class="chapter-text">
+                        <p>हाँ, मैं DMart जाता और खुद से बात करता—क्या वह इस खाने को पसंद करेगी? क्या वह यह टी-शर्ट पहनेगी? क्या उसे यह स्वाद पसंद आएगा?</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section 8: First Meeting -->
+            <h2 class="category-title reveal-item">पहली मुलाकात की कल्पना</h2>
+
+            <div class="chapter-item reveal-item">
+                <div class="chapter-header">जब आप उससे पहली बार मिलेंगे?</div>
+                <div class="chapter-content">
+                    <div class="chapter-text">
+                        <p>शायद एयरपोर्ट पर। मैं तुम्हारा इंतज़ार कर रहा हूँ बच्चा।</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="chapter-item reveal-item">
+                <div class="chapter-header">एयरपोर्ट या घर?</div>
+                <div class="chapter-content">
+                    <div class="chapter-text">
+                        <p>वह मेरा घर है, और हमारी पहली मुलाकात हमेशा के लिए सबसे यादगार होगी।</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="chapter-item reveal-item">
+                <div class="chapter-header">क्या आप पहले हग करेंगे?</div>
+                <div class="chapter-content">
+                    <div class="chapter-text">
+                        <p>जैसे ही मैं उसे एयरपोर्ट पर देखूंगा।</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="chapter-item reveal-item">
+                <div class="chapter-header">क्या आप रोएंगे?</div>
+                <div class="chapter-content">
+                    <div class="chapter-text">
+                        <p>जब वह भारत आएगी, जब मैं उसे पहली बार देखूंगा... जरूर रोऊंगा।</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="chapter-item reveal-item">
+                <div class="chapter-header">क्या आप उसका चेहरा छूएंगे?</div>
+                <div class="chapter-content">
+                    <div class="chapter-text">
+                        <p>ज़रूर, मैं उसे किस करूंगा। अपनी बाहों, उंगलियों, हाथों से छूऊंगा।</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="chapter-item reveal-item">
+                <div class="chapter-header">क्या आप चुप रहेंगे?</div>
+                <div class="chapter-content">
+                    <div class="chapter-text">
+                        <p>तब तक देखता रहूंगा जब तक वह वापस UK के लिए उड़ान न भर ले (या फिर हमेशा के लिए रह जाए)।</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="chapter-item reveal-item">
+                <div class="chapter-header">आप पहले क्या कहेंगे?</div>
+                <div class="chapter-content">
+                    <div class="chapter-text">
+                        <p>"हाय, मेरी दीकू, वेलकम होम दीकू, बहुत याद किया, लव यू।" और फिर उसे जोर से हग करूंगा। अभी सोचकर भी मैं अकेले में रो रहा हूँ...</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section 9: Marriage Dream -->
+            <h2 class="category-title reveal-item">शादी का सपना</h2>
+
+            <div class="chapter-item reveal-item">
+                <div class="chapter-header">कोर्ट मैरिज?</div>
+                <div class="chapter-content">
+                    <div class="chapter-text">
+                        <p>हाँ, हम यात्रा, हनीमून, हमारे भविष्य, घर, कार आदि के लिए पैसा बचाना चाहते हैं।</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="chapter-item reveal-item">
+                <div class="chapter-header">पारंपरिक (Traditional)?</div>
+                <div class="chapter-content">
+                    <div class="chapter-text">
+                        <p>हाँ, लेकिन समय पर निर्भर करता है।</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="chapter-item reveal-item">
+                <div class="chapter-header">दोनों?</div>
+                <div class="chapter-content">
+                    <div class="chapter-text">
+                        <p>हाँ, वह मेकअप आर्टिस्ट से तैयार होगी।</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="chapter-item reveal-item">
+                <div class="chapter-header">किस रंग का शेरवानी?</div>
+                <div class="chapter-content">
+                    <div class="chapter-text">
+                        <p>जो भी वह पसंद करेगी।</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="chapter-item reveal-item">
+                <div class="chapter-header">वह क्या पहनेगी?</div>
+                <div class="chapter-content">
+                    <div class="chapter-text">
+                        <p>जो मैं पसंद करूंगा।</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="chapter-item reveal-item">
+                <div class="chapter-header">कौन ज्यादा रोएगा?</div>
+                <div class="chapter-content">
+                    <div class="chapter-text">
+                        <p>दोनों, या हमारे माता-पिता ज्यादा... और खासकर मैं खुद।</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section 10: Secret -->
+            <h2 class="category-title reveal-item">एक राज़</h2>
+
+            <div class="chapter-item reveal-item">
+                <div class="chapter-header">एक राज़ जो आपने कभी उसे नहीं बताया?</div>
+                <div class="chapter-content">
+                    <div class="chapter-text">
+                        <p>मैं उससे कुछ नहीं छिपाता। वह मेरी सब कुछ है।</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Buttons Section -->
+            <div class="btn-container reveal-item">
+                <a href="story.pdf" download class="action-btn download-btn">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                    Download Story Book
+                </a>
+                
+                <a href="https://codewitharyan-01.github.io/Love/" target="_blank" class="action-btn back-btn">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+                    Back To Our Story
+                </a>
+            </div>
+
         </div>
-    </section>
-
-    <!-- Section 2: First I Love You -->
-    <section class="story-section" id="firstlove">
-        <div class="section-container">
-            <div class="section-number">Adhyay 02</div>
-            <h2 class="section-title">Pehla "I Love You" - Dil Ki Sachi Dhadkan</h2>
-            
-            <p class="story-text">
-                Maine pehle kaha. <span class="story-highlight">Kai baar try kiya tha</span>, lekin dar tha - kahin main usey na kho doon. Lekin jab dil bhar gaya, toh keh diya. Usne response nahi diya turant.
-            </p>
-
-            <div class="quote-box">
-                "Woh khush thi, muskurai bhi... lekin mujhe wait karwaya jawab ke liye. Bohot lamba wait kiya maine, lekin jab usne bhi 'Love You' kaha - us din laga sab kuch poora ho gaya."
-            </div>
-
-            <p class="story-text">
-                Raat ko aankh nahi lagti thi. Jab woh puuchti thi "Soye?" - main jhooth bolta tha "Haan". Lekin sach yeh tha ki <span class="story-emotion">main uski photos dekhta rehta tha</span>, uske messages, humari baatein, uske smile ke screenshots - subah tak.
-            </p>
-
-            <p class="story-text">
-                Woh roye toh mujse control nahi hota tha. <span class="story-highlight">Andar se rota tha</span>, usey hug karna chahta tha, uski aankhon ke aansu pochna chahta tha. Uske rone par mujhe gussa aata tha - kyunki main usey dukhi nahi dekh sakta.
-            </p>
-
-            <div class="timeline">
-                <div class="timeline-item">
-                    <div class="timeline-date">Pehla Izhaar</div>
-                    <div class="timeline-content">
-                        <p class="memory-text">Darr tha, lekin dil mein pyaar zyada tha. Maine kaha "I Love You" - darr ke maare, khushi ke maare.</p>
-                    </div>
-                </div>
-                <div class="timeline-item">
-                    <div class="timeline-date">Uska Jawab</div>
-                    <div class="timeline-content">
-                        <p class="memory-text">Woh khush thi, muskurai. Lekin wait karwaya. Usne socha, shayad. Main bhi wait kiya.</p>
-                    </div>
-                </div>
-                <div class="timeline-item">
-                    <div class="timeline-date">Jab Usne Kaha</div>
-                    <div class="timeline-content">
-                        <p class="memory-text">Finally - "Love You". Do shabd, lekin mere liye poori duniya.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Section 3: Jealousy & Trust -->
-    <section class="story-section" id="trust">
-        <div class="section-container">
-            <div class="section-number">Adhyay 03</div>
-            <h2 class="section-title">Jazbaat, Dar Aur Bharosa</h2>
-            
-            <p class="story-text">
-                Kabhi kabhi <span class="story-highlight">jealousy</span> aati thi. Jab doosre bio data aate the shaadi ke liye, jab koi impress karna chahta tha usse. Lekin maine kabhi roka nahi usey. Usko space chahiye, jeena hai usey.
-            </p>
-
-            <div class="quote-box">
-                "Main us par blind trust karta hoon. Uski honesty mujhe pyaari hai. Agar kuch hua toh woh mujhe batati hai. Yehi hai sachcha pyaar - bina shaq ke, bina dar ke."
-            </div>
-
-            <p class="story-text">
-                Uske koi male friend nahi - <span class="story-emotion">zero</span>. Aur main yeh cheez bohot appreciate karta hoon. Isse mera pyaar aur badhta hai uske liye.
-            </p>
-
-            <p class="story-text">
-                Family ka pressure nahi hai mere taraf se. Mere <span class="story-highlight">grandparents bohot chahte hain Tulsi ko</span>. Woh chahte hain hum saath rahen, agli 100 janmo tak. Unhe humare bacche dekhne hain before they leave this world.
-            </p>
-
-            <div class="stats-grid">
-                <div class="stat-item">
-                    <div class="stat-number">100%</div>
-                    <div class="stat-label">Bharosa</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-number">0</div>
-                    <div class="stat-label">Male Friends</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-number">100+</div>
-                    <div class="stat-label">Janamon Ki Wishes</div>
-                </div>
-            </div>
-
-            <div class="love-letter">
-                <div class="letter-content">
-                    <p class="letter-text">
-                        Tulsi, main abhi roo raha hoon yeh likhte waqt. 27 February, 11:05 baje - aansu nahi ruk rahe, haath kaamp rahe hain. Mom dad so rahe hain, aur main akela roo raha hoon...
-                    </p>
-                    <p class="letter-text">
-                        <span class="story-highlight">I love you Tulsi</span> - kabhi mat todna humara trust, humara bond, humari relationship diku. Hum tumse bohot pyaar karte hain.
-                    </p>
-                    <div class="letter-signature">- Tumhara Aaru</div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Section 4: Fights & Care -->
-    <section class="story-section" id="fights">
-        <div class="section-container">
-            <div class="section-number">Adhyay 04</div>
-            <h2 class="section-title">Ladai, Maafi Aur Phir Pyaar</h2>
-            
-            <p class="story-text">
-                February mein hui sabse badi ladai. <span class="story-highlight">Video call on nahi kiya</span> usne - chhoti si baat, lekin din bhar no talk. Dono roye. Lekin main block nahi kar sakta, woh bhi nahi kar sakti.
-            </p>
-
-            <div class="quote-box">
-                "Main jaanta hoon hum ek dusre ko kabhi nahi chhodenge. Kabhi nahi. Yeh mera bharosa hai, yeh mera promise hai."
-            </div>
-
-            <p class="story-text">
-                Ladai ke baad main <span class="story-emotion">bohot emotional ho jaata hoon</span>. Khud ko hurt karta hoon, terrace par jaata hoon, rota hoon, khana nahi khata, paani nahi peeta. Uski photos dekhta rehta hoon subah tak. Uska reply, call, message - sab ka intezaar.
-            </p>
-
-            <p class="story-text">
-                Woh mujhe gussa hoti hai jab main properly baat nahi karta, jab apni health ka khayal nahi rakhta. <span class="story-highlight">Woh care karti hai</span>, isliye gussa karti hai.
-            </p>
-
-            <div class="memory-grid">
-                <div class="memory-card">
-                    <div class="memory-icon">
-                        <svg viewBox="0 0 24 24" fill="none" stroke-width="2">
-                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-                        </svg>
-                    </div>
-                    <div class="memory-title">Sabse Badi Ladai</div>
-                    <div class="memory-text">February mein video call wali - dono roye, lekin saath rahe.</div>
-                </div>
-
-                <div class="memory-card">
-                    <div class="memory-icon">
-                        <svg viewBox="0 0 24 24" fill="none" stroke-width="2">
-                            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
-                        </svg>
-                    </div>
-                    <div class="memory-title">Maafi</div>
-                    <div class="memory-text">Ek hi din mein theek - hum bina ek dusre ke nahi reh sakte.</div>
-                </div>
-
-                <div class="memory-card">
-                    <div class="memory-icon">
-                        <svg viewBox="0 0 24 24" fill="none" stroke-width="2">
-                            <circle cx="12" cy="12" r="10"/>
-                            <path d="M16 16s-1.5-2-4-2-4 2-4 2"/>
-                            <line x1="9" y1="9" x2="9.01" y2="9"/>
-                            <line x1="15" y1="9" x2="15.01" y2="9"/>
-                        </svg>
-                    </div>
-                    <div class="memory-title">Uski Care</div>
-                    <div class="memory-text">Gussa bhi pyaar se, daantna bhi pyaar se - yehi hai Tulsi.</div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Section 5: Fears -->
-    <section class="story-section" id="fears">
-        <div class="section-container">
-            <div class="section-number">Adhyay 05</div>
-            <h2 class="section-title">Darr Hai, Lekin Vishwas Zyada Hai</h2>
-            
-            <p class="story-text">
-                Sach kahun? <span class="story-highlight">Mujhe darr lagta hai</span> woh mujhe chhod de. Yeh soch ke hi main skeleton jaisa feel karta hoon - body bina soul ke, heart bina feelings ke.
-            </p>
-
-            <p class="story-text">
-                Long distance ka darr nahi hai - <span class="story-emotion">main usey trust karta hoon</span>. Lekin mere weight ka darr hai. Main overweight hoon, try kar raha hoon reduce karne ka. Kabhi kabhi rota hoon apni body dekh ke.
-            </p>
-
-            <div class="quote-box">
-                "Mujhe darr hai - kya main fail ho jaunga? Kya main UK mein job nahi paunga? Kya main usse khush nahi rakh paunga? Main family bana chahta hoon, paisa kamaana chahta hoon, usey happy rakhna chahta hoon poori zindagi."
-            </div>
-
-            <p class="story-text">
-                Family approval ka darr bhi hai kabhi kabhi. <span class="story-highlight">Uske dadaji</span> - unse darr lagta hai. Kya woh manenge? Kya woh Tulsi ko emotional blackmail karenge?
-            </p>
-
-            <p class="story-text">
-                Raat ko <span class="story-emotion">overthink</span> karta hoon. Yeh mera sabse bada problem hai. Sochta rehta hoon - par sach yeh hai ki main us par bharosa rakhta hoon, woh mujh par rakhti hai.
-            </p>
-        </div>
-    </section>
-
-    <!-- Section 6: Romantic Memories -->
-    <section class="story-section" id="memories">
-        <div class="section-container">
-            <div class="section-number">Adhyay 06</div>
-            <h2 class="section-title">Woh Yaadein Jo Dil Mein Hamesha Rahengi</h2>
-            
-            <p class="story-text">
-                <span class="story-highlight">Har pal romantic hai</span> humari kahani mein. Jab uski mummy maan gayi mere baare mein, jab maine sapna dekha humari shaadi ka...
-            </p>
-
-            <div class="quote-box">
-                "Usne mujhe video call par ek kiss di thi - sirf ek baar. Main roz wait karta hoon doosri kiss ka. Woh kehti hai 'No' aur phir hasti hai. Yehi hai meri duniya."
-            </div>
-
-            <p class="story-text">
-                Call par soti hai woh kabhi kabhi. Main usey dekhta rehta hoon <span class="story-emotion">soyi hui</span>. Uska chehra kitna innocent lagta hai, kitna pyaara. Tab aur pyaar ho jaata hai.
-            </p>
-
-            <p class="story-text">
-                Usne <span class="story-highlight">surprises bhi bheje hain</span> - mobile phone, Apple earphones, wallet, fruits, trimmer, snacks, books, heart pillow, ice cream, roses, cakes... main count nahi kar sakta.
-            </p>
-
-            <p class="story-text">
-                Normal din hota hai, delivery boy aata hai - main hasti hoon, usey yaad karti hoon. <span class="story-emotion">Thank you Tulsi</span>. Lekin baccha, zyada paisa mat kharch karo - ek baar mahine mein theek hai.
-            </p>
-
-            <div class="memory-grid">
-                <div class="memory-card">
-                    <div class="memory-icon">
-                        <svg viewBox="0 0 24 24" fill="none" stroke-width="2">
-                            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
-                        </svg>
-                    </div>
-                    <div class="memory-title">Call Par Kiss</div>
-                    <div class="memory-text">Ek hi baar mili, par yaad hai hamesha ke liye.</div>
-                </div>
-
-                <div class="memory-card">
-                    <div class="memory-icon">
-                        <svg viewBox="0 0 24 24" fill="none" stroke-width="2">
-                            <path d="M20 12V8H6a2 2 0 0 1-2-2c0-1.1.9-2 2-2h12v4"/>
-                            <path d="M4 6v12c0 1.1.9 2 2 2h14v-4"/>
-                            <path d="M18 12a2 2 0 0 0 0 4h4v-4h-4z"/>
-                        </svg>
-                    </div>
-                    <div class="memory-title">Surprises</div>
-                    <div class="memory-text">Phone, earphones, wallet, books - har cheez mein pyaar.</div>
-                </div>
-
-                <div class="memory-card">
-                    <div class="memory-icon">
-                        <svg viewBox="0 0 24 24" fill="none" stroke-width="2">
-                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
-                            <circle cx="9" cy="7" r="4"/>
-                            <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
-                            <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
-                        </svg>
-                    </div>
-                    <div class="memory-title">Husband Bulana</div>
-                    <div class="memory-text">Mazaak mein, lekin dil mein sach thi woh baat.</div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Section 7: The Parcel -->
-    <section class="story-section" id="parcel">
-        <div class="section-container">
-            <div class="section-number">Adhyay 07</div>
-            <h2 class="section-title">Ek Parcel, Bohot Saare Emotions</h2>
-            
-            <p class="story-text">
-                <span class="story-highlight">1 February se</span> maine sab paisa ek account mein daal diya - savings, pocket money, earnings, emergency sab. Aur shuru kiya uske liye cheezein kharidna.
-            </p>
-
-            <div class="quote-box">
-                "DMart jaata tha, usse baat karta tha khud se - 'Yeh food pasand aayegi kya?', 'Yeh T-shirt pehnegi kya?', 'Yeh taste pasand aayega kya?' Har cheez mein uska khayal."
-            </div>
-
-            <p class="story-text">
-                <span class="story-emotion">Letters likhta tha</span>, uske liye special items chhupata tha parcel mein. Har din track karta tha - kab pahunchega, kaise kholegi woh, kaisi lagegi usey.
-            </p>
-
-            <p class="story-text">
-                Har item ko pakadta tha, <span class="story-highlight">muskurata tha</span> - sochta tha yeh uske haath lagega. Agar kuch chhoot gaya ho diku, toh maaf karna - maine koshish ki sab yaad rakhne ki.
-            </p>
-
-            <div class="stats-grid">
-                <div class="stat-item">
-                    <div class="stat-number">1st</div>
-                    <div class="stat-label">Feb Se Shuru</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-number">100%</div>
-                    <div class="stat-label">Pyaar Se Bhara</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-number">Daily</div>
-                    <div class="stat-label">Tracking</div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Section 8: First Meeting Dream -->
-    <section class="story-section" id="meeting">
-        <div class="section-container">
-            <div class="section-number">Adhyay 08</div>
-            <h2 class="section-title">Pehli Mulaqaat Ka Sapna</h2>
-            
-            <p class="story-text">
-                <span class="story-highlight">Airport</span> pe hoga shayad pehla milan. Main wait kar raha hoon baccha tumhara.
-            </p>
-
-            <div class="quote-box">
-                "Tum mera ghar ho. Humari pehli mulaqaat sabse special hogi. Main tumhe dekhunga, bataunga - 'Hi, meri diku, welcome home diku, bohot miss kiya, love you' - aur phir tight hug."
-            </div>
-
-            <p class="story-text">
-                Jab tum India aogi, jab pehli baar <span class="story-emotion">saamne se dekhunga</span> - aansu aa jayenge mere. Main tumhara chehra chhooonga, tumhe kiss karunga, apni baanho mein bharunga.
-            </p>
-
-            <p class="story-text">
-                Jab tak tum wapas UK nahi jaati, <span class="story-highlight">main tumhe dekhta rehta hoon</span>. Ek pal bhi nahi chhodna hai tumhe ab.
-            </p>
-
-            <div class="timeline">
-                <div class="timeline-item">
-                    <div class="timeline-date">Airport</div>
-                    <div class="timeline-content">
-                        <p class="memory-text">Pehla dekhna, pehla ehsaas - sab yahin hoga.</p>
-                    </div>
-                </div>
-                <div class="timeline-item">
-                    <div class="timeline-date">Pehla Hug</div>
-                    <div class="timeline-content">
-                        <p class="memory-text">Tight, lamba, emotional - sab kuch us hug mein.</p>
-                    </div>
-                </div>
-                <div class="timeline-item">
-                    <div class="timeline-date">Pehla Kiss</div>
-                    <div class="timeline-content">
-                        <p class="memory-text">Jo video call par di thi, ab saamne dekhni hai.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Section 9: Marriage Dream -->
-    <section class="story-section" id="marriage">
-        <div class="section-container">
-            <div class="section-number">Adhyay 09</div>
-            <h2 class="section-title">Shaadi Ka Sapna - Ek Nayi Shuruwat</h2>
-            
-            <p class="story-text">
-                <span class="story-highlight">Court marriage</span> - haan, hum paisa bachana chahte hain. Travel ke liye, honeymoon ke liye, ghar gaadi ke liye, future ke liye.
-            </p>
-
-            <p class="story-text">
-                <span class="story-emotion">Traditional bhi</span> - time ke hisaab se. Main jo sherwani pehnunga woh tumhari choice hogi. Tum jo pehnogi woh meri choice hogi.
-            </p>
-
-            <div class="quote-box">
-                "Dono roenge - hum, humare parents. Shayad main zyada rounga. Yeh khushi ke aansu honge, ki finally, finally hum saath hain."
-            </div>
-
-            <p class="story-text">
-                Mere grandparents bohot chahte hain yeh shaadi <span class="story-highlight">jitni jaldi ho sake</span>. Unhe humari shaadi dekhni hai, humare bacche dekhne hain. Unka ashirwad humare saath hai.
-            </p>
-
-            <div class="memory-grid">
-                <div class="memory-card">
-                    <div class="memory-icon">
-                        <svg viewBox="0 0 24 24" fill="none" stroke-width="2">
-                            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
-                        </svg>
-                    </div>
-                    <div class="memory-title">Court Marriage</div>
-                    <div class="memory-text">Simple, practical, future ke liye sahi.</div>
-                </div>
-
-                <div class="memory-card">
-                    <div class="memory-icon">
-                        <svg viewBox="0 0 24 24" fill="none" stroke-width="2">
-                            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
-                        </svg>
-                    </div>
-                    <div class="memory-title">Traditional</div>
-                    <div class="memory-text">Rasmein, riwaaz, parivar sabke saath.</div>
-                </div>
-
-                <div class="memory-card">
-                    <div class="memory-icon">
-                        <svg viewBox="0 0 24 24" fill="none" stroke-width="2">
-                            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
-                        </svg>
-                    </div>
-                    <div class="memory-title">Dono Rorenge</div>
-                    <div class="memory-text">Khushi ke aansu, finally saath hain hum.</div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Section 10: Final Letter -->
-    <section class="story-section" id="final">
-        <div class="section-container">
-            <div class="section-number">Antim Adhyay</div>
-            <h2 class="section-title">Ek Chhithi Tumhare Naam</h2>
-            
-            <div class="love-letter">
-                <div class="letter-content">
-                    <p class="letter-text">
-                        Tulsi meri pyaari,
-                    </p>
-                    <p class="letter-text">
-                        Main kuch nahi chhupaata tumse. Tum meri duniya ho, mera sab kuch ho. <span class="story-highlight">6,924.46 kilometre</span> ki duri humare dil ka faasla nahi badal sakti.
-                    </p>
-                    <p class="letter-text">
-                        Tumne mujhe bohot khush kiya hai - har surprise se, har call se, har message se. Main tumse vada karta hoon ki main kabhi nahi chhodunga tumhe. <span class="story-emotion">Agli 100 janmo tak</span> bhi tumhare saath rahunga.
-                    </p>
-                    <p class="letter-text">
-                        Jab bhi tum royi, main andar se roya. Jab bhi tum khush hui, main bohot khush hua. Tumhari har emotion meri dhadkan ban gayi hai ab.
-                    </p>
-                    <p class="letter-text">
-                        <span class="story-highlight">Mujhe tumse pyaar hai diku</span> - itna pyaar ki main shabdo mein bayaan nahi kar sakta. Bas ek cheez ke liye kehta hoon - kabhi mat chhodna mujhe. Kabhi mat todna humara bond.
-                    </p>
-                    <p class="letter-text">
-                        Tumhara intezaar karta rahega,
-                    </p>
-                    <div class="letter-signature">Tumhara Aaru, hamesha ke liye</div>
-                </div>
-            </div>
-
-            <div class="quote-box" style="margin-top: 3rem; text-align: center;">
-                <p style="font-size: 1.5rem; color: var(--accent);">
-                    "Duri mein bhi paas hain hum, kyunki dil ka koi distance nahi hota."
-                </p>
-            </div>
-
-            <div class="stats-grid" style="margin-top: 4rem;">
-                <div class="stat-item">
-                    <div class="stat-number">6924</div>
-                    <div class="stat-label">Kilometres Duri</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-number">0</div>
-                    <div class="stat-label">Faasla Dil Ka</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-number">Forever</div>
-                    <div class="stat-label">Pyaar Hamesha</div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer style="text-align: center; padding: 4rem 2rem; background: linear-gradient(to top, rgba(168, 87, 106, 0.1), transparent); position: relative; z-index: 2;">
-        <p style="color: var(--muted); font-size: 0.875rem; letter-spacing: 0.2em; text-transform: uppercase;">Tulsi aur Aryan</p>
-        <p style="color: var(--accent); font-size: 1.25rem; margin-top: 0.5rem; font-family: 'Playfair Display', serif;">Ek Anokhi Prem Kahani</p>
-        <p style="color: var(--muted); font-size: 0.75rem; margin-top: 2rem;">2 June 2025 Se Shuru, Hamesha Tak</p>
-    </footer>
-
-    <!-- Navigation Dots -->
-    <nav class="nav" id="nav">
-        <div class="nav-dot active" data-section="hero"></div>
-        <div class="nav-dot" data-section="beginning"></div>
-        <div class="nav-dot" data-section="firstlove"></div>
-        <div class="nav-dot" data-section="trust"></div>
-        <div class="nav-dot" data-section="fights"></div>
-        <div class="nav-dot" data-section="fears"></div>
-        <div class="nav-dot" data-section="memories"></div>
-        <div class="nav-dot" data-section="parcel"></div>
-        <div class="nav-dot" data-section="meeting"></div>
-        <div class="nav-dot" data-section="marriage"></div>
-        <div class="nav-dot" data-section="final"></div>
-    </nav>
+    </div>
 
     <script>
-        // Initialize variables first
-        const sections = document.querySelectorAll('.story-section, .hero');
-        const navDots = document.querySelectorAll('.nav-dot');
-        const progressBar = document.getElementById('progress-bar');
-        const distanceCounter = document.getElementById('distance-counter');
-        
-        let targetDistance = 6924.46;
-        let currentDistance = 0;
-        let distanceAnimated = false;
+        // Accordion Logic
+        const chapters = document.querySelectorAll('.chapter-item');
 
-        // Particle System
-        const canvas = document.getElementById('particles-canvas');
-        const ctx = canvas.getContext('2d');
-        let particles = [];
-        let animationFrameId = null;
+        chapters.forEach(chapter => {
+            const header = chapter.querySelector('.chapter-header');
+            const content = chapter.querySelector('.chapter-content');
+            
+            header.addEventListener('click', () => {
+                // Close other open chapters (optional, comment out if you want multiple open)
+                /*
+                chapters.forEach(otherChapter => {
+                    if (otherChapter !== chapter) {
+                        otherChapter.classList.remove('active');
+                        otherChapter.querySelector('.chapter-content').style.maxHeight = null;
+                    }
+                });
+                */
 
-        function resizeCanvas() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        }
-
-        function createParticle() {
-            return {
-                x: Math.random() * canvas.width,
-                y: Math.random() * canvas.height,
-                size: Math.max(0.5, Math.random() * 2),
-                speedX: (Math.random() - 0.5) * 0.3,
-                speedY: (Math.random() - 0.5) * 0.3,
-                opacity: Math.random() * 0.5 + 0.2,
-                hue: Math.random() > 0.5 ? 35 : 350
-            };
-        }
-
-        function initParticles() {
-            particles = [];
-            const particleCount = Math.min(80, Math.floor(window.innerWidth / 20));
-            for (let i = 0; i < particleCount; i++) {
-                particles.push(createParticle());
-            }
-        }
-
-        function animateParticles() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-            particles.forEach((p, index) => {
-                p.x += p.speedX;
-                p.y += p.speedY;
-
-                if (p.x < 0 || p.x > canvas.width) p.speedX *= -1;
-                if (p.y < 0 || p.y > canvas.height) p.speedY *= -1;
-
-                const gradient = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, Math.max(0.1, p.size * 3));
-                if (p.hue === 35) {
-                    gradient.addColorStop(0, 'rgba(201, 168, 108, ' + p.opacity + ')');
-                    gradient.addColorStop(1, 'rgba(201, 168, 108, 0)');
+                // Toggle current chapter
+                chapter.classList.toggle('active');
+                
+                if (chapter.classList.contains('active')) {
+                    content.style.maxHeight = content.scrollHeight + "px";
                 } else {
-                    gradient.addColorStop(0, 'rgba(168, 87, 106, ' + p.opacity + ')');
-                    gradient.addColorStop(1, 'rgba(168, 87, 106, 0)');
+                    content.style.maxHeight = null;
                 }
-
-                ctx.beginPath();
-                ctx.arc(p.x, p.y, Math.max(0.1, p.size * 3), 0, Math.PI * 2);
-                ctx.fillStyle = gradient;
-                ctx.fill();
             });
-
-            animationFrameId = requestAnimationFrame(animateParticles);
-        }
-
-        // Distance Counter Animation
-        function animateDistance() {
-            if (!distanceCounter) return;
-            
-            const duration = 2000;
-            const startTime = performance.now();
-
-            function updateDistance(currentTime) {
-                const elapsed = currentTime - startTime;
-                const progress = Math.min(elapsed / duration, 1);
-                
-                const easeOut = 1 - Math.pow(1 - progress, 3);
-                currentDistance = progress * targetDistance;
-                
-                distanceCounter.textContent = currentDistance.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-
-                if (progress < 1) {
-                    requestAnimationFrame(updateDistance);
-                }
-            }
-
-            requestAnimationFrame(updateDistance);
-        }
-
-        // Scroll Reveal
-        function setupScrollReveal() {
-            const observerOptions = {
-                threshold: 0.1,
-                rootMargin: '0px 0px -50px 0px'
-            };
-
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        const elements = entry.target.querySelectorAll('.section-number, .section-title, .story-text, .quote-box, .memory-card, .timeline-item, .stat-item, .love-letter');
-                        
-                        elements.forEach((el, index) => {
-                            setTimeout(() => {
-                                el.classList.add('reveal');
-                            }, index * 100);
-                        });
-
-                        // Trigger distance animation when hero is visible
-                        if (entry.target.id === 'hero' && !distanceAnimated) {
-                            distanceAnimated = true;
-                            setTimeout(animateDistance, 500);
-                        }
-                    }
-                });
-            }, observerOptions);
-
-            sections.forEach(section => observer.observe(section));
-        }
-
-        // Navigation
-        function setupNavigation() {
-            navDots.forEach(dot => {
-                dot.addEventListener('click', () => {
-                    const sectionId = dot.getAttribute('data-section');
-                    const section = document.getElementById(sectionId);
-                    if (section) {
-                        section.scrollIntoView({ behavior: 'smooth' });
-                    }
-                });
-            });
-
-            // Update active dot on scroll
-            window.addEventListener('scroll', () => {
-                const scrollPos = window.scrollY + window.innerHeight / 2;
-
-                sections.forEach((section, index) => {
-                    const sectionTop = section.offsetTop;
-                    const sectionBottom = sectionTop + section.offsetHeight;
-
-                    if (scrollPos >= sectionTop && scrollPos < sectionBottom) {
-                        navDots.forEach(d => d.classList.remove('active'));
-                        if (navDots[index]) {
-                            navDots[index].classList.add('active');
-                        }
-                    }
-                });
-
-                // Progress bar
-                const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-                const progress = Math.min((window.scrollY / docHeight) * 100, 100);
-                progressBar.style.width = progress + '%';
-            });
-        }
-
-        // Floating Hearts
-        function createFloatingHeart(x, y) {
-            const heart = document.createElement('div');
-            heart.className = 'floating-heart';
-            heart.innerHTML = `
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
-                </svg>
-            `;
-            heart.style.left = x + 'px';
-            heart.style.top = y + 'px';
-            heart.style.color = Math.random() > 0.5 ? '#c9a86c' : '#a8576a';
-            document.body.appendChild(heart);
-
-            setTimeout(() => heart.remove(), 4000);
-        }
-
-        // Click to create hearts
-        document.addEventListener('click', (e) => {
-            for (let i = 0; i < 3; i++) {
-                setTimeout(() => {
-                    createFloatingHeart(e.clientX + (Math.random() - 0.5) * 30, e.clientY + (Math.random() - 0.5) * 30);
-                }, i * 100);
-            }
         });
 
-        // Reduced motion check
-        const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        // Scroll Reveal Animation
+        const revealElements = document.querySelectorAll('.reveal-item');
 
-        // Initialize everything
-        function init() {
-            resizeCanvas();
-            
-            if (!prefersReducedMotion) {
-                initParticles();
-                animateParticles();
-            }
-            
-            setupScrollReveal();
-            setupNavigation();
-        }
+        const revealOnScroll = () => {
+            const windowHeight = window.innerHeight;
+            const revealPoint = 100;
 
-        // Event listeners
-        window.addEventListener('resize', () => {
-            resizeCanvas();
-            if (!prefersReducedMotion) {
-                initParticles();
-            }
-        });
+            revealElements.forEach(element => {
+                const elementTop = element.getBoundingClientRect().top;
 
-        // Start
-        init();
+                if (elementTop < windowHeight - revealPoint) {
+                    element.classList.add('visible');
+                }
+            });
+        };
+
+        window.addEventListener('scroll', revealOnScroll);
+        window.addEventListener('load', revealOnScroll); // Trigger on load
     </script>
 </body>
 </html>
