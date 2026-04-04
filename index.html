@@ -1,1166 +1,1584 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tulsi & Aryan - A Song of Love and Distance</title>
-    <link href="https://cdn.tailwindcss.com" rel="stylesheet">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Cinzel:wght@400;500;600;700&family=Fauna+One:wght@300;400;500;700&display=swap" rel="stylesheet">
-    
-    <style>
-        :root {
-            --bg-dark: #050505;
-            --gold-primary: #c9a227;
-            --gold-glow: #ffdf6d;
-            --blood-red: #8a0303;
-            --parchment: #e8dcc4;
-            --text-dark: #111;
-            --text-light: #d4c4a8;
-        }
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Wispa AI</title>
+<style>
+/* ════════════════════════════════════════════════════════════
+   RESET + ROOT
+════════════════════════════════════════════════════════════ */
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --white:#FFFFFF;
+  --off:#F5F5F5;
+  --ink:#0A0A0A;
+  --dim:#6B6B6B;
+  --ghost:#D4D4D8;
+  --graphite:#1F2937;
+  --ease-silk:cubic-bezier(0.16,1,0.3,1);
+  --ease-cinematic:cubic-bezier(0.4,0,0.15,1);
+}
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+html,body{
+  width:100%;
+  background:var(--white);
+  color:var(--ink);
+  overflow:hidden; /* we control scroll via JS */
+}
 
-        html {
-            scroll-behavior: smooth;
-        }
+/* Custom cursor */
+#cursor{
+  position:fixed;width:8px;height:8px;
+  background:var(--ink);border-radius:50%;
+  pointer-events:none;z-index:99999;
+  transform:translate(-50%,-50%);
+  transition:transform .2s,opacity .3s,background .4s,width .3s,height .3s;
+  mix-blend-mode:difference;
+}
+body.light-mode #cursor{background:var(--white)}
 
-        body {
-            font-family: 'Fauna One', serif;
-            background-color: var(--bg-dark);
-            color: var(--text-light);
-            overflow-x: hidden;
-            cursor: none; /* Hide default cursor */
-        }
+/* Progress bar */
+#progress{
+  position:fixed;top:0;left:0;height:1px;
+  background:var(--ink);z-index:9999;
+  width:0%;transition:width .1s linear;
+  opacity:0.25;
+}
 
-        /* Custom Cursor */
-        .cursor {
-            width: 20px;
-            height: 20px;
-            border: 2px solid var(--gold-primary);
-            border-radius: 50%;
-            position: fixed;
-            pointer-events: none;
-            z-index: 9999;
-            transition: transform 0.15s ease, background 0.15s ease;
-            transform: translate(-50%, -50%);
-            mix-blend-mode: difference;
-        }
+/* Stage counter */
+#stage-counter{
+  position:fixed;right:32px;top:50%;
+  transform:translateY(-50%);
+  z-index:9000;
+  display:flex;flex-direction:column;gap:6px;
+  opacity:0;transition:opacity 1s;
+}
+#stage-counter.visible{opacity:1}
+.sc-dot{
+  width:4px;height:4px;border-radius:50%;
+  background:var(--ghost);
+  transition:all .4s var(--ease-silk);
+  cursor:pointer;
+}
+.sc-dot.active{
+  background:var(--ink);
+  transform:scale(1.8);
+}
 
-        .cursor.hover {
-            transform: translate(-50%, -50%) scale(1.5);
-            background: rgba(201, 162, 39, 0.3);
-            border-color: var(--gold-glow);
-        }
+/* Scroll hint */
+#scroll-hint{
+  position:fixed;bottom:32px;left:50%;
+  transform:translateX(-50%);
+  z-index:9000;
+  display:flex;flex-direction:column;align-items:center;gap:8px;
+  opacity:0;
+  transition:opacity .8s;
+}
+#scroll-hint.visible{opacity:1}
+#scroll-hint span{
+  font-size:9px;letter-spacing:0.3em;text-transform:uppercase;
+  color:var(--dim);font-family:'Georgia',serif;
+}
+.sh-line{
+  width:1px;height:40px;
+  background:linear-gradient(to bottom,var(--ghost),transparent);
+  animation:shDrop 2s ease-in-out infinite;
+}
 
-        /* Particle Canvas */
-        #ember-canvas {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 0;
-            pointer-events: none;
-        }
+/* ════════════════════════════════════════════════════════════
+   STAGE CONTAINER — FULL VIEWPORT STAGES
+════════════════════════════════════════════════════════════ */
+#experience{
+  position:fixed;inset:0;
+  overflow:hidden;
+}
 
-        /* Main Container */
-        .main-wrapper {
-            position: relative;
-            z-index: 2;
-            width: 100%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
+.stage{
+  position:absolute;inset:0;
+  display:flex;align-items:center;justify-content:center;
+  opacity:0;
+  pointer-events:none;
+  transition:none; /* JS-controlled */
+}
+.stage.active{
+  opacity:1;
+  pointer-events:all;
+}
 
-        /* Hero Section */
-        .hero-section {
-            min-height: 100vh;
-            width: 100%;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            position: relative;
-            text-align: center;
-            perspective: 1000px;
-        }
+/* ════════════════════════════════════════════════════════════
+   STAGE 1 — ENTRY
+════════════════════════════════════════════════════════════ */
+#s1{background:var(--white)}
+.entry-dot{
+  width:6px;height:6px;
+  border-radius:50%;
+  background:var(--ink);
+  position:absolute;top:50%;left:50%;
+  transform:translate(-50%,-50%);
+  animation:dotExpand 2.5s var(--ease-silk) forwards;
+  animation-play-state:paused;
+}
+.entry-dot.play{animation-play-state:running}
+.entry-ring{
+  width:6px;height:6px;
+  border-radius:50%;
+  border:1px solid var(--ink);
+  position:absolute;top:50%;left:50%;
+  transform:translate(-50%,-50%);
+  opacity:0;
+  animation:ringExpand 3s var(--ease-silk) 0.8s forwards;
+  animation-play-state:paused;
+}
+.entry-ring.play{animation-play-state:running}
+#s1-text{
+  position:absolute;
+  font-family:'Georgia',serif;
+  font-size:clamp(14px,1.8vw,20px);
+  font-weight:400;
+  letter-spacing:0.18em;
+  color:var(--ink);
+  opacity:0;
+  top:calc(50% + 80px);
+  left:50%;transform:translateX(-50%);
+  white-space:nowrap;
+  animation:fadeInSlow 2s ease 3s forwards;
+  animation-play-state:paused;
+}
+#s1-text.play{animation-play-state:running}
 
-        .hero-bg-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: radial-gradient(circle at center, transparent 0%, #000 90%);
-            z-index: 1;
-        }
+/* ════════════════════════════════════════════════════════════
+   STAGE 2 — NOISE
+════════════════════════════════════════════════════════════ */
+#s2{background:var(--white);overflow:hidden}
+.noise-fragment{
+  position:absolute;
+  opacity:0;
+  transition:all 0.3s ease;
+  pointer-events:none;
+  will-change:transform,opacity;
+}
+.nf-notif{
+  background:var(--white);
+  border:1px solid var(--ghost);
+  border-radius:14px;
+  padding:12px 18px;
+  display:flex;align-items:center;gap:10px;
+  min-width:220px;
+  box-shadow:0 4px 20px rgba(0,0,0,0.06);
+  font-size:12px;color:var(--ink);
+  font-family:'Georgia',serif;
+}
+.nf-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.nf-text{flex:1;line-height:1.4}
+.nf-app{font-size:9px;text-transform:uppercase;letter-spacing:0.1em;color:var(--dim);margin-bottom:2px}
+.nf-msg{font-size:12px;color:var(--ink)}
+.nf-time{font-size:9px;color:var(--dim);font-family:monospace}
 
-        .hero-content {
-            z-index: 2;
-            max-width: 900px;
-            padding: 2rem;
-        }
+.nf-message{
+  font-family:'Georgia',serif;
+  font-size:clamp(11px,1.5vw,15px);
+  color:var(--dim);
+  padding:8px 0;
+  border-bottom:1px solid var(--ghost);
+  max-width:300px;
+  line-height:1.5;
+}
+.nf-number{
+  font-family:'Georgia',serif;
+  font-size:clamp(60px,10vw,140px);
+  font-weight:400;
+  color:var(--ghost);
+  line-height:1;
+}
 
-        .main-title {
-            font-family: 'Cinzel Decorative', cursive;
-            font-size: clamp(3rem, 10vw, 7rem);
-            color: transparent;
-            background: linear-gradient(to bottom, var(--gold-glow), var(--gold-primary), #8a6e1a);
-            -webkit-background-clip: text;
-            background-clip: text;
-            text-shadow: 0 0 20px rgba(201, 162, 39, 0.5);
-            margin-bottom: 1rem;
-            letter-spacing: 0.1em;
-            animation: titleGlow 3s infinite alternate;
-        }
+/* ════════════════════════════════════════════════════════════
+   STAGE 3 — COLLAPSE
+════════════════════════════════════════════════════════════ */
+#s3{background:var(--white)}
+.collapse-ring{
+  position:absolute;top:50%;left:50%;
+  transform:translate(-50%,-50%);
+  border-radius:50%;
+  border:1px solid var(--ghost);
+  animation:collapseIn 0.8s var(--ease-cinematic) forwards;
+  animation-play-state:paused;
+}
+.collapse-ring.play{animation-play-state:running}
+.cr1{width:600px;height:600px;animation-delay:0s}
+.cr2{width:400px;height:400px;animation-delay:0.1s}
+.cr3{width:200px;height:200px;animation-delay:0.2s}
 
-        .subtitle {
-            font-family: 'Cinzel', serif;
-            color: var(--text-light);
-            letter-spacing: 0.5em;
-            text-transform: uppercase;
-            font-size: 1rem;
-            margin-bottom: 3rem;
-            opacity: 0.8;
-        }
+/* ════════════════════════════════════════════════════════════
+   STAGE 4 — REALIZATION
+════════════════════════════════════════════════════════════ */
+#s4{background:var(--white)}
+#s4-text{
+  font-family:'Georgia',serif;
+  font-size:clamp(22px,3.5vw,48px);
+  font-weight:400;
+  line-height:1.3;
+  text-align:center;
+  max-width:640px;
+  padding:0 40px;
+  color:var(--ink);
+  letter-spacing:0.01em;
+  opacity:0;
+  transform:translateY(16px);
+  transition:opacity 2s var(--ease-silk),transform 2s var(--ease-silk);
+}
+#s4-text.show{opacity:1;transform:translateY(0)}
 
-        .sigil-container {
-            position: relative;
-            width: 150px;
-            height: 150px;
-            margin: 0 auto 3rem;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
+/* ════════════════════════════════════════════════════════════
+   STAGE 5 — INTRODUCING WISPA
+════════════════════════════════════════════════════════════ */
+#s5{background:var(--white);flex-direction:column;gap:0}
+.s5-device{
+  position:relative;
+  width:160px;height:160px;
+  opacity:0;
+  transform:scale(0.7);
+  filter:blur(20px);
+  transition:all 2.4s var(--ease-silk);
+  margin-bottom:70px;
+}
+.s5-device.show{opacity:1;transform:scale(1);filter:blur(0)}
+.s5-line{
+  position:absolute;
+  font-family:'Georgia',serif;
+  font-size:clamp(18px,2.5vw,32px);
+  font-weight:400;
+  color:var(--ink);
+  letter-spacing:0.06em;
+  text-align:center;
+  opacity:0;
+  transition:opacity 1.6s var(--ease-silk),transform 1.6s var(--ease-silk);
+  transform:translateY(10px);
+  width:100%;
+  left:0;
+}
+.s5-line-1{bottom:-110px}
+.s5-line-2{bottom:-160px}
+.s5-line.show{opacity:1;transform:translateY(0)}
 
-        .sigil-ring {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            border: 2px solid var(--gold-primary);
-            border-radius: 50%;
-            animation: spin 20s linear infinite;
-        }
+/* ════════════════════════════════════════════════════════════
+   STAGE 6 — OBJECT FOCUS (PRODUCT)
+════════════════════════════════════════════════════════════ */
+#s6{background:var(--off)}
+.s6-device{
+  opacity:0;
+  transform:scale(0.9) rotate(-5deg);
+  transition:all 2s var(--ease-silk);
+  position:relative;
+}
+.s6-device.show{opacity:1;transform:scale(1) rotate(0deg)}
+/* Slow continuous rotation */
+.s6-inner{
+  animation:slowRotate 20s linear infinite;
+  animation-play-state:paused;
+}
+.s6-inner.play{animation-play-state:running}
 
-        .sigil-ring::before, .sigil-ring::after {
-            content: "";
-            position: absolute;
-            top: -10px;
-            left: 50%;
-            width: 20px;
-            height: 20px;
-            background: var(--blood-red);
-            border-radius: 50%;
-            transform: translateX(-50%);
-            box-shadow: 0 0 10px var(--blood-red);
-        }
+/* ════════════════════════════════════════════════════════════
+   STAGE 7 — VOICE INTERACTION
+════════════════════════════════════════════════════════════ */
+#s7{background:var(--white);flex-direction:column;gap:0;justify-content:center}
+.voice-line{
+  position:absolute;
+  font-family:'Georgia',serif;
+  font-weight:400;
+  color:var(--ink);
+  text-align:center;
+  opacity:0;
+  transform:translateY(8px);
+  transition:opacity 1.4s var(--ease-silk),transform 1.4s var(--ease-silk);
+  width:100%;
+}
+.voice-line.show{opacity:1;transform:translateY(0)}
+.vl-user{
+  font-size:clamp(14px,2vw,22px);
+  letter-spacing:0.1em;
+  color:var(--dim);
+  top:calc(50% - 80px);
+}
+.vl-cursor{
+  display:inline-block;
+  width:2px;height:1em;
+  background:var(--ink);
+  margin-left:4px;
+  vertical-align:middle;
+  animation:blinkCursor 1s ease-in-out infinite;
+  opacity:0;
+  transition:opacity .3s;
+}
+.vl-cursor.show{opacity:1}
+.vl-wispa{
+  font-size:clamp(22px,4vw,52px);
+  letter-spacing:-0.01em;
+  top:calc(50% - 20px);
+}
+.vl-sub{
+  font-size:clamp(11px,1.4vw,16px);
+  letter-spacing:0.14em;
+  text-transform:uppercase;
+  color:var(--dim);
+  top:calc(50% + 60px);
+}
+.vl-device{
+  position:absolute;
+  bottom:80px;left:50%;transform:translateX(-50%);
+  opacity:0;transition:opacity 1s var(--ease-silk) 1s;
+}
+.vl-device.show{opacity:1}
 
-        .sigil-ring::after {
-            top: auto;
-            bottom: -10px;
-        }
+/* ════════════════════════════════════════════════════════════
+   STAGE 8 — PRESENCE MODE
+════════════════════════════════════════════════════════════ */
+#s8{background:var(--white);flex-direction:column;gap:60px}
+.presence-scene{
+  position:relative;width:100%;max-width:700px;
+  opacity:0;transform:translateY(20px);
+  transition:all 1.6s var(--ease-silk);
+  text-align:center;
+}
+.presence-scene.show{opacity:1;transform:translateY(0)}
+.ps-items{
+  display:flex;justify-content:center;gap:60px;
+  margin-bottom:40px;flex-wrap:wrap;
+}
+.ps-item{
+  display:flex;flex-direction:column;align-items:center;gap:12px;
+  position:relative;
+}
+.ps-icon{
+  width:60px;height:60px;border-radius:50%;
+  background:var(--off);
+  display:flex;align-items:center;justify-content:center;
+  font-size:24px;
+  position:relative;overflow:hidden;
+  transition:all 1.5s var(--ease-silk);
+}
+.ps-icon.vanish{
+  opacity:0;transform:scale(0.8);
+  transition-delay:var(--vd,0s);
+}
+.ps-icon.wispa-stays{
+  opacity:1!important;transform:scale(1)!important;
+  background:var(--ink);
+}
+.ps-label{
+  font-size:10px;letter-spacing:0.2em;text-transform:uppercase;
+  color:var(--dim);font-family:'Georgia',serif;
+  transition:opacity 1s;
+}
+.ps-label.vanish{opacity:0;transition-delay:var(--vd,0s)}
+.ps-caption{
+  font-family:'Georgia',serif;
+  font-size:clamp(14px,2vw,22px);
+  font-weight:400;color:var(--ink);
+  letter-spacing:0.04em;
+  opacity:0;transform:translateY(8px);
+  transition:all 1.2s var(--ease-silk) 1.8s;
+}
+.ps-caption.show{opacity:1;transform:translateY(0)}
 
-        .sigil-text {
-            font-family: 'Cinzel Decorative', cursive;
-            font-size: 1.5rem;
-            color: var(--gold-primary);
-            z-index: 2;
-        }
+/* ════════════════════════════════════════════════════════════
+   STAGE 9 — TIME FLOW
+════════════════════════════════════════════════════════════ */
+#s9{background:var(--white);flex-direction:column;gap:0}
+.time-scene{
+  position:absolute;
+  width:100%;display:flex;flex-direction:column;align-items:center;gap:24px;
+  opacity:0;transition:opacity 1.4s var(--ease-silk);
+  text-align:center;padding:0 40px;
+}
+.time-scene.show{opacity:1}
+.ts-time{
+  font-family:'Georgia',serif;
+  font-size:clamp(60px,12vw,140px);
+  font-weight:300;
+  color:var(--ink);
+  letter-spacing:-0.04em;
+  line-height:1;
+}
+.ts-label{
+  font-size:11px;letter-spacing:0.28em;text-transform:uppercase;
+  color:var(--dim);font-family:'Georgia',serif;
+}
+.ts-wispa{
+  font-size:clamp(13px,1.8vw,18px);
+  color:var(--dim);font-family:'Georgia',serif;
+  font-style:italic;letter-spacing:0.04em;
+  opacity:0;transition:opacity 1s var(--ease-silk) .8s;
+}
+.ts-wispa.show{opacity:1}
+.ts-device{
+  opacity:0;transition:opacity 1s var(--ease-silk) 1.2s;
+}
+.ts-device.show{opacity:1}
 
-        .distance-badge {
-            display: inline-block;
-            padding: 1rem 2rem;
-            border: 1px solid var(--gold-primary);
-            background: rgba(0, 0, 0, 0.6);
-            backdrop-filter: blur(5px);
-            font-family: 'Cinzel', serif;
-            color: var(--gold-primary);
-            letter-spacing: 0.2em;
-            position: relative;
-        }
+/* ════════════════════════════════════════════════════════════
+   STAGE 10 — HOW IT WORKS
+════════════════════════════════════════════════════════════ */
+#s10{background:var(--off)}
+.hiw-words{
+  display:flex;flex-direction:column;
+  align-items:center;gap:0;
+  text-align:center;
+}
+.hiw-word{
+  font-family:'Georgia',serif;
+  font-size:clamp(28px,6vw,88px);
+  font-weight:300;
+  line-height:1.05;
+  letter-spacing:-0.02em;
+  color:var(--ink);
+  opacity:0;
+  transform:translateY(20px);
+  transition:opacity 1.2s var(--ease-silk),transform 1.2s var(--ease-silk);
+}
+.hiw-word.show{opacity:1;transform:translateY(0)}
+.hiw-pause{
+  width:30px;height:1px;
+  background:var(--ghost);
+  margin:20px auto;
+  opacity:0;transition:opacity 1s;
+}
+.hiw-pause.show{opacity:1}
 
-        .distance-badge::before, .distance-badge::after {
-            content: "";
-            position: absolute;
-            top: 5px;
-            left: 5px;
-            right: 5px;
-            bottom: 5px;
-            border: 1px solid rgba(201, 162, 39, 0.3);
-            pointer-events: none;
-        }
+/* ════════════════════════════════════════════════════════════
+   STAGE 11 — PHILOSOPHY
+════════════════════════════════════════════════════════════ */
+#s11{background:var(--white)}
+.phil-block{
+  max-width:560px;padding:0 40px;
+  display:flex;flex-direction:column;gap:48px;
+}
+.pb-line{
+  font-family:'Georgia',serif;
+  font-size:clamp(20px,3vw,38px);
+  font-weight:300;
+  line-height:1.3;
+  color:var(--ink);
+  opacity:0;transform:translateX(-16px);
+  transition:opacity 1.6s var(--ease-silk),transform 1.6s var(--ease-silk);
+}
+.pb-line.show{opacity:1;transform:translateX(0)}
 
-        /* Book Container */
-        .book-section {
-            width: 100%;
-            max-width: 900px;
-            padding: 4rem 1rem;
-            position: relative;
-        }
+/* ════════════════════════════════════════════════════════════
+   STAGE 12 — TRUST
+════════════════════════════════════════════════════════════ */
+#s12{background:var(--ink)}
+#s12-text{
+  font-family:'Georgia',serif;
+  font-size:clamp(24px,4.5vw,64px);
+  font-weight:300;
+  color:var(--white);
+  letter-spacing:0.06em;
+  text-align:center;
+  opacity:0;
+  transition:opacity 2s var(--ease-silk);
+}
+#s12-text.show{opacity:1}
+#s12-sub{
+  position:absolute;
+  bottom:80px;left:50%;transform:translateX(-50%);
+  font-size:11px;letter-spacing:0.22em;text-transform:uppercase;
+  color:rgba(255,255,255,0.3);
+  font-family:'Georgia',serif;
+  opacity:0;transition:opacity 1.4s var(--ease-silk) 1s;
+  white-space:nowrap;
+}
+#s12-sub.show{opacity:1}
 
-        .book-paper {
-            background: linear-gradient(to right, #dcd0b8, #e8dcc4, #dcd0b8);
-            box-shadow: 
-                0 0 50px rgba(0,0,0,0.8),
-                inset 0 0 80px rgba(139, 69, 19, 0.2);
-            padding: 4rem 2rem;
-            position: relative;
-            border-radius: 2px;
-            border: 1px solid #777;
-            transform-style: preserve-3d;
-            transition: transform 0.5s ease;
-        }
+/* ════════════════════════════════════════════════════════════
+   STAGE 13 — FOUNDERS
+════════════════════════════════════════════════════════════ */
+#s13{background:var(--white);flex-direction:column;gap:60px}
+.founders-line{
+  font-family:'Georgia',serif;
+  font-size:clamp(14px,2vw,22px);
+  font-weight:400;
+  color:var(--dim);
+  text-align:center;
+  letter-spacing:0.06em;
+  opacity:0;
+  transition:opacity 1.4s var(--ease-silk);
+}
+.founders-line.show{opacity:1}
+.founders-row{
+  display:flex;gap:48px;align-items:flex-start;
+  justify-content:center;flex-wrap:wrap;
+  opacity:0;transition:opacity 1.4s var(--ease-silk) .4s;
+}
+.founders-row.show{opacity:1}
+.founder-item{
+  display:flex;flex-direction:column;align-items:center;gap:14px;
+  max-width:160px;text-align:center;
+}
+.founder-avatar{
+  width:80px;height:80px;border-radius:50%;
+  background:var(--off);
+  border:1px solid var(--ghost);
+  display:flex;align-items:center;justify-content:center;
+  overflow:hidden;
+  position:relative;
+}
+.fa-initial{
+  font-family:'Georgia',serif;
+  font-size:28px;font-weight:300;
+  color:var(--dim);
+}
+.founder-name{
+  font-size:13px;font-weight:500;
+  color:var(--ink);letter-spacing:0.06em;
+}
+.founder-role{
+  font-size:10px;letter-spacing:0.14em;text-transform:uppercase;
+  color:var(--dim);
+}
 
-        /* Paper Texture Overlay */
-        .book-paper::before {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.08'/%3E%3C/svg%3E");
-            pointer-events: none;
-            z-index: 1;
-            border-radius: 2px;
-        }
+/* ════════════════════════════════════════════════════════════
+   STAGE 14 — CTA
+════════════════════════════════════════════════════════════ */
+#s14{background:var(--white);flex-direction:column;gap:48px}
+#s14-q{
+  font-family:'Georgia',serif;
+  font-size:clamp(22px,4vw,54px);
+  font-weight:300;
+  text-align:center;
+  max-width:640px;
+  padding:0 40px;
+  color:var(--ink);
+  letter-spacing:0.02em;
+  line-height:1.2;
+  opacity:0;transform:translateY(16px);
+  transition:opacity 2s var(--ease-silk),transform 2s var(--ease-silk);
+}
+#s14-q.show{opacity:1;transform:translateY(0)}
+.cta-form{
+  display:flex;flex-direction:column;align-items:center;gap:16px;
+  opacity:0;transition:opacity 1.4s var(--ease-silk) .6s;
+}
+.cta-form.show{opacity:1}
+.cta-email{
+  width:320px;max-width:90vw;
+  padding:16px 24px;
+  border:1px solid var(--ghost);
+  background:transparent;
+  font-family:'Georgia',serif;
+  font-size:15px;
+  color:var(--ink);
+  outline:none;
+  text-align:center;
+  transition:border-color .3s;
+  border-radius:0;
+  -webkit-appearance:none;
+}
+.cta-email::placeholder{color:var(--ghost)}
+.cta-email:focus{border-color:var(--ink)}
+.cta-btn{
+  background:var(--ink);
+  color:var(--white);
+  border:none;
+  padding:18px 52px;
+  font-family:'Georgia',serif;
+  font-size:13px;
+  letter-spacing:0.18em;
+  text-transform:uppercase;
+  cursor:pointer;
+  transition:opacity .3s,transform .3s;
+}
+.cta-btn:hover{opacity:.75;transform:translateY(-1px)}
+.cta-note{
+  font-size:11px;letter-spacing:0.12em;
+  color:var(--dim);font-family:'Georgia',serif;
+}
 
-        /* Fold Line Effect */
-        .book-paper::after {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: 50%;
-            width: 2px;
-            height: 100%;
-            background: linear-gradient(to bottom, transparent, rgba(0,0,0,0.1), transparent);
-            pointer-events: none;
-            z-index: 1;
-        }
+/* ════════════════════════════════════════════════════════════
+   STAGE 15 — FOOTER
+════════════════════════════════════════════════════════════ */
+#s15{
+  background:var(--ink);
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  gap:0;
+}
+.footer-inner{
+  width:100%;max-width:960px;
+  padding:0 60px;
+  display:flex;flex-direction:column;gap:60px;
+  opacity:0;transition:opacity 1.6s var(--ease-silk);
+}
+.footer-inner.show{opacity:1}
+.footer-top{
+  display:flex;justify-content:space-between;
+  align-items:flex-start;gap:40px;flex-wrap:wrap;
+}
+.footer-brand{
+  font-family:'Georgia',serif;
+  font-size:22px;font-weight:400;
+  color:var(--white);letter-spacing:0.1em;
+}
+.footer-tagline{
+  font-size:12px;font-weight:300;
+  color:rgba(255,255,255,0.35);
+  margin-top:8px;font-family:'Georgia',serif;
+  max-width:240px;line-height:1.7;
+}
+.footer-cols{display:flex;gap:60px;flex-wrap:wrap}
+.footer-col-title{
+  font-size:9px;letter-spacing:0.26em;text-transform:uppercase;
+  color:rgba(255,255,255,0.3);font-family:'Georgia',serif;
+  margin-bottom:16px;
+}
+.footer-col-links{list-style:none;display:flex;flex-direction:column;gap:10px}
+.footer-col-links a{
+  font-size:13px;font-weight:300;
+  color:rgba(255,255,255,0.55);
+  text-decoration:none;font-family:'Georgia',serif;
+  transition:color .3s;letter-spacing:0.04em;
+}
+.footer-col-links a:hover{color:var(--white)}
+.footer-bottom{
+  border-top:1px solid rgba(255,255,255,0.08);
+  padding-top:24px;
+  display:flex;justify-content:space-between;align-items:center;
+  flex-wrap:wrap;gap:16px;
+}
+.footer-copy{font-size:11px;color:rgba(255,255,255,0.25);font-family:'Georgia',serif}
+.footer-legal{display:flex;gap:24px;list-style:none}
+.footer-legal a{font-size:11px;color:rgba(255,255,255,0.25);text-decoration:none;font-family:'Georgia',serif;transition:color .3s}
+.footer-legal a:hover{color:rgba(255,255,255,0.6)}
 
-        .content-wrapper {
-            position: relative;
-            z-index: 2;
-            color: var(--text-dark);
-        }
+/* ════════════════════════════════════════════════════════════
+   WISPA DEVICE COMPONENT (CSS-RENDERED)
+════════════════════════════════════════════════════════════ */
+.wispa-device-css{
+  position:relative;
+  border-radius:50%;
+  background:
+    radial-gradient(circle at 38% 32%, #2c2c3e 0%, #141420 45%, #080810 100%);
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,0.05),
+    0 30px 80px rgba(0,0,0,0.35),
+    0 8px 24px rgba(0,0,0,0.2),
+    inset 0 1px 0 rgba(255,255,255,0.06);
+  display:flex;align-items:center;justify-content:center;
+  overflow:visible;
+}
+.wispa-device-css::before{
+  content:'';
+  position:absolute;inset:8px;border-radius:50%;
+  border:1.5px solid rgba(100,180,255,0.35);
+  box-shadow:0 0 16px rgba(100,180,255,0.2),inset 0 0 16px rgba(100,180,255,0.04);
+  animation:ringGlowPulse 3s ease-in-out infinite;
+}
+.wispa-device-css::after{
+  content:'';
+  position:absolute;top:-30%;left:-10%;width:60%;height:50%;
+  background:radial-gradient(ellipse,rgba(255,255,255,0.04) 0%,transparent 60%);
+  border-radius:50%;transform:rotate(-20deg);
+}
+.device-wordmark-inner{
+  font-family:'Georgia',serif;
+  font-size:0.9em;
+  letter-spacing:0.22em;
+  color:rgba(255,255,255,0.65);
+  position:relative;z-index:1;
+  display:flex;flex-direction:column;align-items:center;gap:10px;
+}
+.device-wave-inner{
+  display:flex;gap:2.5px;align-items:center;
+}
+.dw-bar{
+  display:block;width:2px;border-radius:1px;
+  background:rgba(100,180,255,0.7);
+  box-shadow:0 0 4px rgba(100,180,255,0.4);
+  animation:waveAnim 1.2s ease-in-out infinite;
+  transform-origin:bottom;
+}
+.dw-bar:nth-child(1){height:4px;animation-delay:0s}
+.dw-bar:nth-child(2){height:9px;animation-delay:.1s}
+.dw-bar:nth-child(3){height:14px;animation-delay:.2s}
+.dw-bar:nth-child(4){height:18px;animation-delay:.3s}
+.dw-bar:nth-child(5){height:14px;animation-delay:.4s}
+.dw-bar:nth-child(6){height:9px;animation-delay:.5s}
+.dw-bar:nth-child(7){height:4px;animation-delay:.6s}
 
-        /* Section Title */
-        .category-header {
-            font-family: 'Cinzel Decorative', cursive;
-            font-size: 2rem;
-            color: var(--text-dark);
-            text-align: center;
-            margin-bottom: 3rem;
-            position: relative;
-            padding-bottom: 1rem;
-        }
+/* Device rim */
+.device-rim-outer{
+  position:absolute;inset:-4px;
+  border-radius:50%;
+  background:conic-gradient(
+    from 0deg,
+    #1a1a28 0deg, #2e2e48 60deg,
+    #3a3a58 90deg, #2a2a40 140deg,
+    #1a1a28 200deg, #3e3e60 260deg,
+    #1a1a28 360deg
+  );
+  z-index:-1;
+}
 
-        .category-header::after {
-            content: "";
-            position: absolute;
-            bottom: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 100px;
-            height: 3px;
-            background: var(--blood-red);
-            box-shadow: 0 0 10px var(--blood-red);
-        }
+/* INDICATOR DOTS ON DEVICE */
+.device-indicators{
+  position:absolute;bottom:-8px;left:50%;transform:translateX(-50%);
+  display:flex;gap:6px;
+  background:rgba(10,10,10,0.8);
+  border:1px solid rgba(255,255,255,0.08);
+  border-radius:100px;
+  padding:6px 12px;
+  backdrop-filter:blur(8px);
+}
+.dev-ind{
+  display:flex;flex-direction:column;align-items:center;gap:3px;
+}
+.dev-ind-dot{
+  width:6px;height:6px;border-radius:50%;
+  transition:all .4s;
+}
+.dev-ind-label{
+  font-size:6px;letter-spacing:0.1em;text-transform:uppercase;
+  color:rgba(255,255,255,0.3);
+}
+/* WiFi */
+.ind-w .dev-ind-dot{background:rgba(74,240,200,0.9);box-shadow:0 0 5px rgba(74,240,200,0.6)}
+/* Bluetooth */
+.ind-b .dev-ind-dot{background:rgba(107,140,255,0.9);box-shadow:0 0 5px rgba(107,140,255,0.6)}
+/* Power */
+.ind-p .dev-ind-dot{background:rgba(74,240,200,0.9);box-shadow:0 0 5px rgba(74,240,200,0.6)}
+/* LED */
+.ind-l .dev-ind-dot{background:rgba(240,192,96,0.9);box-shadow:0 0 5px rgba(240,192,96,0.7);animation:ledPulse 1.8s ease-in-out infinite}
 
-        /* Accordion Styles */
-        .chapter-item {
-            margin-bottom: 1.5rem;
-            position: relative;
-            border-left: 3px solid transparent;
-            transition: all 0.3s ease;
-        }
-
-        .chapter-item:hover {
-            border-left-color: var(--blood-red);
-        }
-
-        .chapter-header {
-            background: rgba(255, 255, 255, 0.4);
-            padding: 1.5rem;
-            cursor: pointer;
-            font-family: 'Cinzel', serif;
-            font-weight: 700;
-            font-size: 1.1rem;
-            color: var(--text-dark);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            transition: background 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .chapter-header::before {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.5), transparent);
-            transform: translateX(-100%);
-            transition: transform 0.5s ease;
-        }
-
-        .chapter-item:hover .chapter-header::before {
-            transform: translateX(100%);
-        }
-
-        .chapter-icon {
-            font-size: 1.5rem;
-            color: var(--blood-red);
-            transition: transform 0.3s ease;
-        }
-
-        .chapter-item.active .chapter-icon {
-            transform: rotate(45deg);
-        }
-
-        .chapter-content {
-            max-height: 0;
-            overflow: hidden;
-            background: rgba(255, 255, 255, 0.6);
-            transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1), padding 0.3s ease;
-        }
-
-        .chapter-text {
-            padding: 1.5rem;
-            border-top: 1px solid rgba(0,0,0,0.1);
-            font-size: 1rem;
-            line-height: 1.8;
-            color: #333;
-        }
-
-        .chapter-text p { margin-bottom: 1rem; }
-        
-        .emotional-note {
-            font-style: italic;
-            color: var(--blood-red);
-            margin-top: 1rem;
-            padding-top: 1rem;
-            border-top: 1px dashed #999;
-            font-weight: bold;
-        }
-
-        /* Buttons */
-        .btn-container {
-            display: flex;
-            flex-direction: column;
-            gap: 1.5rem;
-            margin-top: 4rem;
-            padding-top: 2rem;
-            border-top: 2px solid rgba(0,0,0,0.1);
-            align-items: center;
-        }
-
-        .action-btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.75rem;
-            padding: 1.2rem 2.5rem;
-            font-family: 'Cinzel', serif;
-            font-weight: 700;
-            text-decoration: none;
-            border-radius: 2px;
-            transition: all 0.3s ease;
-            text-transform: uppercase;
-            letter-spacing: 0.15em;
-            cursor: pointer;
-            position: relative;
-            width: 100%;
-            max-width: 350px;
-            overflow: hidden;
-        }
-
-        /* Iron Button Style */
-        .back-btn {
-            background: #1a1a1a;
-            color: #ccc;
-            border: 1px solid #444;
-            box-shadow: inset 0 0 20px rgba(0,0,0,0.5);
-        }
-
-        .back-btn:hover {
-            color: var(--gold-primary);
-            border-color: var(--gold-primary);
-            box-shadow: 0 0 15px rgba(201, 162, 39, 0.3), inset 0 0 20px rgba(0,0,0,0.5);
-        }
-
-        /* Gold Seal Button Style */
-        .download-btn {
-            background: linear-gradient(to right, #8a6e1a, var(--gold-primary), #8a6e1a);
-            color: #000;
-            border: 1px solid var(--gold-glow);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-        }
-
-        .download-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(201, 162, 39, 0.4);
-        }
-
-        .action-btn span {
-            position: relative;
-            z-index: 2;
-        }
-
-        /* Animations */
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        @keyframes titleGlow {
-            0% { text-shadow: 0 0 20px rgba(201, 162, 39, 0.3); }
-            100% { text-shadow: 0 0 40px rgba(201, 162, 39, 0.8); }
-        }
-
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .reveal-item {
-            opacity: 0;
-            transform: translateY(30px);
-            transition: opacity 1s ease, transform 1s ease;
-        }
-
-        .reveal-item.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            .book-paper {
-                padding: 2rem 1rem;
-            }
-            .main-title {
-                font-size: 2.5rem;
-            }
-            body {
-                cursor: auto; /* Default cursor on mobile */
-            }
-            .cursor {
-                display: none;
-            }
-        }
-    </style>
+/* ════════════════════════════════════════════════════════════
+   KEYFRAMES
+════════════════════════════════════════════════════════════ */
+@keyframes dotExpand{
+  0%{width:6px;height:6px;opacity:1}
+  100%{width:80px;height:80px;opacity:0.08}
+}
+@keyframes ringExpand{
+  0%{width:6px;height:6px;opacity:0;transform:translate(-50%,-50%)}
+  20%{opacity:1}
+  100%{width:160px;height:160px;opacity:0;transform:translate(-50%,-50%)}
+}
+@keyframes fadeInSlow{
+  from{opacity:0;transform:translateX(-50%) translateY(6px)}
+  to{opacity:1;transform:translateX(-50%) translateY(0)}
+}
+@keyframes collapseIn{
+  from{opacity:1;transform:translate(-50%,-50%) scale(1)}
+  to{opacity:0;transform:translate(-50%,-50%) scale(0.02)}
+}
+@keyframes slowRotate{
+  from{transform:rotate(0deg)}
+  to{transform:rotate(360deg)}
+}
+@keyframes waveAnim{
+  0%,100%{transform:scaleY(.3);opacity:.4}
+  50%{transform:scaleY(1);opacity:1}
+}
+@keyframes ringGlowPulse{
+  0%,100%{box-shadow:0 0 10px rgba(100,180,255,.15),inset 0 0 10px rgba(100,180,255,.03);opacity:.7}
+  50%{box-shadow:0 0 28px rgba(100,180,255,.35),inset 0 0 20px rgba(100,180,255,.08);opacity:1}
+}
+@keyframes ledPulse{
+  0%,100%{opacity:.6;transform:scale(1)}
+  50%{opacity:1;transform:scale(1.2)}
+}
+@keyframes shDrop{
+  0%{transform:scaleY(0);transform-origin:top;opacity:0}
+  40%{transform:scaleY(1);transform-origin:top;opacity:1}
+  60%{transform:scaleY(1);transform-origin:bottom;opacity:1}
+  100%{transform:scaleY(0);transform-origin:bottom;opacity:0}
+}
+@keyframes blinkCursor{
+  0%,100%{opacity:1}50%{opacity:0}
+}
+@keyframes breathe{
+  0%,100%{transform:translateY(0) scale(1)}
+  50%{transform:translateY(-12px) scale(1.02)}
+}
+@keyframes shadowSync{
+  0%,100%{transform:translateX(-50%) scaleX(1);opacity:.6}
+  50%{transform:translateX(-50%) scaleX(.7);opacity:.25}
+}
+</style>
 </head>
 <body>
 
-    <!-- Custom Cursor -->
-    <div class="cursor" id="cursor"></div>
+<!-- Progress bar -->
+<div id="progress"></div>
 
-    <!-- Ember Particles Canvas -->
-    <canvas id="ember-canvas"></canvas>
+<!-- Custom cursor -->
+<div id="cursor"></div>
 
-    <div class="main-wrapper">
-        
-        <!-- Hero Section -->
-        <header class="hero-section">
-            <div class="hero-bg-overlay"></div>
-            
-            <div class="hero-content">
-                <div class="sigil-container reveal-item visible" style="transition-delay: 0s;">
-                    <div class="sigil-ring"></div>
-                    <div class="sigil-text">T & A</div>
-                </div>
-                
-                <h1 class="main-title reveal-item visible" style="transition-delay: 0.2s;">TULSI & ARYAN</h1>
-                <p class="subtitle reveal-item visible" style="transition-delay: 0.4s;">A Song of Love & Distance</p>
-                
-                <div class="distance-badge reveal-item visible" style="transition-delay: 0.6s;">
-                    <div style="font-size: 1.2rem; margin-bottom: 0.5rem;">6,924.46 KM Apart</div>
-                    <div style="font-size: 0.8rem; opacity: 0.7;">Since 2nd June 2025</div>
-                </div>
-            </div>
-            
-            <!-- Scroll Down Indicator -->
-            <div style="position: absolute; bottom: 2rem; animation: bounce 2s infinite;">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#c9a227" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M12 5v14M19 12l-7 7-7-7"/>
-                </svg>
-            </div>
-        </header>
+<!-- Stage navigation dots -->
+<div id="stage-counter"></div>
 
-        <!-- Book Content Section -->
-        <section class="book-section">
-            <div class="book-paper">
-                <div class="content-wrapper">
-                    
-                    <!-- Section 1 -->
-                    <h2 class="category-header reveal-item">Memories & Emotions</h2>
-                    
-                    <div class="chapter-item reveal-item">
-                        <div class="chapter-header">
-                            <span>Was it during a call?</span>
-                            <span class="chapter-icon">&#10022;</span>
-                        </div>
-                        <div class="chapter-content">
-                            <div class="chapter-text">
-                                <p>The first call was so long and we were so talkative. We talked a lot with full of happiness. It felt like souls meeting for the first time.</p>
-                            </div>
-                        </div>
-                    </div>
+<!-- Scroll hint -->
+<div id="scroll-hint">
+  <span>Scroll to begin</span>
+  <div class="sh-line"></div>
+</div>
 
-                    <div class="chapter-item reveal-item">
-                        <div class="chapter-header">
-                            <span>During a fight?</span>
-                            <span class="chapter-icon">&#10022;</span>
-                        </div>
-                        <div class="chapter-content">
-                            <div class="chapter-text">
-                                <p>We cry alone, we remember each other, and we wait to see who texts first after the fight. The silence is heavy, but the love remains.</p>
-                            </div>
-                        </div>
-                    </div>
+<!-- ════════════════════════════════════════════════════════════
+     EXPERIENCE CONTAINER
+════════════════════════════════════════════════════════════ -->
+<div id="experience">
 
-                    <div class="chapter-item reveal-item">
-                        <div class="chapter-header">
-                            <span>When she cared for you?</span>
-                            <span class="chapter-icon">&#10022;</span>
-                        </div>
-                        <div class="chapter-content">
-                            <div class="chapter-text">
-                                <p>When I was very ill, when my health was bad, and when my mood was off. She always stands by me, no matter the distance.</p>
-                            </div>
-                        </div>
-                    </div>
+  <!-- ─── STAGE 1: ENTRY ─── -->
+  <div class="stage" id="s1">
+    <div class="entry-dot" id="entryDot"></div>
+    <div class="entry-ring" id="entryRing"></div>
+    <div id="s1-text">Something is wrong.</div>
+  </div>
 
-                    <div class="chapter-item reveal-item">
-                        <div class="chapter-header">
-                            <span>When she said something special?</span>
-                            <span class="chapter-icon">&#10022;</span>
-                        </div>
-                        <div class="chapter-content">
-                            <div class="chapter-text">
-                                <p>There was a time when she said <strong>"Mumma is with us."</strong> That moment gave me so much peace.</p>
-                            </div>
-                        </div>
-                    </div>
+  <!-- ─── STAGE 2: NOISE ─── -->
+  <div class="stage" id="s2">
+    <!-- Populated by JS -->
+  </div>
 
-                    <div class="chapter-item reveal-item">
-                        <div class="chapter-header">
-                            <span>When she called you by a nickname?</span>
-                            <span class="chapter-icon">&#10022;</span>
-                        </div>
-                        <div class="chapter-content">
-                            <div class="chapter-text">
-                                <p>She calls me <strong>"AARU"</strong> and sometimes <strong>"Post Office Dabba"</strong>. Every name hides her love for me.</p>
-                            </div>
-                        </div>
-                    </div>
+  <!-- ─── STAGE 3: COLLAPSE ─── -->
+  <div class="stage" id="s3">
+    <div class="collapse-ring cr1" id="cr1"></div>
+    <div class="collapse-ring cr2" id="cr2"></div>
+    <div class="collapse-ring cr3" id="cr3"></div>
+  </div>
 
-                    <div class="chapter-item reveal-item">
-                        <div class="chapter-header">
-                            <span>When she cried?</span>
-                            <span class="chapter-icon">&#10022;</span>
-                        </div>
-                        <div class="chapter-content">
-                            <div class="chapter-text">
-                                <p>I feel so bad, I cry from the inside. At that moment, I just want to hug her. I never want her to cry. Her tears are unbearable for me.</p>
-                            </div>
-                        </div>
-                    </div>
+  <!-- ─── STAGE 4: REALIZATION ─── -->
+  <div class="stage" id="s4">
+    <p id="s4-text">We were never meant<br/>to live like this.</p>
+  </div>
 
-                    <div class="chapter-item reveal-item">
-                        <div class="chapter-header">
-                            <span>When she got angry?</span>
-                            <span class="chapter-icon">&#10022;</span>
-                        </div>
-                        <div class="chapter-content">
-                            <div class="chapter-text">
-                                <p>When I don't talk to her properly, or when I don't care about my health. Her anger is also a part of her love.</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="chapter-item reveal-item">
-                        <div class="chapter-header">
-                            <span>When she ignored you?</span>
-                            <span class="chapter-icon">&#10022;</span>
-                        </div>
-                        <div class="chapter-content">
-                            <div class="chapter-text">
-                                <p>I don't eat, I cry a lot. I check every notification. My health deteriorates and I miss her a lot. Her silence breaks me.</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Section 2 -->
-                    <h2 class="category-header reveal-item">The First "I Love You"</h2>
-
-                    <div class="chapter-item reveal-item">
-                        <div class="chapter-header">
-                            <span>Who said it first?</span>
-                            <span class="chapter-icon">&#10022;</span>
-                        </div>
-                        <div class="chapter-content">
-                            <div class="chapter-text"><p>I said it first.</p></div>
-                        </div>
-                    </div>
-
-                    <div class="chapter-item reveal-item">
-                        <div class="chapter-header">
-                            <span>How did it happen?</span>
-                            <span class="chapter-icon">&#10022;</span>
-                        </div>
-                        <div class="chapter-content">
-                            <div class="chapter-text">
-                                <p>When I was sure, I shared my feelings, but she didn't respond immediately.</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="chapter-item reveal-item">
-                        <div class="chapter-header">
-                            <span>Was it planned or sudden?</span>
-                            <span class="chapter-icon">&#10022;</span>
-                        </div>
-                        <div class="chapter-content">
-                            <div class="chapter-text">
-                                <p>I had tried to share it many times, but I had a fear of losing her. Finally, the heart spoke.</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="chapter-item reveal-item">
-                        <div class="chapter-header">
-                            <span>What was her reaction?</span>
-                            <span class="chapter-icon">&#10022;</span>
-                        </div>
-                        <div class="chapter-content">
-                            <div class="chapter-text">
-                                <p>She was happy and smiled, but she made me wait for the answer. She was perhaps thinking, and I was waiting eagerly.</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="chapter-item reveal-item">
-                        <div class="chapter-header">
-                            <span>Did she take time?</span>
-                            <span class="chapter-icon">&#10022;</span>
-                        </div>
-                        <div class="chapter-content">
-                            <div class="chapter-text">
-                                <p>Yes, she said "Love you" after a long time. But when she said it, the wait felt justified.</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="chapter-item reveal-item">
-                        <div class="chapter-header">
-                            <span>Did she tease you?</span>
-                            <span class="chapter-icon">&#10022;</span>
-                        </div>
-                        <div class="chapter-content">
-                            <div class="chapter-text">
-                                <p>When she is full of mood, she teases me a lot, and when she teases me, I fear losing her.</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="chapter-item reveal-item">
-                        <div class="chapter-header">
-                            <span>Did she say it softly?</span>
-                            <span class="chapter-icon">&#10022;</span>
-                        </div>
-                        <div class="chapter-content">
-                            <div class="chapter-text">
-                                <p>She cries a lot and I hate that. When she cries a lot, it makes me so angry. It hurts to see her in pain.</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="chapter-item reveal-item">
-                        <div class="chapter-header">
-                            <span>Did you sleep that night or not?</span>
-                            <span class="chapter-icon">&#10022;</span>
-                        </div>
-                        <div class="chapter-content">
-                            <div class="chapter-text">
-                                <p>I could not even close my eyes. When she asked "Did you sleep?", I lied and said yes, but in reality, I was watching her pics, her messages, her smiles. I waited until morning.</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Section 3 -->
-                    <h2 class="category-header reveal-item">Jealousy & Trust</h2>
-
-                    <div class="chapter-item reveal-item">
-                        <div class="chapter-header">
-                            <span>Did you ever feel jealous?</span>
-                            <span class="chapter-icon">&#10022;</span>
-                        </div>
-                        <div class="chapter-content">
-                            <div class="chapter-text"><p>So and so much.</p></div>
-                        </div>
-                    </div>
-
-                    <div class="chapter-item reveal-item">
-                        <div class="chapter-header">
-                            <span>Because of?</span>
-                            <span class="chapter-icon">&#10022;</span>
-                        </div>
-                        <div class="chapter-content">
-                            <div class="chapter-text">
-                                <p>Some other biodata comes for marriage, or when someone tries to impress and get close to her.</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="chapter-item reveal-item">
-                        <div class="chapter-header">
-                            <span>Someone liking her photo?</span>
-                            <span class="chapter-icon">&#10022;</span>
-                        </div>
-                        <div class="chapter-content">
-                            <div class="chapter-text">
-                                <p>That is okay to me because she also needs space to live life. I never say do this or do that, but I just take care of her from toxic people.</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="chapter-item reveal-item">
-                        <div class="chapter-header">
-                            <span>Someone messaging her?</span>
-                            <span class="chapter-icon">&#10022;</span>
-                        </div>
-                        <div class="chapter-content">
-                            <div class="chapter-text">
-                                <p>I trust her blindly and I respect her. I never ask about messages, calls, or video calls from anyone, but yes, I love her honesty. She tells me everything if something happens.</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="chapter-item reveal-item">
-                        <div class="chapter-header">
-                            <span>Her male friend?</span>
-                            <span class="chapter-icon">&#10022;</span>
-                        </div>
-                        <div class="chapter-content">
-                            <div class="chapter-text">
-                                <p>Zero. And I love that. Her having zero male friends makes me love her even more.</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="chapter-item reveal-item">
-                        <div class="chapter-header">
-                            <span>Family pressure?</span>
-                            <span class="chapter-icon">&#10022;</span>
-                        </div>
-                        <div class="chapter-content">
-                            <div class="chapter-text">
-                                <p>I do not have any pressure but I love my grandparents and they love Tulsi. They want us together for a lifetime, even for the next 100 births. They want to see us and our children before they die. My family loves her a lot and waits every second for Tulsi to come to India, to marry me.</p>
-                                <div class="emotional-note">
-                                    "Tulsi, I am literally crying over this part. This is 27th Feb, 11:05 and tears are not stopping, hands are vibrating, mom and dad are sleeping, and I am crying... I love you Tulsi - never break our trust, our bond, and relationship diku. We love you."
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="chapter-item reveal-item">
-                        <div class="chapter-header">
-                            <span>She didn't reply fast?</span>
-                            <span class="chapter-icon">&#10022;</span>
-                        </div>
-                        <div class="chapter-content">
-                            <div class="chapter-text">
-                                <p>I wait, I don't get angry but I am proud of her because she works in a medicine shop. She is doing so many efforts for me, for our bright future, for our family. I am proud of you Tuli.</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="chapter-item reveal-item">
-                        <div class="chapter-header">
-                            <span>What did you do?</span>
-                            <span class="chapter-icon">&#10022;</span>
-                        </div>
-                        <div class="chapter-content">
-                            <div class="chapter-text"><p>I wait and I wait for my favorite notification from her.</p></div>
-                        </div>
-                    </div>
-
-                    <div class="chapter-item reveal-item">
-                        <div class="chapter-header">
-                            <span>Did you fight?</span>
-                            <span class="chapter-icon">&#10022;</span>
-                        </div>
-                        <div class="chapter-content">
-                            <div class="chapter-text"><p>Sometimes because of ego, attitude, or maybe misunderstanding.</p></div>
-                        </div>
-                    </div>
-
-                    <div class="chapter-item reveal-item">
-                        <div class="chapter-header">
-                            <span>Did she calm you?</span>
-                            <span class="chapter-icon">&#10022;</span>
-                        </div>
-                        <div class="chapter-content">
-                            <div class="chapter-text"><p>She is the only one who can calm me, otherwise, I can be the one who fights against the world. She is my peace.</p></div>
-                        </div>
-                    </div>
-
-                    <div class="chapter-item reveal-item">
-                        <div class="chapter-header">
-                            <span>Did you act mature or emotional?</span>
-                            <span class="chapter-icon">&#10022;</span>
-                        </div>
-                        <div class="chapter-content">
-                            <div class="chapter-text"><p>So much emotional, every time emotional.</p></div>
-                        </div>
-                    </div>
-
-                    <!-- Section 4 -->
-                    <h2 class="category-header reveal-item">The Biggest Fight</h2>
-
-                    <div class="chapter-item reveal-item">
-                        <div class="chapter-header"><span>Describe the worst fight.</span><span class="chapter-icon">&#10022;</span></div>
-                        <div class="chapter-content"><div class="chapter-text"><p>Just recently in February.</p></div></div>
-                    </div>
-                    <div class="chapter-item reveal-item">
-                        <div class="chapter-header"><span>What was the reason?</span><span class="chapter-icon">&#10022;</span></div>
-                        <div class="chapter-content"><div class="chapter-text"><p>Because she did not turn the video call on.</p></div></div>
-                    </div>
-                    <div class="chapter-item reveal-item">
-                        <div class="chapter-header"><span>Did someone cry?</span><span class="chapter-icon">&#10022;</span></div>
-                        <div class="chapter-content"><div class="chapter-text"><p>We both cried.</p></div></div>
-                    </div>
-                    <div class="chapter-item reveal-item">
-                        <div class="chapter-header"><span>Did someone block?</span><span class="chapter-icon">&#10022;</span></div>
-                        <div class="chapter-content"><div class="chapter-text"><p>Not yet, I can't. She says she can't either. I can't block her even if she makes me feel the worst.</p></div></div>
-                    </div>
-                    <div class="chapter-item reveal-item">
-                        <div class="chapter-header"><span>Did someone say "leave me"?</span><span class="chapter-icon">&#10022;</span></div>
-                        <div class="chapter-content"><div class="chapter-text"><p>I know her, we are not going to leave each other. Never, never, and never.</p></div></div>
-                    </div>
-                    <div class="chapter-item reveal-item">
-                        <div class="chapter-header"><span>How many hours/days no talk?</span><span class="chapter-icon">&#10022;</span></div>
-                        <div class="chapter-content"><div class="chapter-text"><p>Only one day when we did not make a video call, but we did have small talk.</p></div></div>
-                    </div>
-                    <div class="chapter-item reveal-item">
-                        <div class="chapter-header"><span>What were you feeling during silence?</span><span class="chapter-icon">&#10022;</span></div>
-                        <div class="chapter-content"><div class="chapter-text"><p>I am more silent than her. I hurt myself, I go to the terrace, I cry a lot. I do not eat, do not drink water, and sometimes I just watch her pics till morning. I wait for her reply, text, call, or video call, holding my phone in my hands overnight.</p></div></div>
-                    </div>
-
-                    <!-- Section 5 -->
-                    <h2 class="category-header reveal-item">Your Biggest Fear</h2>
-
-                    <div class="chapter-item reveal-item">
-                        <div class="chapter-header"><span>Are you scared she may leave?</span><span class="chapter-icon">&#10022;</span></div>
-                        <div class="chapter-content"><div class="chapter-text"><p>Yes, even the thought makes me feel like a skeleton without a body, a heart without feeling. I cry so much.</p></div></div>
-                    </div>
-                    <div class="chapter-item reveal-item">
-                        <div class="chapter-header"><span>Are you scared long distance may fail?</span><span class="chapter-icon">&#10022;</span></div>
-                        <div class="chapter-content"><div class="chapter-text"><p>Nope, I trust her.</p></div></div>
-                    </div>
-                    <div class="chapter-item reveal-item">
-                        <div class="chapter-header"><span>Are you insecure about weight?</span><span class="chapter-icon">&#10022;</span></div>
-                        <div class="chapter-content"><div class="chapter-text"><p>Yes, I am overweight and I am trying to lose it. Sometimes I cry because of my body and belly.</p></div></div>
-                    </div>
-                    <div class="chapter-item reveal-item">
-                        <div class="chapter-header"><span>Are you scared about money/career?</span><span class="chapter-icon">&#10022;</span></div>
-                        <div class="chapter-content"><div class="chapter-text"><p>I want to build a family, money, and career. I want her happy for a lifetime, hence I think a lot—what if I failed? What if I do not earn? What if I can't find a job in the UK?</p></div></div>
-                    </div>
-                    <div class="chapter-item reveal-item">
-                        <div class="chapter-header"><span>Are you scared about family approval?</span><span class="chapter-icon">&#10022;</span></div>
-                        <div class="chapter-content"><div class="chapter-text"><p>I believe in Tulsi, but sometimes I get scared of her big father, her family. What if they decline? Or make Tulsi emotionally blackmail?</p></div></div>
-                    </div>
-                    <div class="chapter-item reveal-item">
-                        <div class="chapter-header"><span>Do you overthink at night?</span><span class="chapter-icon">&#10022;</span></div>
-                        <div class="chapter-content"><div class="chapter-text"><p>Yes, this is my biggest problem. I overthink so much.</p></div></div>
-                    </div>
-
-                    <!-- Section 6 -->
-                    <h2 class="category-header reveal-item">Most Romantic Memory</h2>
-
-                    <div class="chapter-item reveal-item">
-                        <div class="chapter-header"><span>Most romantic memory?</span><span class="chapter-icon">&#10022;</span></div>
-                        <div class="chapter-content"><div class="chapter-text"><p>Each and every moment. When her mother agreed about me, when I dreamed about our romance.</p></div></div>
-                    </div>
-                    <div class="chapter-item reveal-item">
-                        <div class="chapter-header"><span>Most romantic thing she ever did?</span><span class="chapter-icon">&#10022;</span></div>
-                        <div class="chapter-content"><div class="chapter-text"><p>Gave me a kiss over a video call—I miss it every day. She gave me one only once when I asked, otherwise, she says no (laughing hahaha).</p></div></div>
-                    </div>
-                    <div class="chapter-item reveal-item">
-                        <div class="chapter-header"><span>Did she ever sleep on call?</span><span class="chapter-icon">&#10022;</span></div>
-                        <div class="chapter-content"><div class="chapter-text"><p>Many times, and I love watching her sleepy. When she sleeps, I love her more by watching her face.</p></div></div>
-                    </div>
-                    <div class="chapter-item reveal-item">
-                        <div class="chapter-header"><span>Did she send surprise?</span><span class="chapter-icon">&#10022;</span></div>
-                        <div class="chapter-content">
-                            <div class="chapter-text">
-                                <p>Yes, this is one of my favorite things. She bought me a mobile phone, wired Apple earphones, wallet, so many fruits, trimmer, snacks, books, a heart pillow, ice creams, roses, cakes, and so many things I can't even count. She is just amazing.</p>
-                                <p>I love when she orders suddenly and surprisingly. Thank you, Tulsi. But Tulsi, this is not a good thing to use so much money. Once a month is fine, my baccha.</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="chapter-item reveal-item">
-                        <div class="chapter-header"><span>Did she call you husband jokingly?</span><span class="chapter-icon">&#10022;</span></div>
-                        <div class="chapter-content"><div class="chapter-text"><p>Yes, I do funny things over a call. I just want to make her smile, make her laugh so I can see her smiling face.</p></div></div>
-                    </div>
-
-                    <!-- Section 7 -->
-                    <h2 class="category-header reveal-item">The Parcel Scene</h2>
-
-                    <div class="chapter-item reveal-item">
-                        <div class="chapter-header"><span>When you packed the parcel?</span><span class="chapter-icon">&#10022;</span></div>
-                        <div class="chapter-content"><div class="chapter-text"><p>From February 1st, I took all my money in one bank account—my savings, pocket money, earnings, hidden money (emergency money). And I started buying things for her. I chose the best things, like the best company toy, best food, etc.</p></div></div>
-                    </div>
-                    <div class="chapter-item reveal-item">
-                        <div class="chapter-header"><span>Were you emotional?</span><span class="chapter-icon">&#10022;</span></div>
-                        <div class="chapter-content"><div class="chapter-text"><p>When the parcel left and when I was writing letters, hiding my emotions at those times... yes, very emotional.</p></div></div>
-                    </div>
-                    <div class="chapter-item reveal-item">
-                        <div class="chapter-header"><span>Did you imagine her opening it?</span><span class="chapter-icon">&#10022;</span></div>
-                        <div class="chapter-content"><div class="chapter-text"><p>Each and every day. I check the parcel details, I track the parcel.</p></div></div>
-                    </div>
-                    <div class="chapter-item reveal-item">
-                        <div class="chapter-header"><span>Did you hold items and smile?</span><span class="chapter-icon">&#10022;</span></div>
-                        <div class="chapter-content"><div class="chapter-text"><p>Yes, I sent each and every item I remembered. I am sorry diku if I missed any item.</p></div></div>
-                    </div>
-                    <div class="chapter-item reveal-item">
-                        <div class="chapter-header"><span>Did you talk to yourself?</span><span class="chapter-icon">&#10022;</span></div>
-                        <div class="chapter-content"><div class="chapter-text"><p>Yes, I go to the DMart and talk about her—does she like this food? Will she wear this T-shirt? Does she love this taste?</p></div></div>
-                    </div>
-
-                    <!-- Section 8 -->
-                    <h2 class="category-header reveal-item">First Meeting Imagination</h2>
-
-                    <div class="chapter-item reveal-item">
-                        <div class="chapter-header"><span>When you meet her for the first time?</span><span class="chapter-icon">&#10022;</span></div>
-                        <div class="chapter-content"><div class="chapter-text"><p>Maybe at the airport. I am waiting for you, baccha.</p></div></div>
-                    </div>
-                    <div class="chapter-item reveal-item">
-                        <div class="chapter-header"><span>Airport or home?</span><span class="chapter-icon">&#10022;</span></div>
-                        <div class="chapter-content"><div class="chapter-text"><p>She is my home, and our first meet will be the most grateful moment of all time.</p></div></div>
-                    </div>
-                    <div class="chapter-item reveal-item">
-                        <div class="chapter-header"><span>Will you hug first?</span><span class="chapter-icon">&#10022;</span></div>
-                        <div class="chapter-content"><div class="chapter-text"><p>As soon as I see her at the airport.</p></div></div>
-                    </div>
-                    <div class="chapter-item reveal-item">
-                        <div class="chapter-header"><span>Will you cry?</span><span class="chapter-icon">&#10022;</span></div>
-                        <div class="chapter-content"><div class="chapter-text"><p>When she comes to India, when I see her for the first time... I will definitely cry.</p></div></div>
-                    </div>
-                    <div class="chapter-item reveal-item">
-                        <div class="chapter-header"><span>Will you touch her face?</span><span class="chapter-icon">&#10022;</span></div>
-                        <div class="chapter-content"><div class="chapter-text"><p>Of course, I will kiss her. I will touch her with my arms, fingers, hands.</p></div></div>
-                    </div>
-                    <div class="chapter-item reveal-item">
-                        <div class="chapter-header"><span>Will you stay silent?</span><span class="chapter-icon">&#10022;</span></div>
-                        <div class="chapter-content"><div class="chapter-text"><p>I will look at her until she flies back to the UK (or stays forever).</p></div></div>
-                    </div>
-                    <div class="chapter-item reveal-item">
-                        <div class="chapter-header"><span>What will you say first?</span><span class="chapter-icon">&#10022;</span></div>
-                        <div class="chapter-content"><div class="chapter-text"><p>"Hi, my diku, welcome home diku, missed you so much, love you." And then hug her tightly. Even now, I am imagining and crying alone...</p></div></div>
-                    </div>
-
-                    <!-- Section 9 -->
-                    <h2 class="category-header reveal-item">Marriage Dream</h2>
-
-                    <div class="chapter-item reveal-item">
-                        <div class="chapter-header"><span>Court marriage?</span><span class="chapter-icon">&#10022;</span></div>
-                        <div class="chapter-content"><div class="chapter-text"><p>Yes, we want to save money to travel, for a honeymoon, for our future, for a house, car, etc.</p></div></div>
-                    </div>
-                    <div class="chapter-item reveal-item">
-                        <div class="chapter-header"><span>Traditional?</span><span class="chapter-icon">&#10022;</span></div>
-                        <div class="chapter-content"><div class="chapter-text"><p>Yes, but depends on the time.</p></div></div>
-                    </div>
-                    <div class="chapter-item reveal-item">
-                        <div class="chapter-header"><span>Both?</span><span class="chapter-icon">&#10022;</span></div>
-                        <div class="chapter-content"><div class="chapter-text"><p>Yes, she will be ready by a makeup artist.</p></div></div>
-                    </div>
-                    <div class="chapter-item reveal-item">
-                        <div class="chapter-header"><span>What color sherwani?</span><span class="chapter-icon">&#10022;</span></div>
-                        <div class="chapter-content"><div class="chapter-text"><p>Whatever she likes.</p></div></div>
-                    </div>
-                    <div class="chapter-item reveal-item">
-                        <div class="chapter-header"><span>What will she wear?</span><span class="chapter-icon">&#10022;</span></div>
-                        <div class="chapter-content"><div class="chapter-text"><p>Whatever I like.</p></div></div>
-                    </div>
-                    <div class="chapter-item reveal-item">
-                        <div class="chapter-header"><span>Who will cry more?</span><span class="chapter-icon">&#10022;</span></div>
-                        <div class="chapter-content"><div class="chapter-text"><p>Both, or our parents more... and definitely myself.</p></div></div>
-                    </div>
-
-                    <!-- Section 10 -->
-                    <h2 class="category-header reveal-item">One Secret</h2>
-
-                    <div class="chapter-item reveal-item">
-                        <div class="chapter-header"><span>One secret you never told her?</span><span class="chapter-icon">&#10022;</span></div>
-                        <div class="chapter-content"><div class="chapter-text"><p>I have nothing to hide from her. She is my everything.</p></div></div>
-                    </div>
-
-                    <!-- Buttons -->
-                    <div class="btn-container reveal-item">
-                        <a href="story.pdf" download class="action-btn download-btn">
-                            <span>Download Story Book</span>
-                        </a>
-                        
-                        <a href="https://codewitharyan-01.github.io/Love/" target="_blank" class="action-btn back-btn">
-                            <span>Back To Our Story</span>
-                        </a>
-                    </div>
-
-                </div>
-            </div>
-        </section>
-
-        <footer style="text-align: center; padding: 4rem 0; color: #555; font-family: 'Cinzel', serif;">
-            <p>Fire & Blood | Love & Distance</p>
-        </footer>
+  <!-- ─── STAGE 5: INTRODUCING WISPA ─── -->
+  <div class="stage" id="s5">
+    <div style="position:relative;width:100%;display:flex;justify-content:center;align-items:center;height:100%">
+      <div class="s5-device" id="s5Device">
+        <!-- Device rendered in JS -->
+        <div class="s5-line s5-line-1" id="s5l1">So we removed the screen.</div>
+        <div class="s5-line s5-line-2" id="s5l2">And kept the intelligence.</div>
+      </div>
     </div>
+  </div>
 
-    <script>
-        // --- 1. Ember Particle System ---
-        const canvas = document.getElementById('ember-canvas');
-        const ctx = canvas.getContext('2d');
-        let particles = [];
+  <!-- ─── STAGE 6: OBJECT FOCUS ─── -->
+  <div class="stage" id="s6">
+    <div class="s6-device" id="s6Device">
+      <div class="s6-inner" id="s6Inner">
+        <!-- Device populated in JS -->
+      </div>
+    </div>
+  </div>
 
-        function resizeCanvas() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        }
-        resizeCanvas();
-        window.addEventListener('resize', resizeCanvas);
+  <!-- ─── STAGE 7: VOICE INTERACTION ─── -->
+  <div class="stage" id="s7">
+    <div class="voice-line vl-user" id="vl1">"Hey Wispa…<span class="vl-cursor" id="vlCursor"></span>"</div>
+    <div class="voice-line vl-wispa" id="vl2">Your day starts at 10 AM.</div>
+    <div class="voice-line vl-sub" id="vl3">Wispa AI · Voice Intelligence</div>
+    <div class="vl-device" id="vlDevice"></div>
+  </div>
 
-        class Particle {
-            constructor() {
-                this.reset();
-            }
+  <!-- ─── STAGE 8: PRESENCE ─── -->
+  <div class="stage" id="s8">
+    <div class="presence-scene" id="presScene">
+      <div class="ps-items">
+        <div class="ps-item">
+          <div class="ps-icon" id="ps-notif" style="--vd:0s">📱</div>
+          <div class="ps-label" id="ps-notif-l" style="--vd:0s">Notifications</div>
+        </div>
+        <div class="ps-item">
+          <div class="ps-icon" id="ps-msg" style="--vd:.3s">💬</div>
+          <div class="ps-label" id="ps-msg-l" style="--vd:.3s">Messages</div>
+        </div>
+        <div class="ps-item" style="position:relative">
+          <div class="ps-icon wispa-stays" id="ps-wispa">
+            <div style="color:white;font-size:10px;letter-spacing:0.1em;font-family:'Georgia',serif">W</div>
+          </div>
+          <div class="ps-label" style="color:var(--ink);font-weight:500">Wispa</div>
+        </div>
+        <div class="ps-item">
+          <div class="ps-icon" id="ps-app" style="--vd:.6s">⚡</div>
+          <div class="ps-label" id="ps-app-l" style="--vd:.6s">Distractions</div>
+        </div>
+        <div class="ps-item">
+          <div class="ps-icon" id="ps-noise" style="--vd:.9s">🔔</div>
+          <div class="ps-label" id="ps-noise-l" style="--vd:.9s">Noise</div>
+        </div>
+      </div>
+      <div class="ps-caption" id="psCaption">Only what matters. Always.</div>
+    </div>
+  </div>
 
-            reset() {
-                this.x = Math.random() * canvas.width;
-                this.y = canvas.height + 10;
-                this.size = Math.random() * 3 + 1;
-                this.speedY = Math.random() * 2 + 0.5;
-                this.speedX = (Math.random() - 0.5) * 1;
-                this.opacity = Math.random() * 0.5 + 0.3;
-                this.color = Math.random() > 0.5 ? '#c9a227' : '#ff4500'; // Gold or Red-Orange
-            }
+  <!-- ─── STAGE 9: TIME FLOW ─── -->
+  <div class="stage" id="s9">
+    <div class="time-scene" id="ts-morning">
+      <div class="ts-time">07:00</div>
+      <div class="ts-label">Morning</div>
+      <div class="ts-wispa" id="ts-m-w">"Good morning. Your first meeting is at 10."</div>
+      <div class="ts-device" id="ts-m-d"></div>
+    </div>
+    <div class="time-scene" id="ts-work">
+      <div class="ts-time">14:30</div>
+      <div class="ts-label">Afternoon</div>
+      <div class="ts-wispa" id="ts-w-w">"You have 90 minutes of deep work scheduled."</div>
+      <div class="ts-device" id="ts-w-d"></div>
+    </div>
+    <div class="time-scene" id="ts-evening">
+      <div class="ts-time">20:00</div>
+      <div class="ts-label">Evening</div>
+      <div class="ts-wispa" id="ts-e-w">"All done. Your screen time today — zero."</div>
+      <div class="ts-device" id="ts-e-d"></div>
+    </div>
+  </div>
 
-            update() {
-                this.y -= this.speedY;
-                this.x += this.speedX;
-                this.opacity -= 0.003;
+  <!-- ─── STAGE 10: HOW IT WORKS ─── -->
+  <div class="stage" id="s10">
+    <div class="hiw-words">
+      <div class="hiw-word" id="hw1">You speak.</div>
+      <div class="hiw-pause" id="hwp1"></div>
+      <div class="hiw-word" id="hw2">It understands.</div>
+      <div class="hiw-pause" id="hwp2"></div>
+      <div class="hiw-word" id="hw3">It responds.</div>
+    </div>
+  </div>
 
-                if (this.opacity <= 0 || this.y < -10) {
-                    this.reset();
-                }
-            }
+  <!-- ─── STAGE 11: PHILOSOPHY ─── -->
+  <div class="stage" id="s11">
+    <div class="phil-block">
+      <div class="pb-line" id="pb1">Technology should disappear.</div>
+      <div class="pb-line" id="pb2" style="transition-delay:.6s">Intelligence should feel natural.</div>
+      <div class="pb-line" id="pb3" style="transition-delay:1.2s">Less interaction, more life.</div>
+    </div>
+  </div>
 
-            draw() {
-                ctx.fillStyle = this.color;
-                ctx.globalAlpha = this.opacity;
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                ctx.fill();
-                ctx.globalAlpha = 1;
-                
-                // Glow effect
-                ctx.shadowBlur = 10;
-                ctx.shadowColor = this.color;
-            }
-        }
+  <!-- ─── STAGE 12: TRUST ─── -->
+  <div class="stage" id="s12">
+    <div id="s12-text">Private. Secure. Yours.</div>
+    <div id="s12-sub">Your voice is never stored. Your data is never sold.</div>
+  </div>
 
-        function initParticles() {
-            particles = [];
-            for (let i = 0; i < 50; i++) {
-                particles.push(new Particle());
-            }
-        }
+  <!-- ─── STAGE 13: FOUNDERS ─── -->
+  <div class="stage" id="s13">
+    <div class="founders-line" id="f-intro">We built what we needed.</div>
+    <div class="founders-row" id="foundersRow">
+      <div class="founder-item">
+        <div class="founder-avatar"><div class="fa-initial">A</div></div>
+        <div class="founder-name">Aryan Mehta</div>
+        <div class="founder-role">CEO & Co-founder</div>
+      </div>
+      <div class="founder-item">
+        <div class="founder-avatar"><div class="fa-initial">P</div></div>
+        <div class="founder-name">Priya Nair</div>
+        <div class="founder-role">CTO & Co-founder</div>
+      </div>
+      <div class="founder-item">
+        <div class="founder-avatar"><div class="fa-initial">R</div></div>
+        <div class="founder-name">Rohan Shah</div>
+        <div class="founder-role">Head of AI</div>
+      </div>
+    </div>
+  </div>
 
-        function animateParticles() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            particles.forEach(p => {
-                p.update();
-                p.draw();
-            });
-            requestAnimationFrame(animateParticles);
-        }
+  <!-- ─── STAGE 14: CTA ─── -->
+  <div class="stage" id="s14">
+    <p id="s14-q">Ready to experience silence?</p>
+    <div class="cta-form" id="ctaForm">
+      <input type="email" class="cta-email" placeholder="Your email" id="ctaEmail"/>
+      <button class="cta-btn" id="ctaBtn" onclick="submitCta()">Pre-order Wispa</button>
+      <span class="cta-note">Limited early access · No spam ever</span>
+    </div>
+  </div>
 
-        initParticles();
-        animateParticles();
+  <!-- ─── STAGE 15: FOOTER ─── -->
+  <div class="stage" id="s15">
+    <div class="footer-inner" id="footerInner">
+      <div class="footer-top">
+        <div>
+          <div class="footer-brand">Wispa AI</div>
+          <div class="footer-tagline">A voice-first AI companion. Less screen. More presence. More life.</div>
+        </div>
+        <div class="footer-cols">
+          <div>
+            <div class="footer-col-title">Product</div>
+            <ul class="footer-col-links">
+              <li><a href="#">How it works</a></li>
+              <li><a href="#">Pre-order</a></li>
+              <li><a href="#">Design</a></li>
+              <li><a href="#">Specs</a></li>
+            </ul>
+          </div>
+          <div>
+            <div class="footer-col-title">Company</div>
+            <ul class="footer-col-links">
+              <li><a href="#">About</a></li>
+              <li><a href="#">Team</a></li>
+              <li><a href="#">Press</a></li>
+              <li><a href="#">Careers</a></li>
+            </ul>
+          </div>
+          <div>
+            <div class="footer-col-title">Connect</div>
+            <ul class="footer-col-links">
+              <li><a href="#">Twitter</a></li>
+              <li><a href="#">Instagram</a></li>
+              <li><a href="#">LinkedIn</a></li>
+              <li><a href="mailto:hello@wispa.ai">hello@wispa.ai</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span class="footer-copy">© 2025 Wispa Technologies Pvt. Ltd.</span>
+        <ul class="footer-legal">
+          <li><a href="#">Privacy</a></li>
+          <li><a href="#">Terms</a></li>
+          <li><a href="#">Cookies</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
 
+</div><!-- /experience -->
 
-        // --- 2. Custom Cursor ---
-        const cursor = document.getElementById('cursor');
-        const hoverElements = document.querySelectorAll('a, button, .chapter-header');
+<script>
+/* ═══════════════════════════════════════════════════════
+   CURSOR
+═══════════════════════════════════════════════════════ */
+const cur = document.getElementById('cursor');
+let mx=0,my=0;
+document.addEventListener('mousemove', e => {
+  mx=e.clientX; my=e.clientY;
+  cur.style.left = mx+'px';
+  cur.style.top = my+'px';
+});
 
-        window.addEventListener('mousemove', (e) => {
-            cursor.style.left = e.clientX + 'px';
-            cursor.style.top = e.clientY + 'px';
+/* ═══════════════════════════════════════════════════════
+   DEVICE HTML BUILDER
+═══════════════════════════════════════════════════════ */
+function buildDevice(size=140, showIndicators=true, waveActive=true) {
+  const s = size;
+  const fs = Math.round(s * 0.07);
+  const barH = [4,9,14,18,14,9,4];
+  const waveBars = waveActive
+    ? barH.map(h=>`<span class="dw-bar" style="height:${h}px"></span>`).join('')
+    : barH.map(()=>`<span class="dw-bar" style="height:3px;animation:none;opacity:0.2"></span>`).join('');
+
+  const indicators = showIndicators ? `
+    <div class="device-indicators">
+      <div class="dev-ind ind-w">
+        <div class="dev-ind-dot"></div>
+        <div class="dev-ind-label">WiFi</div>
+      </div>
+      <div class="dev-ind ind-b">
+        <div class="dev-ind-dot"></div>
+        <div class="dev-ind-label">BT</div>
+      </div>
+      <div class="dev-ind ind-p">
+        <div class="dev-ind-dot"></div>
+        <div class="dev-ind-label">PWR</div>
+      </div>
+      <div class="dev-ind ind-l">
+        <div class="dev-ind-dot"></div>
+        <div class="dev-ind-label">LED</div>
+      </div>
+    </div>` : '';
+
+  return `
+    <div style="position:relative;display:inline-block">
+      <div class="wispa-device-css" style="width:${s}px;height:${s}px">
+        <div class="device-rim-outer"></div>
+        <div class="device-wordmark-inner" style="font-size:${fs}px">
+          <span>WISPA</span>
+          <div class="device-wave-inner">${waveBars}</div>
+        </div>
+      </div>
+      ${indicators}
+      <div style="
+        position:absolute;bottom:-20px;left:50%;transform:translateX(-50%);
+        width:${Math.round(s*.7)}px;height:${Math.round(s*.12)}px;
+        background:radial-gradient(ellipse,rgba(0,0,0,0.12) 0%,transparent 70%);
+        border-radius:50%;
+        animation:shadowSync 5s ease-in-out infinite;
+      "></div>
+    </div>`;
+}
+
+/* ═══════════════════════════════════════════════════════
+   STAGE SYSTEM
+═══════════════════════════════════════════════════════ */
+const STAGES = [
+  's1','s2','s3','s4','s5','s6','s7','s8',
+  's9','s10','s11','s12','s13','s14','s15'
+];
+let currentStage = 0;
+let isTransitioning = false;
+let stageTimers = [];
+
+// Build stage nav dots
+const sc = document.getElementById('stage-counter');
+STAGES.forEach((id,i) => {
+  const dot = document.createElement('div');
+  dot.className='sc-dot';
+  dot.dataset.stage = i;
+  dot.title = `Stage ${i+1}`;
+  dot.onclick = () => goToStage(i);
+  sc.appendChild(dot);
+});
+
+function updateDots(idx) {
+  document.querySelectorAll('.sc-dot').forEach((d,i)=>{
+    d.classList.toggle('active', i===idx);
+  });
+}
+
+/* ── Noise fragments data ── */
+const noiseItems = [
+  {type:'notif',icon:'💬',color:'#25D366',app:'WhatsApp',msg:'You have 23 unread messages',time:'now',x:'8%',y:'10%',r:-3},
+  {type:'notif',icon:'📧',color:'#EA4335',app:'Gmail',msg:'Meeting: Budget Review — 5 threads',time:'2m',x:'58%',y:'6%',r:2},
+  {type:'notif',icon:'📱',color:'#E1306C',app:'Instagram',msg:'Meera tagged you in a photo',time:'4m',x:'75%',y:'22%',r:-2},
+  {type:'notif',icon:'💼',color:'#4285F4',app:'Slack',msg:'#general · 47 new messages',time:'5m',x:'5%',y:'38%',r:1},
+  {type:'notif',icon:'📅',color:'#0F9D58',app:'Calendar',msg:'In 15 minutes: All Hands call',time:'6m',x:'62%',y:'44%',r:-1},
+  {type:'msg',msg:'Have you seen the Q3 report?',x:'14%',y:'56%',r:2},
+  {type:'msg',msg:'Did you reply to Sharma ji?',x:'54%',y:'66%',r:-2},
+  {type:'msg',msg:'Call me when you get a minute',x:'8%',y:'74%',r:1},
+  {type:'num',num:'87',x:'42%',y:'12%',r:0},
+  {type:'num',num:'∞',x:'80%',y:'68%',r:0},
+];
+
+/* ═══════════════════════════════════════════════════════
+   STAGE ENTER / EXIT ANIMATIONS
+═══════════════════════════════════════════════════════ */
+function enterStage(idx) {
+  stageTimers.forEach(t=>clearTimeout(t));
+  stageTimers=[];
+
+  const el = document.getElementById(STAGES[idx]);
+  el.classList.add('active');
+
+  // Determine light/dark for cursor
+  const darkStages = [12, 14]; // s12(trust-dark), s15(footer-dark)
+  document.body.classList.toggle('light-mode', darkStages.includes(idx));
+
+  switch(idx) {
+
+    case 0: // ENTRY
+      stageTimers.push(setTimeout(()=>{
+        document.getElementById('entryDot').classList.add('play');
+        document.getElementById('entryRing').classList.add('play');
+        document.getElementById('s1-text').classList.add('play');
+      }, 300));
+      stageTimers.push(setTimeout(()=>{
+        document.getElementById('scroll-hint').classList.add('visible');
+      }, 4000));
+      break;
+
+    case 1: // NOISE
+      buildNoiseStage();
+      break;
+
+    case 2: // COLLAPSE
+      stageTimers.push(setTimeout(()=>{
+        ['cr1','cr2','cr3'].forEach(id=>{
+          document.getElementById(id).classList.add('play');
         });
+      },100));
+      break;
 
-        hoverElements.forEach(el => {
-            el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
-            el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
+    case 3: // REALIZATION
+      stageTimers.push(setTimeout(()=>{
+        document.getElementById('s4-text').classList.add('show');
+      }, 300));
+      break;
+
+    case 4: // INTRODUCING WISPA
+      document.getElementById('s5Device').innerHTML =
+        buildDevice(160, true, true) +
+        `<div class="s5-line s5-line-1" id="s5l1">So we removed the screen.</div>
+         <div class="s5-line s5-line-2" id="s5l2">And kept the intelligence.</div>`;
+      stageTimers.push(setTimeout(()=>{
+        document.getElementById('s5Device').classList.add('show');
+      },400));
+      stageTimers.push(setTimeout(()=>{
+        document.getElementById('s5l1').classList.add('show');
+      },1800));
+      stageTimers.push(setTimeout(()=>{
+        document.getElementById('s5l2').classList.add('show');
+      },3000));
+      break;
+
+    case 5: // OBJECT FOCUS
+      document.getElementById('s6Inner').innerHTML = buildDevice(200,true,true);
+      stageTimers.push(setTimeout(()=>{
+        document.getElementById('s6Device').classList.add('show');
+        document.getElementById('s6Inner').classList.add('play');
+      },400));
+      break;
+
+    case 6: // VOICE INTERACTION
+      document.getElementById('vlDevice').innerHTML = buildDevice(60,false,true);
+      stageTimers.push(setTimeout(()=>{
+        document.getElementById('vl1').classList.add('show');
+        document.getElementById('vlCursor').classList.add('show');
+      },400));
+      stageTimers.push(setTimeout(()=>{
+        document.getElementById('vlCursor').classList.remove('show');
+      },1800));
+      stageTimers.push(setTimeout(()=>{
+        document.getElementById('vl2').classList.add('show');
+      },2200));
+      stageTimers.push(setTimeout(()=>{
+        document.getElementById('vl3').classList.add('show');
+        document.getElementById('vlDevice').classList.add('show');
+      },3200));
+      break;
+
+    case 7: // PRESENCE
+      stageTimers.push(setTimeout(()=>{
+        document.getElementById('presScene').classList.add('show');
+      },300));
+      stageTimers.push(setTimeout(()=>{
+        ['ps-notif','ps-msg','ps-app','ps-noise'].forEach(id=>{
+          const el=document.getElementById(id);
+          const lbl=document.getElementById(id+'-l');
+          if(el){el.classList.add('vanish')}
+          if(lbl){lbl.classList.add('vanish')}
         });
+      },1600));
+      stageTimers.push(setTimeout(()=>{
+        document.getElementById('psCaption').classList.add('show');
+      },2800));
+      break;
 
+    case 8: // TIME FLOW — show all three times sequentially
+      const timeScenes=['ts-morning','ts-work','ts-evening'];
+      const timeWispa=['ts-m-w','ts-w-w','ts-e-w'];
+      const timeDevs=['ts-m-d','ts-w-d','ts-e-d'];
+      // Place devices
+      timeDevs.forEach(id=>{
+        const d=document.getElementById(id);
+        if(d) d.innerHTML=buildDevice(50,false,true);
+      });
+      // Animate sequence
+      timeScenes.forEach((sid,i)=>{
+        stageTimers.push(setTimeout(()=>{
+          timeScenes.forEach(s=>document.getElementById(s).classList.remove('show'));
+          document.getElementById(sid).classList.add('show');
+        },i*2200));
+        stageTimers.push(setTimeout(()=>{
+          document.getElementById(timeWispa[i]).classList.add('show');
+          document.getElementById(timeDevs[i]).classList.add('show');
+        },i*2200+700));
+      });
+      break;
 
-        // --- 3. Accordion Logic ---
-        const chapters = document.querySelectorAll('.chapter-item');
+    case 9: // HOW IT WORKS
+      stageTimers.push(setTimeout(()=>{
+        document.getElementById('hw1').classList.add('show');
+      },400));
+      stageTimers.push(setTimeout(()=>{
+        document.getElementById('hwp1').classList.add('show');
+        document.getElementById('hw2').classList.add('show');
+      },1600));
+      stageTimers.push(setTimeout(()=>{
+        document.getElementById('hwp2').classList.add('show');
+        document.getElementById('hw3').classList.add('show');
+      },2800));
+      break;
 
-        chapters.forEach(chapter => {
-            const header = chapter.querySelector('.chapter-header');
-            const content = chapter.querySelector('.chapter-content');
-            
-            header.addEventListener('click', () => {
-                // Close others (optional, remove if you want multiple open)
-                chapters.forEach(other => {
-                    if (other !== chapter) {
-                        other.classList.remove('active');
-                        other.querySelector('.chapter-content').style.maxHeight = null;
-                    }
-                });
+    case 10: // PHILOSOPHY
+      stageTimers.push(setTimeout(()=>{
+        document.getElementById('pb1').classList.add('show');
+        document.getElementById('pb2').classList.add('show');
+        document.getElementById('pb3').classList.add('show');
+      },400));
+      break;
 
-                // Toggle current
-                chapter.classList.toggle('active');
-                if (chapter.classList.contains('active')) {
-                    content.style.maxHeight = content.scrollHeight + "px";
-                } else {
-                    content.style.maxHeight = null;
-                }
-            });
-        });
+    case 11: // TRUST
+      stageTimers.push(setTimeout(()=>{
+        document.getElementById('s12-text').classList.add('show');
+        document.getElementById('s12-sub').classList.add('show');
+      },400));
+      break;
 
+    case 12: // FOUNDERS
+      stageTimers.push(setTimeout(()=>{
+        document.getElementById('f-intro').classList.add('show');
+        document.getElementById('foundersRow').classList.add('show');
+      },400));
+      break;
 
-        // --- 4. Scroll Reveal Animation ---
-        const revealElements = document.querySelectorAll('.reveal-item');
+    case 13: // CTA
+      stageTimers.push(setTimeout(()=>{
+        document.getElementById('s14-q').classList.add('show');
+        document.getElementById('ctaForm').classList.add('show');
+      },500));
+      break;
 
-        const revealOnScroll = () => {
-            const windowHeight = window.innerHeight;
-            const revealPoint = 150;
+    case 14: // FOOTER
+      stageTimers.push(setTimeout(()=>{
+        document.getElementById('footerInner').classList.add('show');
+      },400));
+      break;
+  }
+}
 
-            revealElements.forEach(element => {
-                const elementTop = element.getBoundingClientRect().top;
-                if (elementTop < windowHeight - revealPoint) {
-                    element.classList.add('visible');
-                }
-            });
-        };
+function exitStage(idx) {
+  const el = document.getElementById(STAGES[idx]);
 
-        window.addEventListener('scroll', revealOnScroll);
-        window.addEventListener('load', revealOnScroll);
+  // Reset all stage-specific state
+  el.classList.remove('active');
 
-    </script>
+  switch(idx) {
+    case 0:
+      document.getElementById('entryDot').classList.remove('play');
+      document.getElementById('entryRing').classList.remove('play');
+      document.getElementById('s1-text').classList.remove('play');
+      document.getElementById('scroll-hint').classList.remove('visible');
+      break;
+    case 1:
+      document.getElementById('s2').innerHTML='';
+      break;
+    case 2:
+      ['cr1','cr2','cr3'].forEach(id=>document.getElementById(id)?.classList.remove('play'));
+      break;
+    case 3:
+      document.getElementById('s4-text').classList.remove('show');
+      break;
+    case 5:
+      document.getElementById('s6Device').classList.remove('show');
+      document.getElementById('s6Inner')?.classList.remove('play');
+      break;
+    case 6:
+      ['vl1','vl2','vl3'].forEach(id=>document.getElementById(id)?.classList.remove('show'));
+      document.getElementById('vlCursor')?.classList.remove('show');
+      document.getElementById('vlDevice')?.classList.remove('show');
+      break;
+    case 7:
+      document.getElementById('presScene')?.classList.remove('show');
+      document.getElementById('psCaption')?.classList.remove('show');
+      ['ps-notif','ps-msg','ps-app','ps-noise'].forEach(id=>{
+        document.getElementById(id)?.classList.remove('vanish');
+        document.getElementById(id+'-l')?.classList.remove('vanish');
+      });
+      break;
+    case 8:
+      ['ts-morning','ts-work','ts-evening'].forEach(id=>document.getElementById(id)?.classList.remove('show'));
+      ['ts-m-w','ts-w-w','ts-e-w'].forEach(id=>document.getElementById(id)?.classList.remove('show'));
+      ['ts-m-d','ts-w-d','ts-e-d'].forEach(id=>document.getElementById(id)?.classList.remove('show'));
+      break;
+    case 9:
+      ['hw1','hw2','hw3','hwp1','hwp2'].forEach(id=>document.getElementById(id)?.classList.remove('show'));
+      break;
+    case 10:
+      ['pb1','pb2','pb3'].forEach(id=>document.getElementById(id)?.classList.remove('show'));
+      break;
+    case 11:
+      document.getElementById('s12-text')?.classList.remove('show');
+      document.getElementById('s12-sub')?.classList.remove('show');
+      break;
+    case 12:
+      document.getElementById('f-intro')?.classList.remove('show');
+      document.getElementById('foundersRow')?.classList.remove('show');
+      break;
+    case 13:
+      document.getElementById('s14-q')?.classList.remove('show');
+      document.getElementById('ctaForm')?.classList.remove('show');
+      break;
+    case 14:
+      document.getElementById('footerInner')?.classList.remove('show');
+      break;
+  }
+}
+
+/* ── Build noise stage ── */
+function buildNoiseStage() {
+  const s2 = document.getElementById('s2');
+  s2.innerHTML='';
+
+  noiseItems.forEach((item, i) => {
+    const el = document.createElement('div');
+    el.className = 'noise-fragment';
+    el.style.left = item.x;
+    el.style.top = item.y;
+    el.style.transform = `rotate(${item.r}deg)`;
+    el.style.zIndex = i;
+
+    if(item.type==='notif'){
+      el.innerHTML=`<div class="nf-notif">
+        <div class="nf-dot" style="background:${item.color}"></div>
+        <div class="nf-text">
+          <div class="nf-app">${item.app}</div>
+          <div class="nf-msg">${item.msg}</div>
+        </div>
+        <div class="nf-time">${item.time}</div>
+      </div>`;
+    } else if(item.type==='msg'){
+      el.innerHTML=`<div class="nf-message">${item.msg}</div>`;
+    } else if(item.type==='num'){
+      el.innerHTML=`<div class="nf-number">${item.num}</div>`;
+    }
+
+    s2.appendChild(el);
+    // Staggered appearance
+    stageTimers.push(setTimeout(()=>{
+      el.style.opacity='1';
+      el.style.transform=`rotate(${item.r}deg) translateY(0)`;
+      // Random subtle movement
+      const dx = (Math.random()-0.5)*20;
+      const dy = (Math.random()-0.5)*20;
+      el.style.transition=`opacity .5s ease, transform ${2+Math.random()*3}s ease-in-out infinite alternate`;
+      setTimeout(()=>{
+        el.style.transform=`rotate(${item.r}deg) translate(${dx}px,${dy}px)`;
+      },600+i*200);
+    }, 200 + i*300));
+  });
+}
+
+/* ═══════════════════════════════════════════════════════
+   NAVIGATION CORE
+═══════════════════════════════════════════════════════ */
+function goToStage(targetIdx, direction=1) {
+  if(isTransitioning) return;
+  if(targetIdx < 0 || targetIdx >= STAGES.length) return;
+
+  isTransitioning = true;
+
+  // Transition duration per stage type
+  const quickTransitions = [2]; // collapse stage
+  const slowTransitions = [4,5]; // product intro
+  let dur = 600;
+  if(quickTransitions.includes(targetIdx)) dur=300;
+  if(slowTransitions.includes(targetIdx)) dur=800;
+
+  // Cross-fade
+  const currentEl = document.getElementById(STAGES[currentStage]);
+  const nextEl = document.getElementById(STAGES[targetIdx]);
+
+  // Fade out current
+  currentEl.style.transition='opacity .5s ease';
+  currentEl.style.opacity='0';
+
+  setTimeout(()=>{
+    exitStage(currentStage);
+    currentEl.style.transition='';
+    currentEl.style.opacity='';
+
+    currentStage = targetIdx;
+
+    nextEl.style.opacity='0';
+    nextEl.classList.add('active');
+    nextEl.style.transition='opacity .6s ease';
+
+    requestAnimationFrame(()=>{
+      requestAnimationFrame(()=>{
+        nextEl.style.opacity='1';
+        setTimeout(()=>{
+          nextEl.style.transition='';
+          nextEl.style.opacity='';
+          enterStage(targetIdx);
+          updateDots(targetIdx);
+          updateProgress(targetIdx);
+          isTransitioning = false;
+        }, 700);
+      });
+    });
+  }, dur);
+}
+
+function updateProgress(idx) {
+  const pct = (idx / (STAGES.length-1)) * 100;
+  document.getElementById('progress').style.width = pct + '%';
+}
+
+/* ═══════════════════════════════════════════════════════
+   SCROLL + KEYBOARD NAVIGATION
+═══════════════════════════════════════════════════════ */
+let scrollAcc = 0;
+let scrollTimeout = null;
+const SCROLL_THRESHOLD = 60;
+
+window.addEventListener('wheel', e => {
+  e.preventDefault();
+  scrollAcc += e.deltaY;
+  clearTimeout(scrollTimeout);
+  scrollTimeout = setTimeout(()=>{ scrollAcc=0; },200);
+  if(Math.abs(scrollAcc) >= SCROLL_THRESHOLD) {
+    const dir = scrollAcc > 0 ? 1 : -1;
+    scrollAcc = 0;
+    goToStage(currentStage + dir, dir);
+  }
+}, { passive: false });
+
+// Keyboard
+window.addEventListener('keydown', e => {
+  if(['ArrowDown','Space','PageDown'].includes(e.code)) {
+    e.preventDefault();
+    goToStage(currentStage+1,1);
+  }
+  if(['ArrowUp','PageUp'].includes(e.code)) {
+    e.preventDefault();
+    goToStage(currentStage-1,-1);
+  }
+});
+
+// Touch support
+let touchStartY=0;
+window.addEventListener('touchstart', e=>{ touchStartY=e.touches[0].clientY; },{passive:true});
+window.addEventListener('touchend', e=>{
+  const dy = touchStartY - e.changedTouches[0].clientY;
+  if(Math.abs(dy)>40){
+    goToStage(currentStage+(dy>0?1:-1));
+  }
+});
+
+/* ═══════════════════════════════════════════════════════
+   CTA SUBMIT
+═══════════════════════════════════════════════════════ */
+function submitCta(){
+  const email=document.getElementById('ctaEmail');
+  const btn=document.getElementById('ctaBtn');
+  const val=email.value.trim();
+  if(!val||!val.includes('@')){
+    email.style.borderColor='#c0392b';
+    email.placeholder='Valid email required';
+    setTimeout(()=>{
+      email.style.borderColor='';
+      email.placeholder='Your email';
+    },2000);
+    return;
+  }
+  btn.textContent='You\'re in ✓';
+  btn.style.opacity='0.6';
+  btn.disabled=true;
+  email.disabled=true;
+  email.value='';
+  email.placeholder='We\'ll whisper when you\'re ready.';
+}
+document.getElementById('ctaEmail')?.addEventListener('keypress',e=>{
+  if(e.key==='Enter') submitCta();
+});
+
+/* ═══════════════════════════════════════════════════════
+   SHOW STAGE NAV AFTER FIRST STAGE
+═══════════════════════════════════════════════════════ */
+setTimeout(()=>{
+  document.getElementById('stage-counter').classList.add('visible');
+},6000);
+
+/* ═══════════════════════════════════════════════════════
+   INIT
+═══════════════════════════════════════════════════════ */
+updateDots(0);
+updateProgress(0);
+enterStage(0);
+document.getElementById('s1').classList.add('active');
+
+// Hint auto-advance on mobile if no interaction
+let autoHintTimer = setTimeout(()=>{
+  document.getElementById('scroll-hint').classList.add('visible');
+},2000);
+</script>
 </body>
 </html>
